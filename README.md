@@ -1,5 +1,6 @@
-# RUNNING THE CODE
-----------------
+This repository hosts code for computing theoretical predictions for the 2-point correlation function (2PCF) and the integrated 3-point correlation function (i3PCF) of projected fields.
+
+# Running the code
 
 After you have setup the external libraries (see EXTERNAL FILES section below!), do the following in order to run the i3PCF code:
 
@@ -17,7 +18,6 @@ make -j
 ./Integrated_3PCF_theory
 
 # EXTERNAL FILES
--------------- 
 
 Instructions to include the following external libraries (required for our i3PCF code to work). Perform the following steps:
 
@@ -75,10 +75,10 @@ mv pcubature.o build/.
 cd build/
 ar rcs libcubature.a *.o 
 
-4. Copy this libcubature.a library into the following folder of our Integrated_3PCF_theory folder i.e.
+6. Copy this libcubature.a library into the following folder of our Integrated_3PCF_theory folder i.e.
 
 cp /path/to/cubature/build/libcubature.a /path/to/Integrated_3PCF_theory/external/cubature_files/cubature_lib/.
 
-5. Also copy the cubature.h header file present in the cubature directory into the following folder of our Integrated_3PCF_theory folder i.e.
+7. Also copy the cubature.h header file present in the cubature directory into the following folder of our Integrated_3PCF_theory folder i.e.
 
 cp /path/to/cubature/cubature.h /path/to/Integrated_3PCF_theory/external/cubature_files/cubature_include/.
