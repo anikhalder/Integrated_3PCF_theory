@@ -1,5 +1,4 @@
-########################################################################
-RUNNING THE CODE
+# RUNNING THE CODE
 ----------------
 
 After you have setup the external libraries (see EXTERNAL FILES section below!), do the following in order to run the i3PCF code:
@@ -8,20 +7,21 @@ After you have setup the external libraries (see EXTERNAL FILES section below!),
 2. Go to the build directory and execute the following commands from inside the build directory:
 
 cd /path/to/Integrated_3PCF_theory/build/
+
 make clean
+
 cmake ..
+
 make -j
+
 ./Integrated_3PCF_theory
 
-#########################################################################
-EXTERNAL FILES
+# EXTERNAL FILES
 -------------- 
 
 Instructions to include the following external libraries (required for our i3PCF code to work). Perform the following steps:
 
-############################################################
-CLASS (Boltzmannn solver)
-############################################################
+## CLASS (Boltzmannn solver)
 
 NOTE: Currently the i3PCF project is written based on the CLASS v2.9.4. There were major changes in syntax and variable naming which CLASS introduced in its v3.0 onwards. We plan to update our i3PCF code to these later versions of CLASS in the future.
 
@@ -36,6 +36,7 @@ cd /path/to/class_public/
 3. Once CLASS has been built, go to the build directory inside class_public. Compile the *.o files present inside that build directory and put them together into a single static library e.g. libclass.a
 
 cd build/
+
 ar rcs libclass.a *.o 
 
 4. Copy this libclass.a library into the following folder of our Integrated_3PCF_theory folder i.e.
@@ -47,9 +48,7 @@ cp /path/to/class_public/build/lclass.a /path/to/Integrated_3PCF_theory/external
 cp /path/to/class_public/include/*.h /path/to/Integrated_3PCF_theory/external/class_files/class_include/.
 
 
-############################################################
-cubature (for multi-dimensional integration)
-############################################################
+## cubature (for multi-dimensional integration)
 
 1. Somewhere on your machine (e.g. inside a software folder in your home directory) clone the cubature repository
 
