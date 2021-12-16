@@ -1,6 +1,8 @@
-This repository hosts code for computing theoretical predictions for the 2-point correlation function (2PCF) and the integrated 3-point correlation function (i3PCF) of projected fields.
+# The integrated 3-point correlation function of projected fields
 
-# Running the code
+This repository hosts code for computing theoretical predictions for the integrated 3-point correlation function (i3PCF) of projected fields. It also computes predictions for the 2-point correlation function (2PCF). 
+
+## Running the code
 
 After you have setup the external libraries (see EXTERNAL FILES section below!), do the following in order to run the i3PCF code:
 
@@ -17,11 +19,11 @@ make -j
 
 ./Integrated_3PCF_theory
 
-# EXTERNAL FILES
+## External Files
 
 Instructions to include the following external libraries (required for our i3PCF code to work). Perform the following steps:
 
-## CLASS (Boltzmannn solver)
+### CLASS (Boltzmannn solver)
 
 NOTE: Currently the i3PCF project is written based on the CLASS v2.9.4. There were major changes in syntax and variable naming which CLASS introduced in its v3.0 onwards. We plan to update our i3PCF code to these later versions of CLASS in the future.
 
@@ -48,7 +50,7 @@ cp /path/to/class_public/build/lclass.a /path/to/Integrated_3PCF_theory/external
 cp /path/to/class_public/include/*.h /path/to/Integrated_3PCF_theory/external/class_files/class_include/.
 
 
-## cubature (for multi-dimensional integration)
+### cubature (for multi-dimensional integration)
 
 1. Somewhere on your machine (e.g. inside a software folder in your home directory) clone the cubature repository
 
