@@ -1,4 +1,4 @@
-# The integrated 3-point correlation function of projected fields
+# The integrated 3PCF of projected fields
 
 This repository hosts code for computing theoretical predictions for the integrated 3-point correlation function (i3PCF) of projected fields. It also computes predictions for the 2-point correlation function (2PCF). 
 
