@@ -442,8 +442,8 @@ int main()
         // With 120 ells upto ell_max=20000; MC integration (1e6 and double of it for ell<=220)
 
         // For validation against T17 with bsr corrections - GM / tree / bihalofit
-//        std::string spectra_folder = "./takahashi_nl_ell120_iB_hhh_W75W75W75_redmagicLens1_mc_1e6_x2_220_20000_b1_b2_Tinker_bs2_coevolution_HMF_Tinker/";
-//        std::string correlations_folder = "./takahashi_nl_ell120_iZ_hhh_W75W75W75_redmagicLens1_mc_1e6_x2_220_20000_b1_b2_Tinker_bs2_coevolution_HMF_Tinker/";
+        //std::string spectra_folder = "./takahashi_nl_ell120_iB_hhh_W75W75W75_redmagicLens1_mc_1e6_x2_220_20000_b1_b2_Tinker_bs2_coevolution_HMF_Tinker/";
+        //std::string correlations_folder = "./takahashi_nl_ell120_iZ_hhh_W75W75W75_redmagicLens1_mc_1e6_x2_220_20000_b1_b2_Tinker_bs2_coevolution_HMF_Tinker/";
 
         // ########################
         // Test
