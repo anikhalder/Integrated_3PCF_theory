@@ -43,7 +43,7 @@ ar rcs libclass.a *.o
 
 4. Copy this libclass.a library into the following folder of our Integrated_3PCF_theory folder i.e.
 
-cp /path/to/class_public/build/lclass.a /path/to/Integrated_3PCF_theory/external/class_files/class_lib/.
+cp /path/to/class_public/build/libclass.a /path/to/Integrated_3PCF_theory/external/class_files/class_lib/.
 
 5. Also copy the header files present in the include directory of the class_public folder into the following folder of our Integrated_3PCF_theory folder i.e.
 
