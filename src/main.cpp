@@ -337,7 +337,7 @@ int main()
         bool compute_initial_checks = false;
         bool compute_sigma_quantities_tables = false;
         bool compute_Pk_shell_integration_table = false;
-        bool compute_Pk_Bkkk_tables = false;
+        bool compute_Pk_Bkkk_tables = true;
         bool compute_n_eff_table = false;
         bool compute_k_NL_table = false;
         bool compute_response_function_tables = false;
@@ -998,14 +998,14 @@ int main()
             std::vector<std::vector<double>> B_kkk(num_pts, std::vector<double>(3, 0));
             //std::vector<std::vector<double>> B_kkk(num_pts, std::vector<double>(5, 0));
 
-            #pragma omp parallel for num_threads(thread_count)
+            //#pragma omp parallel for num_threads(thread_count)
             for(int i=0; i<num_pts; i++)
             {
                 double k_h = pow(10, a + i * (b - a) / (num_pts - 1)); // in units of h/Mpc
 
                 double k = k_h*h;
 
-                std::cout << k << std::endl;
+                //std::cout << k << std::endl;
 
                 P_k[i][0] = k_h;
                 P_k[i][1] = P_tree(k,z,class_obj.get())*pow(h,3);
