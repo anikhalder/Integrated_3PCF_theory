@@ -130,13 +130,13 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
     {
         // squeezed configurations
 
-        B = 0.0;
+        //B = 0.0;
         //B = B_tree(k_h, k_m, k_s, z, class_obj, false);
         //B = B_1_loop_hcubature(k_h, k_m, k_s, z, class_obj, false);
         //B = B_SC(k_h, k_m, k_s, z, class_obj, true);
         //B = B_GM(k_h, k_m, k_s, z, class_obj, true);
         //B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
-        //B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
+        B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
 
     }
 

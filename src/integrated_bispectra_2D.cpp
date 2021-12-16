@@ -580,7 +580,6 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     */
 
     // for lll integared bispectra (Comment this out when needed)
-    /*
     if (key == "B_nothing" || key == "A")
         return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*l_1*l_2*X_windows;
 
@@ -622,7 +621,6 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
         return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
                 B_S2PaPb(l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, l_1*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
-    */
 
     // for sss integrated bispectra
     if (key == "B")
@@ -665,6 +663,8 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, cons
                                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
     double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
     params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 

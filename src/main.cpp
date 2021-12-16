@@ -17,18 +17,18 @@
 #include <halo_utils.hpp>
 
 /*
- * Things to check/change when switching from one run to another:
+ * Things to check/change before compiling the code and performing an execution:
  *
  * constants.h:
  * - compute_bihalofit keyword
  * - apply_T17_corrections keyword
  *
  * bispectrum.cpp:
- * - bispectrum type
+ * - bispectrum type (tree, GM, SC, bihalofit, GM+RF etc.)
  *
  * integrated_bispectra_2D.cpp:
- * - evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand() comment out the lll integared bispectra section when evaluating bias correlations
- *
+ * - in the iB_los_l_1_l_2_phi_1_phi_2_mc() or iB_los_l_1_l_2_phi_1_phi_2_hcubature() check the phi_l value
+ * 
  * main.cpp:
  * - index i
  * - k_max
@@ -39,7 +39,7 @@
  * - zs_bins
  * - filename_P and filename_iB names
  * - calls_iB_initial
- * - bin averaging for correlation functions
+ * - bin averaging or not for computing correlation functions
  *
  */
 
@@ -279,13 +279,13 @@ int main()
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -337,12 +337,21 @@ int main()
         bool compute_initial_checks = false;
         bool compute_sigma_quantities_tables = false;
         bool compute_Pk_shell_integration_table = false;
-        bool compute_Pk_Bkkk_tables = true;
+        bool compute_Pk_Bkkk_tables = false;
         bool compute_n_eff_table = false;
         bool compute_k_NL_table = false;
         bool compute_response_function_tables = false;
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
+
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_power_spectra = true;
+        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
+        bool compute_2D_2PCF = true;
+        bool compute_2D_bispectra_equilateral = false;
+        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
+        bool compute_2D_integrated_bispectra_v2 = true;
+        bool compute_2D_integrated_3PCF = true;
 
 //        bool compute_2D_integrated_3PCF_area_pre_factors = false;
 //        bool compute_2D_power_spectra = false;
@@ -352,15 +361,6 @@ int main()
 //        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
 //        bool compute_2D_integrated_bispectra_v2 = false;
 //        bool compute_2D_integrated_3PCF = false;
-
-        bool compute_2D_integrated_3PCF_area_pre_factors = false;
-        bool compute_2D_power_spectra = false;
-        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = false;
-        bool compute_2D_bispectra_equilateral = false;
-        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_3PCF = false;
 
         //std::string spectra_folder = "./takahashi_B_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
         //std::string correlations_folder = "./takahashi_B_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
@@ -408,8 +408,8 @@ int main()
         //std::string correlations_folder = "./takahashi_bsr_bihalofit_ell150_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_200_20000/";
 
         // For validation against T17 with bsr corrections - nonsq GM / tree + sq RF
-        //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_NA_ell150_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_200_20000_optimised_if/";
-        //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_NA_ell150_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_200_20000_optimised_if/";
+        //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell150_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_200_20000/";
+        //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell150_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_200_20000/";
 
         // For Fisher forecast - GM+RF
         //*std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell150_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2.5e6_x2_200_20000_with_baryons_change_params/";
@@ -447,8 +447,11 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./test_spectra/";
-        std::string correlations_folder = "./test_correlations/";
+        //std::string spectra_folder = "./test_spectra/";
+        //std::string correlations_folder = "./test_correlations/";
+
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_bin_averaged_phi_l_0/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_bin_averaged_phi_l_0/";
 
         // ######################################################################################
 
@@ -483,9 +486,9 @@ int main()
         //    l_array.push_back(l);
 
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_157.tab"); // ell_max = 20000 where 157 points log-spaced (1-20000) -- previous settings
-        l_array = read_1_column_table("../data/ell_arrays/ell_array_150_disjoint.tab"); // ell_max = 20000 where 30 points log-spaced (1-200); 120 points log-spaced (230-20000)
+        //l_array = read_1_column_table("../data/ell_arrays/ell_array_150_disjoint.tab"); // ell_max = 20000 where 30 points log-spaced (1-200); 120 points log-spaced (230-20000)
 
-        //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
+        l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
 
         //double a = log10(2);
         //double b = log10(20000);
@@ -694,8 +697,8 @@ int main()
         size_t calls_iB_initial;
 
         if (iB_integration_algorithm == "mc")
-            calls_iB_initial = 2*calls_1e6; // -- current settings for papers
-            //calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 
@@ -2630,11 +2633,11 @@ int main()
                             std::vector<std::vector<double>> iB_Re_matrix = read_3_column_table(iB_flat_2D_spectrum);
                             assert (iB_Re_matrix.at(0).size() == l_array.size());
 
-                            iZp_Re = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xip", thread_count);
-                            iZm_Re = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(2), "xim", thread_count);
+                            //iZp_Re = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xip", thread_count);
+                            //iZm_Re = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(2), "xim", thread_count);
 
-                            //iZp_Re = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xip", thread_count);
-                            //iZm_Re = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, iB_Re_matrix.at(0), iB_Re_matrix.at(2), "xim", thread_count);
+                            iZp_Re = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xip", thread_count);
+                            iZm_Re = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, iB_Re_matrix.at(0), iB_Re_matrix.at(2), "xim", thread_count);
 
                             std::stringstream s_iZp_Re;
                             s_iZp_Re << correlations_folder << "iZp_Re_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
