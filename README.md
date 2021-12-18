@@ -4,7 +4,7 @@ This repository hosts code for computing theoretical predictions for the integra
 
 ## Running the code
 
-After you have setup the external libraries (see EXTERNAL FILES section below!), do the following in order to run the i3PCF code:
+After you have setup the external libraries (see External files section below!), do the following in order to run the i3PCF code:
 
 1. According to your needs change and save the code files present inside the src (e.g. main.cpp etc.) and include (e.g. constants.h) directories.
 2. Go to the build directory and execute the following commands from inside the build directory:
@@ -19,7 +19,7 @@ make -j
 
 ./Integrated_3PCF_theory
 
-## External Files
+## External files
 
 Instructions to include the following external libraries (required for our i3PCF code to work). Perform the following steps:
 

@@ -662,9 +662,9 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, cons
                                    projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
-    double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
-//    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
     params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
