@@ -896,15 +896,13 @@ double B_squeezed_RF(const double &k_h, const double &k_m, const double &k_s, co
 
     double n_h = class_obj->get_n_eff_from_nl_Pk(k_h,z);
     double R_1 = 1.0 - n_h/3.0 + class_obj->get_G_1_k_z_interp(k_h,z);
-//    double R_K = class_obj->get_G_K_k_z_interp(k_h,z) - n_h;
+    double R_K = class_obj->get_G_K_k_z_interp(k_h,z) - n_h;
 
     double Pk_h = class_obj->pk(k_h,z,true);
 //    double Pk_m = class_obj->pk(k_m,z,true);
     double Pk_s = class_obj->pk(k_s,z,true);
 
-//    double B = (R_1 + ( pow(mu_h_s,2) - 1.0/3.0 )*R_K )*Pk_h*Pk_s;
-
-    double B = R_1*Pk_h*Pk_s;
+    double B = (R_1 + ( pow(mu_h_s,2) - 1.0/3.0 )*R_K )*Pk_h*Pk_s;
 
     // Tests for checking behaviour of RF approach
     //double B = F2_EdS(k_h,k_s,k_m)*Pk_h*Pk_s + F2_EdS(k_m,k_s,k_h)*Pk_m*Pk_s + F2_EdS(k_h,k_m,k_s)*Pk_h*Pk_m;
