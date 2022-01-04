@@ -278,14 +278,14 @@ int main()
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
-        pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
