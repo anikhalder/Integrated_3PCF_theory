@@ -450,8 +450,8 @@ int main()
         //std::string spectra_folder = "./test_spectra/";
         //std::string correlations_folder = "./test_correlations/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_angle_averaged/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_angle_averaged/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_bin_averaged_angle_averaged/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_bin_averaged_angle_averaged/";
 
         // ######################################################################################
 
@@ -701,8 +701,8 @@ int main()
         size_t calls_iB_initial;
 
         if (iB_integration_algorithm == "mc")
-            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
-            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            //calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 
@@ -2667,7 +2667,7 @@ int main()
                 }
             }
 
-            else if (filename_iB == "iB_Mss.dat")
+            else if (filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
