@@ -2487,7 +2487,7 @@ int main()
 
             std::cout << "Time taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat")
+            if (filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
