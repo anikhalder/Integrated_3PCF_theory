@@ -156,7 +156,7 @@ double A2pt_hcubature(double alpha, double theta_T)
 
 // ##############################
 
-// testing with phi_alpha integration; this is redundant and time consuming ---> does not affect the results obtained only from A2pt_qag()
+// testing with phi_alpha angle average integration; this is redundant and time consuming ---> does not affect the results obtained only from A2pt_qag()
 
 double A2pt_phi_alpha_qag_integrand(double phi_alpha, void *params)
 {
@@ -168,7 +168,8 @@ double A2pt_phi_alpha_qag_integrand(double phi_alpha, void *params)
     double result = 0;              // the result from the integration
     double error = 0;               // the estimated error from the integration
 
-    qag_1D_integration(&A2pt_theta_qag_integrand, static_cast<void *>(&args), 0, 4.0*p->theta_T, calls_1e5, result, error);
+    //qag_1D_integration(&A2pt_theta_qag_integrand, static_cast<void *>(&args), 0, 4.0*p->theta_T, calls_1e5, result, error);
+    qag_1D_integration_abs_rel(&A2pt_theta_qag_integrand, static_cast<void *>(&args), 0, 4.0*p->theta_T, calls_1e5, result, error);
 
     //return cos(4*phi_alpha)*result;
     return result;
@@ -182,7 +183,8 @@ double A2pt_angle_averaged_qag(double alpha, double theta_T)
     double result = 0;              // the result from the integration
     double error = 0;               // the estimated error from the integration
 
-    qag_1D_integration(&A2pt_phi_alpha_qag_integrand, static_cast<void *>(&args), 0, 2*M_PI, calls_1e5, result, error);
+    //qag_1D_integration(&A2pt_phi_alpha_qag_integrand, static_cast<void *>(&args), 0, 2*M_PI, calls_1e5, result, error);
+    qag_1D_integration_abs_rel(&A2pt_phi_alpha_qag_integrand, static_cast<void *>(&args), 0, 2*M_PI, calls_1e5, result, error);
 
     return result/(2*M_PI);
 }
@@ -765,6 +767,124 @@ void iB_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_i
     error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
 }
 
+// Monte-Carlo angle averaged
+
+double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
+{
+    (void)(dim); // avoid unused parameter warnings
+
+    double phi_l = k[0], z = k[1], l_1 = k[2], l_2 = k[3], phi_1 = k[4], phi_2 = k[5];
+
+    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+
+    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+                                                         p->q1, p->q2, p->q3);
+
+}
+
+void iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                                         projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
+                                         const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
+{
+    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+
+    gsl_monte_function G = { &iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand, 6, static_cast<void *>(&args)};
+
+    if (mc_integration_type == "plain" )
+        monte_carlo_plain_integration(&G, lower_limits, upper_limits, 6, calls, T, result, error);
+    else if (mc_integration_type == "miser" )
+        monte_carlo_miser_integration(&G, lower_limits, upper_limits, 6, calls, T, result, error);
+    else if (mc_integration_type == "vegas" )
+        monte_carlo_vegas_integration(&G, lower_limits, upper_limits, 6, calls, T, result, error);
+}
+
+void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
+           const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
+{
+    result = 0.0;
+    error = 0.0;
+
+    if (key == "B_lF2")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_lF2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "X_W")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("X_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "Y_W")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Y_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "Z_W")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Z_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "X_S2")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("X_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "Y_S2")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Y_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "Z_S2")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Z_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "P_1")
+        // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_1", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "P_2")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "P_3")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "A")
+        // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("A", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    if (key == "B")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xip_cos")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xip_sin")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xim_cos")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xim_sin")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    // components for tracer integrated bispectrum
+
+    else if (key == "B_nothing")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_P")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_P", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_PP")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_S2PP")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_hhh_delta_eps_eps")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_hhh_eps_eps_eps")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_P2P3")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_S2P2P3")
+        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
+    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+}
+
 // h-cubature
 
 int iB_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
@@ -987,7 +1107,7 @@ double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W
     return result;
 }
 
-// angle averaged
+// h-cubature angle averaged
 
 int iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {

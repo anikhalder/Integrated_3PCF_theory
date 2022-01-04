@@ -278,14 +278,14 @@ int main()
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
-        //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
+        pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -353,7 +353,7 @@ int main()
         bool compute_2D_integrated_bispectra_v2 = true;
         bool compute_2D_integrated_3PCF = true;
 
-//        bool compute_2D_integrated_3PCF_area_pre_factors = false;
+//        bool compute_2D_integrated_3PCF_area_pre_factors = true;
 //        bool compute_2D_power_spectra = false;
 //        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
 //        bool compute_2D_2PCF = false;
@@ -450,8 +450,8 @@ int main()
         //std::string spectra_folder = "./test_spectra/";
         //std::string correlations_folder = "./test_correlations/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_NA_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_bin_averaged/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_NA_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_bin_averaged/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_angle_averaged/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_angle_averaged/";
 
         // ######################################################################################
 
@@ -558,6 +558,9 @@ int main()
         std::vector<double> iB_sss_lower_limits = { zs_lower, 1, 1, 0, 0};
         std::vector<double> iB_sss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
         //std::vector<double> iB_sss_upper_limits = { zs_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
+
+        std::vector<double> iB_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
+        std::vector<double> iB_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
 
@@ -670,7 +673,8 @@ int main()
 
         std::string filename_iB;
         //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        //filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
         //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
         //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
 
@@ -1875,8 +1879,8 @@ int main()
             {
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
-                    A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
-                    //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
                 }
 
                 else if (i3pt_area_pre_factors_integration_algorithm == "mc")
@@ -1889,6 +1893,7 @@ int main()
                 {
                     A2pt[alpha_idx] =  A2pt_hcubature(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
                 }
+
                 std::cout << alpha_table.at(alpha_idx) << " " << Adelta << " " << A2pt.at(alpha_idx) << std::endl;
             }
 
@@ -2325,6 +2330,55 @@ int main()
                                     // iBm term
                                     result = 0.0, error = 0.0;
                                     iB_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                else if (iB_integration_algorithm == "hcubature")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }

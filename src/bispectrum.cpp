@@ -130,13 +130,13 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
     {
         // squeezed configurations
 
-        B = 0.0;
+        //B = 0.0;
         //B = B_tree(k_h, k_m, k_s, z, class_obj, false);
         //B = B_1_loop_hcubature(k_h, k_m, k_s, z, class_obj, false);
         //B = B_SC(k_h, k_m, k_s, z, class_obj, true);
         //B = B_GM(k_h, k_m, k_s, z, class_obj, true);
         //B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
-        //B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
+        B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
 
     }
 
@@ -903,11 +903,6 @@ double B_squeezed_RF(const double &k_h, const double &k_m, const double &k_s, co
     double Pk_s = class_obj->pk(k_s,z,true);
 
     double B = (R_1 + ( pow(mu_h_s,2) - 1.0/3.0 )*R_K )*Pk_h*Pk_s;
-
-    // Tests for checking behaviour of RF approach
-    //double B = F2_EdS(k_h,k_s,k_m)*Pk_h*Pk_s + F2_EdS(k_m,k_s,k_h)*Pk_m*Pk_s + F2_EdS(k_h,k_m,k_s)*Pk_h*Pk_m;
-    //double B = F2_EdS(k_h,k_s,k_m)*Pk_h*Pk_s + F2_EdS(k_m,k_s,k_h)*Pk_m*Pk_s;
-    //double B = 2*F2_EdS(k_h,k_s,k_m)*Pk_h*Pk_s;
 
     return B;
 }
