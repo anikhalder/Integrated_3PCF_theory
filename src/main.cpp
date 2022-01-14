@@ -451,8 +451,8 @@ int main()
         //std::string spectra_folder = "./test_spectra/";
         //std::string correlations_folder = "./test_correlations/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_X_v2_bin_averaged_angle_averaged/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_X_v2_bin_averaged_angle_averaged/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
 
         // ######################################################################################
 
@@ -674,8 +674,8 @@ int main()
 
         std::string filename_iB;
         //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        //filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
-        filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
+        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        //filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
         //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
         //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
 
@@ -702,8 +702,8 @@ int main()
         size_t calls_iB_initial;
 
         if (iB_integration_algorithm == "mc")
-            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
-            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            //calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 
@@ -1880,8 +1880,8 @@ int main()
             {
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
-                    //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
-                    A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
                 }
 
                 else if (i3pt_area_pre_factors_integration_algorithm == "mc")
