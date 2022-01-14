@@ -205,6 +205,15 @@ double W_products(const std::string &key, const double &l_1, const double &phi_1
         return W_1*W_2pl*W_m1m2ml;
     }
 
+    else if (key == "X_v2")
+    {
+        double W_m1m2 = info_iB_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB_W_FS.theta_T_meandelta);
+        double W_1pl = info_iB_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,phi_l), info_iB_W_FS.theta_T_2pt);
+        double W_2ml = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
+        
+        return W_m1m2*W_1pl*W_2ml;
+    }
+
     else if (key == "Y")
     {
         double W_1 = info_iB_W_FS.W_meandelta_FS(l_1, info_iB_W_FS.theta_T_meandelta);
@@ -364,7 +373,8 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     double chi_inv = 1/class_obj->get_chi_z(z);
     double Hz_inv = 1/class_obj->get_H_z(z);
-    double X_windows = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+    //double X_windows = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS); // default settings
+    double X_windows = W_products("X_v2", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
     // outdated code (To be DELETED)
     /*
@@ -628,17 +638,30 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     if (key == "B")
         X_windows *= 1;
 
+    // default settings
+    // else if (key == "B_xip_cos")
+    //     X_windows *= cos(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    // else if (key == "B_xip_sin")
+    //     X_windows *= sin(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    // else if (key == "B_xim_cos")
+    //     X_windows *= cos(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    // else if (key == "B_xim_sin")
+    //     X_windows *= sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
     else if (key == "B_xip_cos")
-        X_windows *= cos(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        X_windows *= cos(2*(phi_1 - phi_2));
 
     else if (key == "B_xip_sin")
-        X_windows *= sin(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        X_windows *= sin(2*(phi_1 - phi_2));
 
     else if (key == "B_xim_cos")
-        X_windows *= cos(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        X_windows *= cos(2*(phi_1 + phi_2));
 
     else if (key == "B_xim_sin")
-        X_windows *= sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        X_windows *= sin(2*(phi_1 + phi_2));
 
     return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
                 B(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*

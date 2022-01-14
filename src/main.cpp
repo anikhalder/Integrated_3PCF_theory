@@ -28,6 +28,7 @@
  *
  * integrated_bispectra_2D.cpp:
  * - in the iB_los_l_1_l_2_phi_1_phi_2_mc() or iB_los_l_1_l_2_phi_1_phi_2_hcubature() check the phi_l value
+ * - also check whether you are using X or X_v2 form of the window functions
  * 
  * main.cpp:
  * - index i
@@ -344,23 +345,23 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = true;
-        bool compute_2D_power_spectra = true;
-        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = true;
-        bool compute_2D_bispectra_equilateral = false;
-        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        bool compute_2D_integrated_bispectra_v2 = true;
-        bool compute_2D_integrated_3PCF = true;
+       bool compute_2D_integrated_3PCF_area_pre_factors = true;
+       bool compute_2D_power_spectra = true;
+       bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
+       bool compute_2D_2PCF = true;
+       bool compute_2D_bispectra_equilateral = false;
+       bool compute_2D_integrated_bispectra = false; // OLD to be deleted
+       bool compute_2D_integrated_bispectra_v2 = true;
+       bool compute_2D_integrated_3PCF = true;
 
-//        bool compute_2D_integrated_3PCF_area_pre_factors = true;
-//        bool compute_2D_power_spectra = false;
-//        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-//        bool compute_2D_2PCF = false;
-//        bool compute_2D_bispectra_equilateral = false;
-//        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-//        bool compute_2D_integrated_bispectra_v2 = false;
-//        bool compute_2D_integrated_3PCF = false;
+        // bool compute_2D_integrated_3PCF_area_pre_factors = false;
+        // bool compute_2D_power_spectra = false;
+        // bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
+        // bool compute_2D_2PCF = true;
+        // bool compute_2D_bispectra_equilateral = false;
+        // bool compute_2D_integrated_bispectra = false; // OLD to be deleted
+        // bool compute_2D_integrated_bispectra_v2 = false;
+        // bool compute_2D_integrated_3PCF = true;
 
         //std::string spectra_folder = "./takahashi_B_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
         //std::string correlations_folder = "./takahashi_B_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
@@ -450,8 +451,8 @@ int main()
         //std::string spectra_folder = "./test_spectra/";
         //std::string correlations_folder = "./test_correlations/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_bin_averaged_angle_averaged/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_bin_averaged_angle_averaged/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
 
         // ######################################################################################
 
@@ -673,8 +674,8 @@ int main()
 
         std::string filename_iB;
         //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        //filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
-        filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
+        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        //filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
         //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
         //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
 
@@ -701,8 +702,8 @@ int main()
         size_t calls_iB_initial;
 
         if (iB_integration_algorithm == "mc")
-            calls_iB_initial = 2*calls_1e6; // -- current settings for papers
-            //calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 
@@ -1879,8 +1880,8 @@ int main()
             {
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
-                    //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
-                    A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
                 }
 
                 else if (i3pt_area_pre_factors_integration_algorithm == "mc")

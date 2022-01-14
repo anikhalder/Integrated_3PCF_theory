@@ -221,7 +221,7 @@ double xip_theta_bin_averaged(const double &theta_min, const double &theta_max, 
 
     for (int l = 0; l <= ells.back() ; l++)
     {
-        if (l > 2)
+        if (l >= 2)
             xip += (2.*l+1.) * G_ell_2_x_p_bin_averaged(l, x_min, x_max, P_l_x_min_array, ddx_P_l_x_min_array,
                                                           P_l_x_max_array, ddx_P_l_x_max_array) / (l*l*(l+1.)*(l+1.)) * C_ells.at(l);
     }
@@ -248,7 +248,7 @@ double xim_theta_bin_averaged(const double &theta_min, const double &theta_max, 
 
     for (int l = 0; l <= ells.back() ; l++)
     {
-        if (l > 2)
+        if (l >= 2)
             xim += (2.*l+1.) * G_ell_2_x_m_bin_averaged(l, x_min, x_max, P_l_x_min_array, ddx_P_l_x_min_array,
                                                           P_l_x_max_array, ddx_P_l_x_max_array) / (l*l*(l+1.)*(l+1.)) * C_ells.at(l);
     }
