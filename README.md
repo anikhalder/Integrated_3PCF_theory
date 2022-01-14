@@ -23,7 +23,7 @@ make -j
 
 Instructions to include the following external libraries (required for our i3PCF code to work). Perform the following steps:
 
-### CLASS (Boltzmannn solver)
+### CLASS (Boltzmann solver)
 
 NOTE: Currently the i3PCF project is written based on the CLASS v2.9.4. There were major changes in syntax and variable naming which CLASS introduced in its v3.0 onwards. We plan to update our i3PCF code to these later versions of CLASS in the future.
 
