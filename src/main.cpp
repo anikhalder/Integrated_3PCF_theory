@@ -123,7 +123,7 @@ int main()
         //double A_s = 2.1e-9;
         //double n_s = 0.97;
 
-        // TODO: add equations for massive neutrinos !!!!
+        // TODO: add equations for massive neutrinos and set the CLASS massive neutrino parameters!!!!
 
         // Takahashi simulations cosmology
 
@@ -448,11 +448,11 @@ int main()
 
         // ########################
         // Test
-        //std::string spectra_folder = "./test_spectra/";
-        //std::string correlations_folder = "./test_correlations/";
+        std::string spectra_folder = "./test_spectra/";
+        std::string correlations_folder = "./test_correlations/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
+        //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
+        //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
 
         // ######################################################################################
 
@@ -702,8 +702,8 @@ int main()
         size_t calls_iB_initial;
 
         if (iB_integration_algorithm == "mc")
-            calls_iB_initial = 2*calls_1e6; // -- current settings for papers
-            //calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 

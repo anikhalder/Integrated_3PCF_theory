@@ -37,7 +37,7 @@ const double delta_r_T17 = 450.0; // [Mpc/h]
 
 //const double delta_r_T17 = 126.0; // [Mpc/h] for MassiveNus
 
-const bool apply_T17_corrections = true; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
+const bool apply_T17_corrections = false; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
 
 const bool compute_bihalofit = false;
 
