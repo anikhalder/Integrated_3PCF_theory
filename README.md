@@ -22,13 +22,13 @@ make -j
 
 ## External dependencies
 
-Firstly, you need to have the **gsl** and **cmake** packages downloaded and installed on your machine. 
+Firstly, you need to have the **gsl** (https://www.gnu.org/software/gsl/) and **cmake** (https://cmake.org/install/) packages installed on your machine. Please do so if they are not already installed.
 
-Furthermore, you will also need the **CLASS** and **cubature** packages. Please follow the instructions below on how to compile these two packages locally on your machine and include them into the Integrated_3PCF_theory directory.
+Furthermore, you will also need the **CLASS** and **cubature** packages. Please follow the instructions below on how to compile these two packages locally on your machine and include them into the **Integrated_3PCF_theory** directory.
 
 ### CLASS (Boltzmann solver)
 
-NOTE: Currently the **Integrated_3PCF_theory** code is written based on the **CLASS** v2.9.4. There were major changes in syntax and variable naming which **CLASS** introduced in its v3.0 onwards. We plan to update our code to these later versions of **CLASS** in the future.
+NOTE: Currently the **Integrated_3PCF_theory** code is written based on the **CLASS** v2.9.4. There were major changes in syntax and file naming which **CLASS** introduced in its v3.0 onwards. We plan to update our code to be compatible with these later **CLASS** versions in the future.
 
 1. Somewhere on your machine (e.g. inside a software folder in your home directory) download the v2.9.4 of **CLASS** from
 
@@ -38,13 +38,13 @@ unzip the folder
 
 cd /path/to/class_public-2.9.4/
 
-2. Compile and build this repository (please follow the instructions for building and compiling CLASS on the class_public github page). One usually simply has to do:
+2. Compile and build this repository (please follow the instructions for building and compiling **CLASS** on the class_public github page). One usually simply has to do:
 
 make class -j
 
-Note that you do NOT need to install the CLASSY python package.
+Note that you do NOT need to install the **CLASSY** python package for this project.
 
-3. Once **CLASS** has been built, go to the build directory inside class_public-2.9.4. Compile the *.o files present inside that build directory and put them together into a single static library e.g. libclass.a
+3. Once compilation is complete without errors, go to the build directory inside class_public-2.9.4. Compile the *.o files present inside and put them together into a single static library e.g. libclass.a
 
 cd build/
 
@@ -93,6 +93,6 @@ ar rcs libcubature.a *.o
 
 cp /path/to/cubature/build/libcubature.a /path/to/Integrated_3PCF_theory/external/cubature_files/cubature_lib/.
 
-7. Also copy the cubature.h header file present in the **cubature** directory into the following folder of **Integrated_3PCF_theory**:
+7. Also copy the cubature.h header file from the **cubature** directory to the following folder of **Integrated_3PCF_theory**:
 
 cp /path/to/cubature/cubature.h /path/to/Integrated_3PCF_theory/external/cubature_files/cubature_include/.
