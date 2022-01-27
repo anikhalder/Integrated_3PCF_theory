@@ -207,7 +207,7 @@ double W_products(const std::string &key, const double &l_1, const double &phi_1
 
     else if (key == "X_v2")
     {
-        // this is for another argument form of the window functions; Need to investigate this further
+        // this is for another version of the argument form of the window functions; TODO: Need to investigate this further
         double W_m1m2 = info_iB_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB_W_FS.theta_T_meandelta);
         double W_1pl = info_iB_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,phi_l), info_iB_W_FS.theta_T_2pt);
         double W_2ml = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
@@ -592,7 +592,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     }
     */
 
-    // for lll integared bispectra (Comment this out when needed)
+    // for lll integared bispectra
     if (key == "B_nothing" || key == "A")
         return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*l_1*l_2*X_windows;
 
@@ -652,7 +652,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     else if (key == "B_xim_sin")
         X_windows *= sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
 
-    // this is for another argument form of the window functions; Need to investigate this further
+    // this is for another version of the argument form of the window functions; TODO: Need to investigate this further
     // else if (key == "B_xip_cos")
     //     X_windows *= cos(2*(phi_1 - phi_2));
 
@@ -934,7 +934,6 @@ void iB_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &
     double phi_l = 0.0;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
-
 
     params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
