@@ -25,6 +25,8 @@
 #include <cosmology_utils.h>
 #include <constants.h>
 
+#include <sys/time.h>
+
 //#define DBUG
 
 using namespace std;
@@ -74,7 +76,10 @@ template string str(const unsigned long long &x);
 //----------------
 ClassEngine::ClassEngine(const ClassParams& pars, bool verbose): cl(0),dofree(true)
 {
-
+  // struct timeval start, end;
+  // double time_taken;
+  // gettimeofday(&start, nullptr);
+  
   //prepare fp structure
   size_t n=pars.size();
   //
@@ -96,17 +101,24 @@ ClassEngine::ClassEngine(const ClassParams& pars, bool verbose): cl(0),dofree(tr
   if( verbose ) cout << __FILE__ << " : using lmax=" << _lmax <<endl;
   // assert(_lmax>0); // this collides with transfer function calculations
 
-    //input
+  //input
   if (input_init(&fc,&pr,&ba,&th,&pt,&tr,&pm,&sp,&nl,&le,&op,_errmsg) == _FAILURE_) 
     throw invalid_argument(_errmsg);
+
+  input_init_already_done = true;
 
   //proetction parametres mal defini
   for (size_t i=0;i<pars.size();i++){
     if (fc.read[i] !=_TRUE_) throw invalid_argument(string("invalid CLASS parameter: ")+fc.name[i]);
   }
 
+  // gettimeofday(&end, nullptr);
+  // time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+  // time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+  // std::cout << "Time taken for ClassEngine to do reading: " << time_taken << " sec" << std::endl;
+
   //calcul class
-  computeCls();
+  computeCls(); // This seems to take the major amount of time
   
   //cout <<"creating " << sp.ct_size << " arrays" <<endl;
   if( pt.has_cl_cmb_temperature || pt.has_cl_cmb_polarization || pt.has_cl_lensing_potential ){
@@ -115,73 +127,20 @@ ClassEngine::ClassEngine(const ClassParams& pars, bool verbose): cl(0),dofree(tr
 
   //printFC();
 
-  std::vector<double> m_z_array;
-  std::vector<double> m_k_NL_z_array;
-  std::vector<double> m_bihalofit_R_NL_z_array;
-  std::vector<double> m_bihalofit_n_eff_z_array;
-
-  bihalofit_compute_pk_norm();
-
-  double z=0;
-  while (z <= 2.0)
-  {
-    m_z_array.push_back(z);
-    m_k_NL_z_array.push_back(get_k_NL_from_lin_Pk(z));
-
-    double R_NL;
-
-    if (compute_bihalofit)
-    {
-        R_NL = bihalofit_R_NL(z);
-        m_bihalofit_R_NL_z_array.push_back(R_NL);
-        m_bihalofit_n_eff_z_array.push_back(bihalofit_n_eff(z, R_NL));
-
-        std::cout << z << " " << get_Omega_m_z(z) << " " << R_NL << std::endl;
-    }
-    else
-    {
-        R_NL = 0;
-        m_bihalofit_R_NL_z_array.push_back(0);
-        m_bihalofit_n_eff_z_array.push_back(0);
-    }
-
-    z = z + 0.05;
-  }
-
-  k_NL_z_from_lin_Pk_array = Linear_interp_1D(m_z_array, m_k_NL_z_array);
-  bihalofit_R_NL_z_array = Linear_interp_1D(m_z_array, m_bihalofit_R_NL_z_array);
-  bihalofit_n_eff_z_array = Linear_interp_1D(m_z_array, m_bihalofit_n_eff_z_array);
-
-  std::vector<double> G_1_k_array = read_1_column_table("../data/response_functions/G_1_k_h.tab"); // in h/Mpc
-  std::vector<double> G_1_z_array = read_1_column_table("../data/response_functions/G_1_z.tab");
-  std::vector<double> G_1_vals_array = read_1_column_table("../data/response_functions/G_1_vals.tab");
-
-  for (size_t i=0; i<G_1_k_array.size(); i++)
-  {
-      G_1_k_array[i] *=  ba.h; // convert to 1/Mpc
-  }
-
-  G_1_k_z = Linear_interp_2D(G_1_k_array, G_1_z_array, G_1_vals_array);
-
-  std::vector<double> G_K_k_array = read_1_column_table("../data/response_functions/G_K_k_h.tab"); // in h/Mpc
-  std::vector<double> G_K_z_array = read_1_column_table("../data/response_functions/G_K_z.tab");
-  std::vector<double> G_K_vals_array = read_1_column_table("../data/response_functions/G_K_vals.tab");
-
-  for (size_t i=0; i<G_K_k_array.size(); i++)
-  {
-      G_K_k_array[i] *=  ba.h;// convert to 1/Mpc
-  }
-
-  G_K_k_z = Linear_interp_2D(G_K_k_array, G_K_z_array, G_K_vals_array);
+  compute_bispectrum_helpers();
 
   m_f_NL_local = 0;
   m_f_NL_equilateral = 0;
   m_f_NL_orthogonal = 0;
+
+  // gettimeofday(&end, nullptr);
+  // time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+  // time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+  // std::cout << "Time taken for ClassEngine to do reading and all computations: " << time_taken << " sec" << std::endl;
 }
 
 ClassEngine::ClassEngine(const ClassParams& pars,const string & precision_file, bool verbose): cl(0),dofree(true)
 {
-
   struct file_content fc_precision;
   fc_precision.size = 0;
   //decode pre structure
@@ -206,10 +165,8 @@ ClassEngine::ClassEngine(const ClassParams& pars,const string & precision_file, 
     }
   }
   if( verbose ) cout << __FILE__ << " : using lmax=" << _lmax <<endl;
-  assert(_lmax>0);
+  //assert(_lmax>0);
   
-
-
   //concatenate both
   if (parser_cat(&fc_input,&fc_precision,&fc,_errmsg) == _FAILURE_) throw invalid_argument(_errmsg);
 
@@ -219,6 +176,8 @@ ClassEngine::ClassEngine(const ClassParams& pars,const string & precision_file, 
   //input
   if (input_init(&fc,&pr,&ba,&th,&pt,&tr,&pm,&sp,&nl,&le,&op,_errmsg) == _FAILURE_) 
     throw invalid_argument(_errmsg);
+
+  input_init_already_done = true;
 
   //proetction parametres mal defini
   for (size_t i=0;i<pars.size();i++){
@@ -233,6 +192,50 @@ ClassEngine::ClassEngine(const ClassParams& pars,const string & precision_file, 
     cl=new double[sp.ct_size];
   }
   //printFC();
+
+  compute_bispectrum_helpers();
+
+  m_f_NL_local = 0;
+  m_f_NL_equilateral = 0;
+  m_f_NL_orthogonal = 0;
+}
+
+ClassEngine::ClassEngine(int argc, char **argv): cl(0),dofree(true)
+{
+  // struct timeval start, end;
+  // double time_taken;
+  // gettimeofday(&start, nullptr);
+
+  //input
+  if (input_init_from_arguments(argc,argv,&pr,&ba,&th,&pt,&tr,&pm,&sp,&nl,&le,&op,_errmsg) == _FAILURE_) 
+    throw invalid_argument(_errmsg);
+
+  input_init_already_done = true;
+
+  // gettimeofday(&end, nullptr);
+  // time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+  // time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+  // std::cout << "Time taken for ClassEngine to do reading: " << time_taken << " sec" << std::endl;
+
+  //calcul class
+  computeCls();
+  
+  //cout <<"creating " << sp.ct_size << " arrays" <<endl;
+  if( pt.has_cl_cmb_temperature || pt.has_cl_cmb_polarization || pt.has_cl_lensing_potential ){
+    cl=new double[sp.ct_size];
+  }
+  //printFC();
+
+  compute_bispectrum_helpers();
+
+  m_f_NL_local = 0;
+  m_f_NL_equilateral = 0;
+  m_f_NL_orthogonal = 0;
+
+  // gettimeofday(&end, nullptr);
+  // time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+  // time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+  // std::cout << "Time taken for ClassEngine to do reading and all computations: " << time_taken << " sec" << std::endl;
 }
   
 //--------------
@@ -240,7 +243,6 @@ ClassEngine::ClassEngine(const ClassParams& pars,const string & precision_file, 
 //--------------
 ClassEngine::~ClassEngine()
 {
-
   //printFC();
   dofree && freeStructs();
 
@@ -248,6 +250,7 @@ ClassEngine::~ClassEngine()
     delete [] cl;
   }
 
+  input_init_already_done = false;
 }
 
 //-----------------
@@ -260,14 +263,18 @@ bool ClassEngine::updateParValues(const std::vector<double>& par)
     double val=par[i];
     strcpy(fc.value[i],str(val).c_str());
     strcpy(fc.name[i],parNames[i].c_str());
-#ifdef DBUG
+  
+  #ifdef DBUG
     cout << "update par values #" << i << "\t" <<  val << "\t" << str(val).c_str() << endl;
-#endif
+  #endif
   }
+
+  input_init_already_done = false;
+  
   int status=computeCls();
-#ifdef DBUG
-  cout << "update par status=" << status << " succes=" << _SUCCESS_ << endl;
-#endif
+  #ifdef DBUG
+    cout << "update par status=" << status << " succes=" << _SUCCESS_ << endl;
+  #endif
 
   return (status==_SUCCESS_);
 }
@@ -293,12 +300,14 @@ int ClassEngine::class_main(
 			    struct output * pop,
                 ErrorMsg errmsg)
 {
-  
-
-  if (input_init(pfc,ppr,pba,pth,ppt,ptr,ppm,psp,pnl,ple,pop,errmsg) == _FAILURE_) {
-    printf("\n\nError running input_init_from_arguments \n=>%s\n",errmsg);
-    dofree=false;
-    return _FAILURE_;
+  if (input_init_already_done == false)
+  {
+    if (input_init(pfc,ppr,pba,pth,ppt,ptr,ppm,psp,pnl,ple,pop,errmsg) == _FAILURE_) {
+      printf("\n\nError running input_init_from_arguments \n=>%s\n",errmsg);
+      dofree=false;
+      return _FAILURE_;
+    }
+    input_init_already_done = true;
   }
 
   if (background_init(ppr,pba) == _FAILURE_) {
@@ -441,6 +450,71 @@ int ClassEngine::computeCls()
   cout <<"status=" << status << endl;
 #endif
   return status;
+
+}
+
+void ClassEngine::compute_bispectrum_helpers()
+{
+  std::vector<double> m_z_array;
+  std::vector<double> m_k_NL_z_array;
+  std::vector<double> m_bihalofit_R_NL_z_array;
+  std::vector<double> m_bihalofit_n_eff_z_array;
+
+  if (compute_bihalofit)
+    bihalofit_compute_pk_norm();
+
+  double z=0;
+  while (z <= 2.0)
+  {
+    m_z_array.push_back(z);
+    m_k_NL_z_array.push_back(get_k_NL_from_lin_Pk(z));
+
+    double R_NL;
+
+    if (compute_bihalofit)
+    {
+        R_NL = bihalofit_R_NL(z);
+        m_bihalofit_R_NL_z_array.push_back(R_NL);
+        m_bihalofit_n_eff_z_array.push_back(bihalofit_n_eff(z, R_NL));
+
+        if (verbose_print_outs)
+          std::cout << z << " " << get_Omega_m_z(z) << " " << R_NL << std::endl;
+    }
+    else
+    {
+        R_NL = 0;
+        m_bihalofit_R_NL_z_array.push_back(0);
+        m_bihalofit_n_eff_z_array.push_back(0);
+    }
+
+    z = z + 0.05;
+  }
+
+  k_NL_z_from_lin_Pk_array = Linear_interp_1D(m_z_array, m_k_NL_z_array);
+  bihalofit_R_NL_z_array = Linear_interp_1D(m_z_array, m_bihalofit_R_NL_z_array);
+  bihalofit_n_eff_z_array = Linear_interp_1D(m_z_array, m_bihalofit_n_eff_z_array);
+
+  std::vector<double> G_1_k_array = read_1_column_table("../data/response_functions/G_1_k_h.tab"); // in h/Mpc
+  std::vector<double> G_1_z_array = read_1_column_table("../data/response_functions/G_1_z.tab");
+  std::vector<double> G_1_vals_array = read_1_column_table("../data/response_functions/G_1_vals.tab");
+
+  for (size_t i=0; i<G_1_k_array.size(); i++)
+  {
+      G_1_k_array[i] *=  ba.h; // convert to 1/Mpc
+  }
+
+  G_1_k_z = Linear_interp_2D(G_1_k_array, G_1_z_array, G_1_vals_array);
+
+  std::vector<double> G_K_k_array = read_1_column_table("../data/response_functions/G_K_k_h.tab"); // in h/Mpc
+  std::vector<double> G_K_z_array = read_1_column_table("../data/response_functions/G_K_z.tab");
+  std::vector<double> G_K_vals_array = read_1_column_table("../data/response_functions/G_K_vals.tab");
+
+  for (size_t i=0; i<G_K_k_array.size(); i++)
+  {
+      G_K_k_array[i] *=  ba.h;// convert to 1/Mpc
+  }
+
+  G_K_k_z = Linear_interp_2D(G_K_k_array, G_K_z_array, G_K_vals_array);
 
 }
 

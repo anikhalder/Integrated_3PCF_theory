@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <constants.h>
 #include <assert.h>
+#include <VEGAS_Integrator.h>
 
 namespace
 {
@@ -908,6 +909,96 @@ void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_
 
     result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
     error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+}
+
+// Monte-Carlo CIGAR
+
+double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params)
+{
+    params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *>(params);
+
+    // need the limits of the integrand because the cigar implementation of vegas only performs interation within the [0,1] hypercube
+    double z_ll = p->lower_limits[0];
+    double l_1_ll = p->lower_limits[1];
+    double l_2_ll = p->lower_limits[2];
+    double phi_1_ll = p->lower_limits[3];
+    double phi_2_ll = p->lower_limits[4];
+
+    double z_ul_m_ll = p->upper_limits[0]-z_ll;
+    double l_1_ul_m_ll = p->upper_limits[1]-l_1_ll;
+    double l_2_ul_m_ll = p->upper_limits[2]-l_2_ll;
+    double phi_1_ul_m_ll = p->upper_limits[3]-phi_1_ll;
+    double phi_2_ul_m_ll = p->upper_limits[4]-phi_2_ll;
+
+    double z = z_ll + z_ul_m_ll*k[0];
+    double l_1 = l_1_ll + l_1_ul_m_ll*k[1];
+    double l_2 = l_2_ll + l_2_ul_m_ll*k[2];
+    double phi_1 = phi_1_ll + phi_1_ul_m_ll*k[3];
+    double phi_2 = phi_2_ll + phi_2_ul_m_ll*k[4];
+
+    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+                                                         p->q1, p->q2, p->q3)*z_ul_m_ll*l_1_ul_m_ll*l_2_ul_m_ll*phi_1_ul_m_ll*phi_2_ul_m_ll;
+}
+
+void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                                         projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
+                                         double &result, double &error)
+{
+    double phi_l = 0.;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+
+    params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits};
+
+    VEGAS_Integrator cigar;
+    cigar.Set_Verbose(NONE);
+    cigar.Set_Integrand(iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
+    cigar.Improve_Grid();
+    cigar.Integration();
+
+    result = cigar.Get_Result();
+    error = cigar.Get_Error();
+}
+
+void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                 projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
+                 double &result, double &error)
+{
+    result = 0.0;
+    error = 0.0;
+
+    if (key == "B")
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+
+    else if (key == "B_xip_cos")
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+
+    else if (key == "B_xip_sin")
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+
+    else if (key == "B_xim_cos")
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+
+    else if (key == "B_xim_sin")
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+
+    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
+    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+}
+
+// Monte-Carlo angle averaged
+
+double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
+{
+    (void)(dim); // avoid unused parameter warnings
+
+    double phi_l = k[0], z = k[1], l_1 = k[2], l_2 = k[3], phi_1 = k[4], phi_2 = k[5];
+
+    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+
+    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+                                                         p->q1, p->q2, p->q3);
+
 }
 
 // h-cubature

@@ -74,9 +74,11 @@ class ClassEngine : public Engine
 
 public:
   //constructors
-  ClassEngine(const ClassParams& pars, bool verbose=true );
+  ClassEngine(const ClassParams& pars, bool verbose=true);
   //with a class .pre file
   ClassEngine(const ClassParams& pars, const string & precision_file, bool verbose=true);
+  //with a class .ini file and also .pre file
+  ClassEngine(int argc, char **argv);
 
   // destructor
   ~ClassEngine();
@@ -231,8 +233,12 @@ private:
   bool dofree;
   int freeStructs();
 
+  bool input_init_already_done;
+
   //call once /model
   int computeCls();
+
+  void compute_bispectrum_helpers();
 
   int class_main(
 		 struct file_content *pfc,

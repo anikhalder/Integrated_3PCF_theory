@@ -15,6 +15,7 @@
 #include <real_space_2D.h>
 #include <sstream>
 #include <halo_utils.hpp>
+#include <VEGAS_Integrator.h>
 
 /*
  * Things to check/change before compiling the code and performing an execution:
@@ -44,13 +45,115 @@
  *
  */
 
+/*
+double func_weight(std::vector<double> x, void* param)
+{
+    double dx = *((double *)param);
+    double xmin = -1.0 + dx;
+    double xmax = 1.0 - dx;
+    double x_true = x[0]*2.0-1.0;
+    if (x_true < xmin || x_true > xmax)
+    {
+        return 0;
+    }
+    return (1.0+x_true*x_true)/(1.0-x_true*x_true)*2;
+}
+double func_WW2hh(std::vector<double> x, void *param)
+{
+    double *par = (double *)param;
+    double s = par[0]*par[0];
+    double MH = 125.0;
+    double MW = 80.385;
+    double MH2 = MH*MH;
+    double MW2 = MW*MW;
+    double cth = x[0]*2.0-1.0;
+    double cth2 = cth*cth;
+    double num = 8*pow(MH2,3)*(cth2*s-2*MW2+s)+2*MH2*MH2*(16*(2*cth2+1)*MW2*MW2-40*cth2*MW2*s+(cth2-3)*s*s) + MH2*s*(16*(cth2-3)*MW2*MW2 + 4*(7*cth2+4)*MW2*s-(cth2-1)*s*s) - 8*(cth2-2)*MW2*MW2*s*s - 2*(cth2+3)*MW2*s*s*s;
+    double den = 16*MW2*MW2*pow(s-MH2,2)*pow(-4*MH2*(cth2*(4*MW2-s)+s)+s*(cth2*(4*MW2-s)+s)+4*MH2*MH2,2);
+    return pow(num,2)/den;
+}
+double func_4D(std::vector<double> x, void *param)
+{
+    double r1[4] = {0.33,0.5,0.5,0.5};
+    double r2[4] = {0.67,0.5,0.5,0.5};
+    double x1=0;
+    double x2=0;
+    for (int i = 0; i < 4; i++)
+    {
+        x1 += -100*pow(x[i]-r1[i],2);
+        x2 += -100*pow(x[i]-r2[i],2);
+    }
+    return exp(x1) + exp(x2);
+}
+double func_2D(std::vector<double> x, void *param)
+{
+    double xl = -2;
+    double xu = 3;
+    double yl = -5;
+    double yu = 15;
+    
+    return (pow(xl + (xu-xl)*x[0],2) + pow(yl + (yu-yl)*x[1],2))*(xu-xl)*(yu-yl);
+}
+*/
+
 int main()
 {  
     struct timeval start_file, end_file;
-
     gettimeofday(&start_file, nullptr);
-
     double time_taken_file;
+
+    #pragma omp parallel
+    {
+        #pragma omp master
+        {
+            std::cout << "A maximum of " << omp_get_max_threads() << " OpenMP threads are present in this machine!" << std::endl;
+        }
+    }
+
+    const int thread_count = static_cast<int>(omp_get_max_threads())-1;
+    
+    if (verbose_print_outs)
+        std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
+
+    VEGAS_Integrator inter;
+    inter.Set_Verbose(NONE);
+    
+    /*
+    #pragma omp parallel for num_threads(thread_count)
+    for (double dx = 0.02; dx < 0.31; dx += 0.02)
+    {
+        VEGAS_Integrator inter;
+        inter.Set_Verbose(NONE);
+        inter.Set_Integrand(func_weight, 1, &dx);
+        inter.Improve_Grid();
+        inter.Integration();
+        std::cout<<"dx: "<<dx<<" res: "<<inter.Get_Result()<<" err: "<<inter.Get_Error()<<" chi2: "<<inter.Get_Chisq()<<std::endl;
+    }
+    */
+    
+    /*
+    double energies[37] = {1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2200,2400,2600,2800,3000,3200,3400,3600,3800,4000,5000,6000,7000,8000,9000,10000,12000,14000,16000,18000,20000,22000,24000,26000,28000,30000};
+    //#pragma omp parallel for num_threads(thread_count)
+    for (int i = 0; i < 37; i++)
+    {
+        VEGAS_Integrator inter;
+        inter.Set_Verbose(NONE);
+        inter.Set_Integrand(func_WW2hh, 1, &energies[i]);
+        inter.Improve_Grid();
+        inter.Integration();
+        std::cout<<"Ecm: "<<energies[i]<<" res: "<<inter.Get_Result()/pow(energies[i],2)<<" err: "<<inter.Get_Error()/pow(energies[i],2)<<" chi2: "<<inter.Get_Chisq()<<std::endl;
+    }
+    
+    inter.Set_Integrand(func_4D,4,NULL);
+    inter.Improve_Grid();
+    inter.Integration();
+    std::cout<<"Result: "<<inter.Get_Result()<<" Error: "<<inter.Get_Error()<<" chi2: "<<inter.Get_Chisq()<<std::endl;
+
+    inter.Set_Integrand(func_2D,2,NULL);
+    inter.Improve_Grid();
+    inter.Integration();
+    std::cout<<"Result: "<<inter.Get_Result()<<" Error: "<<inter.Get_Error()<<" chi2: "<<inter.Get_Chisq()<<std::endl;
+    */
 
     std::vector<std::string> filename_extension_array =
             { ".dat",
@@ -71,7 +174,25 @@ int main()
 
         std::string filename_extension = filename_extension_array.at(i);
 
+        // -------------------------------------------------------------------------------------
+
+        struct timeval start, end;
+
+        double time_taken;
+
+        const gsl_rng_type *T = gsl_rng_default;
+
+        size_t counter = 0;
+
         // ######################################################################################
+        // ######################################################################################
+        // ######################################################################################
+
+        // Setting up cosmology and CLASS object
+
+        gettimeofday(&start, nullptr);
+
+        // -------------------------------------------------------------------------------------
 
         // Set cosmology (only comment out/enter the one that is needed)
 
@@ -226,13 +347,13 @@ int main()
         double omega_b = Omega_b*h*h;
         double omega_cdm = Omega_cdm*h*h;
 
-        // ######################################################################################
+        // -------------------------------------------------------------------------------------
 
         // CLASS config
 
         ClassParams pars;
 
-        // #####################
+        // -------------------------
 
         // set cosmological parameters within CLASS
 
@@ -246,20 +367,21 @@ int main()
         //pars.add("A_s",A_s);
 
         // for dark energy
-        pars.add("Omega_Lambda",0);
+        pars.add("Omega_Lambda",0.0);
         pars.add("fluid_equation_of_state","CLP");
         pars.add("w0_fld",w_0);
         pars.add("wa_fld",w_a);
 
         // TODO: for massive neutrinos !!!!
 
-        // #####################
+        // -------------------------
 
         // for the computational output of the 3D matter power spectrum, total density and velocity transfer functions
 
-        pars.add("output","mPk, dTk, vTk");
+        pars.add("output","mPk, dTk, vTk"); // settings for papers
+        //pars.add("output","mPk");
 
-        // #####################
+        // -------------------------
 
         // for non-linear power spectrum use either halofit or hmcode (comment out the one not being used)
 
@@ -268,18 +390,19 @@ int main()
 
         pars.add("non linear","hmcode");
 
-        // #####################
+        // -------------------------
 
         // baryonic parameters (only when using hmcode 2016; otherwise comment these lines out)
 
         pars.add("eta_0",eta_0);
         pars.add("c_min",c_min);
 
-        // #####################
+        // -------------------------
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
@@ -290,25 +413,9 @@ int main()
 
         pars.add("z_max_pk",3.5);
 
-        // #####################
+        // -------------------------
 
         // set verbose parameters for showing output to the terminal
-
-        //pars.add("input_verbose",10);
-        //pars.add("background_verbose",10);
-        //pars.add("thermodynamics_verbose",1);
-        //pars.add("perturbations_verbose",1);
-        //pars.add("transfer_verbose",0);
-        //pars.add("primordial_verbose",1);
-        //pars.add("spectra_verbose",0);
-        //pars.add("nonlinear_verbose",10);
-        //pars.add("lensing_verbose",0);
-        //pars.add("output_verbose",0);
-
-        std::cout << "\n#########################################" << std::endl;
-        std::cout << "#" << i << std::endl;
-        std::cout << "Omega_cdm   sigma8   n_s   w_0   w_a   eta_0   c_min   h" << std::endl;
-        std::cout << Omega_cdm << " " << sigma8 << " " << n_s << " " << w_0 << " " << w_a << " " << eta_0 << " " << c_min << " " << h << "\n" << std::endl;
 
         pars.add("input_verbose",0);
         pars.add("background_verbose",0);
@@ -321,19 +428,46 @@ int main()
         pars.add("lensing_verbose",0);
         pars.add("output_verbose",0);
 
-        std::unique_ptr<ClassEngine> class_obj (new ClassEngine(pars));
+        // create CLASS object using parameters input in main.cpp
+        std::unique_ptr<ClassEngine> class_obj (new ClassEngine(pars, false));
 
-        // #####################
+        // create CLASS object using parameters input in main.cpp along with .pre file
+        //std::unique_ptr<ClassEngine> class_obj (new ClassEngine(pars, (char*)"pk_ref.pre", false));
+
+        // create CLASS object using .ini file (can also provide .pre file)
+        //char *argv[] = {(char*)"class", (char*)"takahashi_fiducial.ini", NULL};
+        //int argc = 0; 
+        //while(argv[++argc] != NULL);
+        //std::unique_ptr<ClassEngine> class_obj (new ClassEngine(argc, argv));
+
+        // -------------------------
 
         // TODO: set primordial non-Gaussianity (not really needed as of now and will investigate this in the future --> hence, setting them to zero)
 
-        class_obj->set_f_NL_local(0);
-        class_obj->set_f_NL_equilateral(0);
-        class_obj->set_f_NL_orthogonal(0);
+        // class_obj->set_f_NL_local(0);
+        // class_obj->set_f_NL_equilateral(0);
+        // class_obj->set_f_NL_orthogonal(0);
+
+        gettimeofday(&end, nullptr);
+        time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+        time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+        std::cout << "Time taken for setting cosmology and CLASS object creation: " << time_taken << " sec" << std::endl;
+
+        // -------------------------------------------------------------------------------------
+
+        if (verbose_print_outs)
+        {
+            std::cout << "\n#########################################" << std::endl;
+            std::cout << "#" << i << std::endl;
+            std::cout << "Omega_cdm   sigma8   n_s   w_0   w_a   eta_0   c_min   h" << std::endl;
+            std::cout << Omega_cdm << " " << sigma8 << " " << n_s << " " << w_0 << " " << w_a << " " << eta_0 << " " << c_min << " " << h << "\n" << std::endl;
+        }
 
         // ######################################################################################
+        // ######################################################################################
+        // ######################################################################################
 
-        // Output settings
+        // Computation settings
 
         bool compute_initial_checks = false;
         bool compute_sigma_quantities_tables = false;
@@ -345,23 +479,29 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-       bool compute_2D_integrated_3PCF_area_pre_factors = true;
-       bool compute_2D_power_spectra = true;
-       bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-       bool compute_2D_2PCF = true;
-       bool compute_2D_bispectra_equilateral = false;
-       bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-       bool compute_2D_integrated_bispectra_v2 = true;
-       bool compute_2D_integrated_3PCF = true;
-
-        // bool compute_2D_integrated_3PCF_area_pre_factors = false;
-        // bool compute_2D_power_spectra = false;
+        // bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        // bool compute_2D_power_spectra = true;
         // bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
         // bool compute_2D_2PCF = true;
         // bool compute_2D_bispectra_equilateral = false;
         // bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        // bool compute_2D_integrated_bispectra_v2 = false;
+        // bool compute_2D_integrated_bispectra_v2 = true;
         // bool compute_2D_integrated_3PCF = true;
+
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_power_spectra = true;
+        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
+        bool compute_2D_2PCF = true;
+        bool compute_2D_bispectra_equilateral = false;
+        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
+        bool compute_2D_integrated_bispectra_v2 = true;
+        bool compute_2D_integrated_3PCF = true;
+
+        // ######################################################################################
+        // ######################################################################################
+        // ######################################################################################
+
+        // Folder settings
 
         //std::string spectra_folder = "./takahashi_B_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
         //std::string correlations_folder = "./takahashi_B_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
@@ -375,7 +515,7 @@ int main()
         //std::string spectra_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iBkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
         //std::string correlations_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iZkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
 
-        // ########################
+        // -------------------------
         // With 157 ells upto ell_max=20000; MC integration (2e6 and double of it for ell<150)
 
         // For validation against T17 with bsr corrections
@@ -386,7 +526,7 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq_RF_ell157_iBkxi_U70W75W75_cross_zs10_zs16_mc_2e6_x2_150_20000_with_baryons_change_params/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq_RF_ell157_iZkxi_U70W75W75_cross_zs10_zs16_mc_2e6_x2_150_20000_with_baryons_change_params/";
 
-        // ########################
+        // -------------------------
         // With 150 ells upto ell_max=12000; MC integration (2e6 and double of it for ell<150)
 
         // For validation against T17 with bsr corrections - GM / tree / bihalofit
@@ -401,7 +541,7 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq9_RF_ell150_iBkxi_U70W75W75_cross_zs10_zs16_mc_2e6_x2_150_12000_with_baryons_change_params/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq9_RF_ell150_iZkxi_U70W75W75_cross_zs10_zs16_mc_2e6_x2_150_12000_with_baryons_change_params/";
 
-        // ########################
+        // -------------------------
         // With 150 ells upto ell_max=20000; MC integration (1e6 and double of it for ell<=200)
 
         // For validation against T17 with bsr corrections - GM / tree / bihalofit
@@ -416,7 +556,7 @@ int main()
         //*std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell150_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2.5e6_x2_200_20000_with_baryons_change_params/";
         //*std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell150_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2.5e6_x2_200_20000_with_baryons_change_params/";
 
-        // ########################
+        // -------------------------
         // With 120 ells upto ell_max=20000; MC integration (2e6 and double of it for ell<=220)
 
 //        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_owls_dmonly/";
@@ -432,7 +572,7 @@ int main()
 //        //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_with_baryons_change_params/";
 //        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_with_baryons_change_params_bin_averaged_P_qag/";
 
-        // ########################
+        // -------------------------
         // Halo bias
         // With 150 ells upto ell_max=20000; MC integration (1e6 and double of it for ell<=200)
 
@@ -448,17 +588,24 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./test_spectra/";
-        std::string correlations_folder = "./test_correlations/";
+        //std::string spectra_folder = "./test_spectra_pars_v3/";
+        //std::string correlations_folder = "./test_correlations_pars_v3/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
 
-        // ######################################################################################
+        std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
+
+        // -------------------------------------------------------------------------------------
+
+        // create folders
 
         std::experimental::filesystem::create_directory(spectra_folder);
         std::experimental::filesystem::create_directory(correlations_folder);
 
+        // ######################################################################################
+        // ######################################################################################
         // ######################################################################################
 
         // 2D window, projection kernel, spectra and correlation calculation settings
@@ -470,7 +617,9 @@ int main()
 
         double theta_T = 75*arcmin;
         double patch_area_sq_radians = spherical_cap_radius_2_sqradians(theta_T);
-        std::cout << "\nPatch area (square radians) = " << patch_area_sq_radians << std::endl;
+
+        if (verbose_print_outs)
+            std::cout << "\nPatch area (square radians) = " << patch_area_sq_radians << std::endl;
 
         std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_20_bins.tab");
         assert(!alpha_table.empty());
@@ -498,7 +647,8 @@ int main()
         //for(int i=0; i<num_pts; i++)
         //    l_array.push_back(pow(10, a + i * (b - a) / (num_pts - 1)));
 
-        std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
+        if (verbose_print_outs)
+            std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
 
         // --------------------------------------------------------
         // Source (shear/convergence) correlations settings
@@ -566,9 +716,7 @@ int main()
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
 
         for (size_t i = 0; i < zs_bins.size(); i++)
-        {
             qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
-        }
 
         // --------------------------------------------------------
         // Lens (halo/galaxy) correlations settings
@@ -638,10 +786,10 @@ int main()
         std::vector<double> iB_lss_lower_limits = { zl_lower, 1, 1, 0, 0};
         std::vector<double> iB_lss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
-        // ######################################################################################
+        // -------------------------------------------------------------------------------------
 
         bool use_pk_nl = true; // default settings
-        //bool use_pk_nl = false; // for tree level computations (for halos and galaxies)
+        //bool use_pk_nl = false; // for tree level computations (for halos and galaxies) 
 
         // -------------------------
 
@@ -696,7 +844,8 @@ int main()
         //filename_iB = "iBkxi_hcubature_angle_averaged.dat"; // for shear integrated bispectra - angle averaged TODO: still needs to be verified
         //filename_iB = "iBkxi_mc.dat"; // for shear integrated bispectra - using MC integration
 
-        std::string iB_integration_algorithm = "mc";
+        //std::string iB_integration_algorithm = "mc";
+        std::string iB_integration_algorithm = "mc_cigar";
         //std::string iB_integration_algorithm = "hcubature";
 
         size_t calls_iB_initial;
@@ -706,27 +855,6 @@ int main()
             calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
-
-        // ######################################################################################
-
-        #pragma omp parallel
-        {
-            #pragma omp master
-            {
-                std::cout << "A maximum of " << omp_get_max_threads() << " OpenMP threads are present in this machine!" << std::endl;
-            }
-        }
-
-        const int thread_count = static_cast<int>(omp_get_max_threads())-1;
-        std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
-
-        struct timeval start, end;
-
-        double time_taken;
-
-        const gsl_rng_type *T = gsl_rng_default;
-
-        size_t counter = 0;
 
         // ######################################################################################
         // ######################################################################################
@@ -825,7 +953,7 @@ int main()
             std::cout << "\ntest2" << std::endl;
             std::cout << "F4_sym(test) = " << F4_sym(1., 1., 1., 1., 1./sqrt(2.), 0., 1./sqrt(3.), 0, 2./sqrt(6.), -1./sqrt(3.)) << std::endl;
 
-            std::cout << "\F3 and F4 mode coupling kernel tests" << std::endl;
+            std::cout << "\nF3 and F4 mode coupling kernel tests" << std::endl;
             std::cout << "F3_sym(0.01, 1.6133604056037736, 1.6133604056037736, 0.02858865975884861, -0.02858865975884861, -0.999999) = " << F3_sym(0.01, 1.6133604056037736, 1.6133604056037736, 0.02858865975884861, -0.02858865975884861, -0.999999) << std::endl;
             std::cout << "F4_sym(0.33863256860613544, 0.33863256860613544, 0.021544346900318832, 0.021544346900318832, -0.999999, 0.04141981391515914, 0.8372570214291091, -0.04141981391515914, -0.8372570214291091, -0.5) = " << F4_sym(0.33863256860613544, 0.33863256860613544, 0.021544346900318832, 0.021544346900318832, -0.999999, 0.04141981391515914, 0.8372570214291091, -0.04141981391515914, -0.8372570214291091, -0.5) << std::endl;
 
@@ -1353,8 +1481,6 @@ int main()
             }
         }
 
-        std::cout << "Final value of counter = " << counter << std::endl;
-
         gettimeofday(&end, nullptr);
 
         time_taken = (end.tv_sec - start.tv_sec) * 1e6;
@@ -1386,7 +1512,8 @@ int main()
         {
             gettimeofday(&start, nullptr);
 
-            std::cout << "\nClock started (2D power spectra calculations started)" << std::endl;
+            if (verbose_print_outs)
+                std::cout << "\nClock started (2D power spectra calculations started)" << std::endl;
 
             std::vector<std::vector<std::vector<double>>> P_ss_array;
             std::vector<std::vector<std::vector<double>>> P_ll_array;
@@ -1461,16 +1588,13 @@ int main()
                     }
                 }
 
-                std::cout << ++counter << " " << l_array.at(idx) << std::endl;
+                if (verbose_print_outs)
+                    std::cout << ++counter << " " << l_array.at(idx) << std::endl;
             }
 
-            std::cout << "Final value of counter = " << counter << std::endl;
-
             gettimeofday(&end, nullptr);
-
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-
             std::cout << "Time taken for 2D power spectra calculations: " << time_taken << " sec" << std::endl;
 
             if (filename_P == "P_kk.dat" || filename_P == "P_ss.dat")
@@ -1526,7 +1650,8 @@ int main()
                 }
             }
 
-            std::cout<<"\n2D power spectra output files created\n";
+            if (verbose_print_outs)
+                std::cout<<"\n2D power spectra output files created\n";
 
             // Spherical sky 2D power spectra (e.g. for FLASK config)
 
@@ -1593,7 +1718,8 @@ int main()
                     }
                 }
 
-                std::cout<<"\n2D power spectra in spherical sky output files created\n";
+                if (verbose_print_outs)
+                    std::cout<<"\n2D power spectra in spherical sky output files created\n";
             }
         }
 
@@ -1607,6 +1733,8 @@ int main()
 
         if (compute_2D_2PCF)
         {
+            gettimeofday(&start, nullptr);
+
             if (filename_P == "P_kk.dat")
             {
                 size_t corr_idx = 0;
@@ -1771,7 +1899,14 @@ int main()
                 }
             }
 
-            std::cout<<"\n2D 2PCF(theta) output files created\n\n";
+            gettimeofday(&end, nullptr);
+            time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+            time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+            std::cout << "Time taken for 2D 2PCF calculations: " << time_taken << " sec" << std::endl;
+
+            if (verbose_print_outs)
+                std::cout<<"\n2D 2PCF output files created\n\n";
+
         }
 
         //}
@@ -1821,10 +1956,9 @@ int main()
                     }
                 }
 
-                std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+                if (verbose_print_outs)
+                    std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
             }
-
-            std::cout << "Final value of counter = " << counter << std::endl;
 
             gettimeofday(&end, nullptr);
 
@@ -1862,7 +1996,8 @@ int main()
                 }
             }
 
-            std::cout<<"\n2D bispectra output files created\n";
+            if (verbose_print_outs)
+                std::cout<<"\n2D bispectra output files created\n";
         }
 
         // ######################################################################################
@@ -1909,7 +2044,8 @@ int main()
                 area_pre_factor << alpha_table.at(alpha_idx) << " " << Adelta << " " << A2pt.at(alpha_idx) << "\n";
             }
 
-            std::cout<<"\n2D integrated 3PCF area pre-factors output file created\n";
+            if (verbose_print_outs)
+                std::cout<<"\n2D integrated 3PCF area pre-factors output file created\n";
 
             area_pre_factor.close();
         }
@@ -2133,10 +2269,7 @@ int main()
                 }
 
                 std::cout << ++counter << " " << l_array.at(l_idx) << " " << iB_111[l_idx][0] << std::endl;
-
             }
-
-            std::cout << "Final value of counter = " << counter << std::endl;
 
             gettimeofday(&end, nullptr);
 
@@ -2277,6 +2410,16 @@ int main()
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
+
+                                if (iB_integration_algorithm == "mc_cigar")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
                                 else if (iB_integration_algorithm == "hcubature")
                                 {
                                     // iB term
@@ -2316,6 +2459,21 @@ int main()
                                     // iBm term
                                     result = 0.0, error = 0.0;
                                     iB_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                if (iB_integration_algorithm == "mc_cigar")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2476,16 +2634,13 @@ int main()
                     }
                 }
 
-                std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+                if (verbose_print_outs)
+                    std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
             }
 
-            std::cout << "Final value of counter = " << counter << std::endl;
-
             gettimeofday(&end, nullptr);
-
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-
             std::cout << "Time taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
             if (filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
@@ -2612,7 +2767,8 @@ int main()
                 }
             }
 
-            std::cout<<"\n2D integrated bispectra output files created\n";
+            if (verbose_print_outs)
+                std::cout<<"\n2D integrated bispectra output files created\n";
         }
 
         // ######################################################################################
@@ -2625,6 +2781,8 @@ int main()
 
         if (compute_2D_integrated_3PCF)
         {
+            gettimeofday(&start, nullptr);
+
             if (filename_iB == "iB_Mkk.dat")
             {
                 size_t corr_idx = 0;
@@ -2897,7 +3055,13 @@ int main()
                 }
             }
 
-            std::cout<<"\n2D integrated 3PCF(theta) output files created\n";
+            gettimeofday(&end, nullptr);
+            time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+            time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+            std::cout << "Time taken for 2D integrated 3PCF calculations: " << time_taken << " sec" << std::endl;
+
+            if (verbose_print_outs)
+                std::cout<<"\n2D integrated 3PCF output files created\n";
         }
 
         //}
@@ -2905,10 +3069,8 @@ int main()
     }
 
     gettimeofday(&end_file, nullptr);
-
     time_taken_file = (end_file.tv_sec - start_file.tv_sec) * 1e6;
     time_taken_file = (time_taken_file + (end_file.tv_usec - start_file.tv_usec)) * 1e-6;
-
     std::cout << "\nTotal time taken for the execution of main.cpp: " << time_taken_file << " sec" << std::endl;
 
     return 0;
