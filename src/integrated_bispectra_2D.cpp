@@ -913,7 +913,7 @@ void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_
 
 // Monte-Carlo CIGAR
 
-double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params)
+double iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params)
 {
     params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *>(params);
 
@@ -952,7 +952,7 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
 
     VEGAS_Integrator cigar;
     cigar.Set_Verbose(NONE);
-    cigar.Set_Integrand(iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
+    cigar.Set_Integrand(iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
     cigar.Improve_Grid();
     cigar.Integration();
 
@@ -984,21 +984,6 @@ void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &
 
     result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
     error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
-}
-
-// Monte-Carlo angle averaged
-
-double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
-{
-    (void)(dim); // avoid unused parameter warnings
-
-    double phi_l = k[0], z = k[1], l_1 = k[2], l_2 = k[3], phi_1 = k[4], phi_2 = k[5];
-
-    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
-
-    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
-                                                         p->q1, p->q2, p->q3);
-
 }
 
 // h-cubature
