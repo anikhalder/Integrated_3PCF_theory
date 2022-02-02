@@ -271,7 +271,8 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
             {
                 cout<<"| Summary of Last 5 Iter: "<<setw(14)<<scientific<<setprecision(5)<< Res <<" | "<<setw(14)<<scientific<<setprecision(5)<< Err <<" | "<<resetiosflags(ios::scientific)<<fixed<<setw(8)<<setprecision(3)<<acc*100<<"% | Chi2 = "<<Chi2<<endl;
             }
-            if ( (acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 )
+            //if ( (acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 )
+            if ( ((acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 ) || NEVAL_START >= 500000 )
             {
                 break;
             }
