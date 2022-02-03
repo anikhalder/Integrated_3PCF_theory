@@ -6,6 +6,7 @@
 #include <interpolation_methods.h>
 #include <gsl/gsl_rng.h>
 #include <constants.h>
+#include <VEGAS_Integrator.h>
 
 // ######################################################################################
 
@@ -119,11 +120,11 @@ double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k
 
 void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                          projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                                         double &result, double &error);
+                                         VEGAS_Integrator &cigar, double &result, double &error, int thread_count);
 
 void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                 double &result, double &error);
+                 double &result, double &error, int thread_count);
 
 // h-cubature
 

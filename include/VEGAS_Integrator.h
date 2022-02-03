@@ -21,6 +21,7 @@ class VEGAS_Integrator
 {
 private:
     VEGAS_INTEGRATOR_VERBOSE verb;
+    int m_thread_count;
 
     INTEGRAND func;
     int N_DIM;
@@ -37,10 +38,11 @@ private:
 
 
 public:
-    VEGAS_Integrator(){verb = INFO;};
+    VEGAS_Integrator(){verb = INFO; m_thread_count = 1;};
     ~VEGAS_Integrator(){};
 
     void Set_Verbose(VEGAS_INTEGRATOR_VERBOSE level);
+    void Set_thread_count(int thread_count);
 
     void Set_Integrand(INTEGRAND integrand, int dim, void* param);
     void Improve_Grid();

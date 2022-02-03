@@ -8,7 +8,6 @@
 #include <stdlib.h>
 #include <constants.h>
 #include <assert.h>
-#include <VEGAS_Integrator.h>
 
 namespace
 {
@@ -942,7 +941,7 @@ double iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void
 
 void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                          projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                                         double &result, double &error)
+                                         VEGAS_Integrator &cigar, double &result, double &error, int thread_count)
 {
     double phi_l = 0.;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
@@ -950,8 +949,8 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
 
     params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits};
 
-    VEGAS_Integrator cigar;
-    cigar.Set_Verbose(NONE);
+    //VEGAS_Integrator cigar;
+    //cigar.Set_Verbose(NONE);
     cigar.Set_Integrand(iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
     cigar.Improve_Grid();
     cigar.Integration();
@@ -962,25 +961,28 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
 
 void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                 double &result, double &error)
+                 double &result, double &error, int thread_count)
 {
     result = 0.0;
     error = 0.0;
 
+    VEGAS_Integrator cigar;
+    cigar.Set_Verbose(NONE);
+
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error);
+        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
     error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;

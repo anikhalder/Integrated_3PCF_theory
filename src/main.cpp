@@ -2377,7 +2377,7 @@ int main()
 
             counter = 0;
 
-            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
+            //#pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             {
                 size_t calls_iB;
@@ -2415,7 +2415,7 @@ int main()
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
+                                    iB_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, thread_count);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
@@ -2467,13 +2467,13 @@ int main()
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
+                                    iB_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, thread_count);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error);
+                                    iB_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, thread_count);
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }

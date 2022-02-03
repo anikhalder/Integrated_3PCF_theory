@@ -10,6 +10,11 @@ void VEGAS_Integrator::Set_Verbose(VEGAS_INTEGRATOR_VERBOSE level)
     verb = level;
 }
 
+void VEGAS_Integrator::Set_thread_count(int thread_count)
+{
+    m_thread_count = thread_count;
+}
+
 void VEGAS_Integrator::Set_Integrand(INTEGRAND integrand, int dim, void* param)
 {
     func = integrand;
@@ -224,6 +229,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
         Results.push_back(0);
         Sigma2.push_back(0);
         NEVAL_REAL = 0;
+        //#pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
         for (int inc = 0; inc < strat.Get_NHYPERCUBICS(); inc++)
         {
             Jf = 0;
