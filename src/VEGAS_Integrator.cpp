@@ -260,6 +260,19 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
         {
             cout<<"| "<<setw(6)<<iter<<" | "<<setw(12)<<NEVAL_REAL<<" | "<<setw(14)<<scientific<<setprecision(5)<<Results[Results.size()-1]<<" | "<<setw(14)<<scientific<<setprecision(5)<<sqrt(Sigma2[Sigma2.size()-1])<<" | "<<resetiosflags(ios::scientific)<<fixed<<setw(8)<<setprecision(3)<<acc*100<<"% |"<<endl;
         }
+        if (iter==5)
+        {
+            Res = Get_Result();
+            Err = Get_Error();
+            Chi2 = Get_Chisq();
+            acc = Err/Res;
+            if (verb >= INFO)
+            {
+                cout<<"| Summary of Last 5 Iter: "<<setw(14)<<scientific<<setprecision(5)<< Res <<" | "<<setw(14)<<scientific<<setprecision(5)<< Err <<" | "<<resetiosflags(ios::scientific)<<fixed<<setw(8)<<setprecision(3)<<acc*100<<"% | Chi2 = "<<Chi2<<endl;
+            }
+            break;
+        }
+        /*
         if (iter%5==0)
         {
             // Every 5 iteration, we check whether we fullfil the condition
@@ -271,8 +284,8 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
             {
                 cout<<"| Summary of Last 5 Iter: "<<setw(14)<<scientific<<setprecision(5)<< Res <<" | "<<setw(14)<<scientific<<setprecision(5)<< Err <<" | "<<resetiosflags(ios::scientific)<<fixed<<setw(8)<<setprecision(3)<<acc*100<<"% | Chi2 = "<<Chi2<<endl;
             }
-            //if ( (acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 )
-            if ( ((acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 ) || NEVAL_START >= 500000 )
+            if ( (acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 )
+            //if ( ((acc < eps_rel || Err < eps_abs) && Chi2/5.0 < 1.0 ) || NEVAL_START >= 500000 )
             {
                 break;
             }
@@ -291,6 +304,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
                 continue;
             }
         }
+        */
     }
     if (verb >= INFO)
     {
