@@ -964,13 +964,13 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
 
 void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                 double &result, double &error, int thread_count)
+                 VEGAS_Integrator &cigar, double &result, double &error, int thread_count)
 {
     result = 0.0;
     error = 0.0;
 
-    VEGAS_Integrator cigar;
-    cigar.Set_Verbose(NONE);
+    //VEGAS_Integrator cigar;
+    //cigar.Set_Verbose(NONE);
 
     if (key == "B")
         iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
