@@ -1099,7 +1099,7 @@ double ClassEngine::get_rho_crit_z(const double &z)
 //    return(rho_crit_z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
 
     // alternative way of calculation
-    return pow(get_H_z(z),2)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
+    return get_H_z(z)*get_H_z(z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
 }
 
 double ClassEngine::get_rho_m_z(const double &z)
@@ -1159,17 +1159,17 @@ double ClassEngine::get_k_NL_from_lin_Pk(const double &z)
 
     k1 = k2 = 1;
 
-    while ( pow(k1,3)*pk_lin(k1,z)*inv_2PI2 > 1 )
+    while ( k1*k1*k1*pk_lin(k1,z)*inv_2PI2 > 1 )
         k1 *= 0.5;
 
-    while ( pow(k2,3)*pk_lin(k2,z)*inv_2PI2  < 1 )
+    while ( k2*k2*k2*pk_lin(k2,z)*inv_2PI2  < 1 )
         k2 *= 2.0;
 
     do
     {
         k_NL = 0.5*(k1+k2);
 
-        val_k_NL = pow(k_NL,3)*pk_lin(k_NL,z)*inv_2PI2 ;
+        val_k_NL = k_NL*k_NL*k_NL*pk_lin(k_NL,z)*inv_2PI2 ;
 
         if (val_k_NL < 1)
             k1 = k_NL;
@@ -1262,19 +1262,19 @@ double ClassEngine::get_G_K_k_z_interp(double k, double z)
 
 void ClassEngine::bihalofit_compute_pk_norm()
 {
-    m_bihalofit_norm = 1.0;
+    m_bihalofit_norm = 1.;
     m_bihalofit_norm*= get_sigma8_z(0)/bihalofit_sigma_j(8.,0);   // P(k) amplitude normalized by sigma8
 }
 
 double ClassEngine::bihalofit_pk_lin(const double &k_h, const double &z)
 {
     double h = get_h();
-    return m_bihalofit_norm*m_bihalofit_norm*pow(h,3)*pk_lin(k_h*h,z);
+    return m_bihalofit_norm*m_bihalofit_norm*h*h*h*pk_lin(k_h*h,z);
 }
 
 double ClassEngine::bihalofit_window(const double &x, const int &j)
 {
-    if(j==0) return 3.0/pow(x,3)*(sin(x)-x*cos(x));  // top hat
+    if(j==0) return 3./(x*x*x)*(sin(x)-x*cos(x));  // top hat
     if(j==1) return exp(-0.5*x*x);   // gaussian
     if(j==2) return x*exp(-0.5*x*x);  // 1st derivative gaussian
     else printf("None of the possible options selected! \n");
@@ -1282,21 +1282,21 @@ double ClassEngine::bihalofit_window(const double &x, const int &j)
 
 double ClassEngine::bihalofit_sigma_j(const double &R, const int &j) // R [Mpc/h]
 {
-    double k1_h = 2.0*M_PI/R; // [h/Mpc]
-    double k2_h = 2.0*M_PI/R; // [h/Mpc]
+    double k1_h = 2.*M_PI/R; // [h/Mpc]
+    double k2_h = 2.*M_PI/R; // [h/Mpc]
 
-    double xxpp=-1.0;
+    double xxpp=-1.;
     double xx;
 
     for(;;)
     {
-        k1_h=k1_h/10.0;
-        k2_h=k2_h*2.0;
+        k1_h=k1_h/10.;
+        k2_h=k2_h*2.;
 
         double a=log(k1_h);
         double b=log(k2_h);
 
-        double xxp=-1.0;
+        double xxp=-1.;
         int n=2;
 
         for(;;)
@@ -1397,7 +1397,7 @@ double ClassEngine::bihalofit_n_eff_interp(const double &z)
 
 //    primordial_spectrum_at_k(&pm, nl.index_md_scalars, linear, k, &pk);
 
-//    return 2*M_PI*M_PI/pow(k,3)*pk;
+//    return 2.*M_PI*M_PI/(k*k*k)*pk;
 //}
 
 double ClassEngine::pk_primordial(const double &k)
@@ -1406,7 +1406,7 @@ double ClassEngine::pk_primordial(const double &k)
 
     // Units: k [1/Mpc] and P(k) [Mpc^3]
 
-    return 2*M_PI*M_PI/pow(k,3) * get_A_s() * pow(k/get_k_pivot(), get_n_s() - 1);
+    return 2.*M_PI*M_PI/(k*k*k) * get_A_s() * pow(k/get_k_pivot(), get_n_s() - 1);
 }
 
 double ClassEngine::pk_gravitational_potential(const double &k)
@@ -1431,7 +1431,7 @@ double ClassEngine::M_poisson_factor(const double &k, const double &z)
 
     return M_k_z;
 
-    //return 2*pow(k,2)*Tk_z0_d_tot.interp(k)*class_obj->D_plus_z(z) / (3*class_obj->get_Omega0_m()*pow(class_obj->get_Hz(0),2));
+    //return 2*k*k*Tk_z0_d_tot.interp(k)*class_obj->D_plus_z(z) / (3*class_obj->get_Omega0_m()*pow(class_obj->get_Hz(0),2));
 }
 
 double ClassEngine::pk_lin(const double &k, const double &z)

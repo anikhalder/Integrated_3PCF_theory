@@ -11,7 +11,7 @@
 
 namespace
 {
-    const double integration_pre_factor = 1/pow(2*M_PI,4);
+    const double integration_pre_factor = 1./(16.*M_PI*M_PI*M_PI*M_PI); // 1/pow(2*M_PI,4)
 }
 
 // ######################################################################################
@@ -385,7 +385,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*X_W;
@@ -397,7 +397,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*Y_W;
@@ -409,7 +409,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*Z_W;
@@ -425,7 +425,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return 2*Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*(X_W + Y_W + Z_W);
@@ -435,7 +435,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 X_W;
@@ -445,7 +445,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 Y_W;
@@ -455,7 +455,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 Z_W;
@@ -467,7 +467,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 S2_1_2*X_W;
@@ -479,7 +479,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 S2_1_2*Y_W;
@@ -491,7 +491,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 S2_1_2*Z_W;
@@ -501,7 +501,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*
                 X_W;
@@ -511,7 +511,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*
                 l_2*class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 X_W;
@@ -521,7 +521,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
 
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 l_2*
                 Z_W;
@@ -537,7 +537,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 - phi_1));
 
-        return 2*Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*(X_W + Y_W + Z_W);
@@ -553,7 +553,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 - phi_1));
 
-        return 2*Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*(X_W + Y_W + Z_W);
@@ -569,7 +569,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 + phi_1));
 
-        return 2*Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*(X_W + Y_W + Z_W);
@@ -585,7 +585,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
         double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 + phi_1));
 
-        return 2*Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
                 class_obj->pk(l_2*chi_inv, z, use_pk_nl)*
                 lF2_1_2*(X_W + Y_W + Z_W);
@@ -594,44 +594,45 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     // for lll integared bispectra
     if (key == "B_nothing" || key == "A")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*l_1*l_2*X_windows;
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*l_1*l_2*X_windows;
 
     else if (key == "B_P")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_P(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 
     else if (key == "B_PP")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_PP(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 
     else if (key == "B_S2PP")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_S2PP(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 
     else if (key == "B_hhh_eps_eps_eps")
     {
-        double _1_over_n_h_z_2 = 1./pow(dynamic_cast<projection_kernel_q_h*>(q3)->get_n_h_z(z),2);
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*_1_over_n_h_z_2*l_1*l_2*X_windows;
+        double n_h_z = dynamic_cast<projection_kernel_q_h*>(q3)->get_n_h_z(z);
+        double _1_over_n_h_z_2 = 1./(n_h_z*n_h_z);
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*_1_over_n_h_z_2*l_1*l_2*X_windows;
     }
 
     else if (key == "B_hhh_delta_eps_eps")
     {
         double _1_over_n_h_z = 1./dynamic_cast<projection_kernel_q_h*>(q3)->get_n_h_z(z);
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_P(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*_1_over_n_h_z*
                 l_1*l_2*X_windows;
     }
 
     else if (key == "B_P2P3")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_PaPb(l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 
     else if (key == "B_S2P2P3")
-        return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+        return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B_S2PaPb(l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, l_1*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 
@@ -665,7 +666,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     // else if (key == "B_xim_sin")
     //     X_windows *= sin(2*(phi_1 + phi_2));
 
-    return Hz_inv*pow(chi_inv,4)*q_1*q_2*q_3*
+    return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 B(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*
                 l_1*l_2*X_windows;
 }
@@ -788,8 +789,9 @@ void iB_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_i
     else if (key == "B_S2P2P3")
         iB_los_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // Monte-Carlo angle averaged
@@ -906,8 +908,9 @@ void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_
     else if (key == "B_S2P2P3")
         iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // Monte-Carlo CIGAR
@@ -984,8 +987,9 @@ void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &
     else if (key == "B_xim_sin")
         iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // h-cubature
@@ -1087,8 +1091,9 @@ void iB_hcubature(const std::string &key, const double &l, const struct_iB_W_FS 
     else if (key == "B_xim_sin")
         iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // h-cubature with 4 dimensions
@@ -1143,8 +1148,9 @@ void iB_hcubature_4dim(const std::string &key, const double &l, const struct_iB_
     else if (key == "B_xim_sin")
         iB_los_l_1_l_2_phi_1_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    result = integration_pre_factor*2*M_PI*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*2*M_PI*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * 2*M_PI* patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * 2*M_PI* patch_sqradians * patch_sqradians * error;
 }
 
 
@@ -1203,8 +1209,9 @@ double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W
     else if (key == "B_xim_sin")
         iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result;
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error;
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 
     return result;
 }
@@ -1257,6 +1264,7 @@ void iB_hcubature_angle_averaged(const std::string &key, const double &l, const 
     else if (key == "B_xim_sin")
         iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    result = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*result / (2*M_PI);
-    error = integration_pre_factor*pow(spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt),2)*error / (2*M_PI);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result / (2*M_PI);
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error / (2*M_PI);
 }

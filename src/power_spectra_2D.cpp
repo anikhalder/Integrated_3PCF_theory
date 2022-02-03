@@ -41,19 +41,19 @@ double evaluate_P_los_integrand(const std::string &key, const double &l, ClassEn
     double Hz_inv = 1/class_obj->get_H_z(z);
 
     if (key == "P")
-        return Hz_inv*pow(chi_inv,2)*q_1*q_2*P(l*chi_inv,z,class_obj,use_pk_nl);
+        return Hz_inv*chi_inv*chi_inv*q_1*q_2*P(l*chi_inv,z,class_obj,use_pk_nl);
 
     else if (key == "P_nothing")
-        return Hz_inv*pow(chi_inv,2)*q_1*q_2;
+        return Hz_inv*chi_inv*chi_inv*q_1*q_2;
 
     else if (key == "P_hh_eps_eps")
     {
         double _1_over_n_h_z = 1./dynamic_cast<projection_kernel_q_h*>(q2)->get_n_h_z(z);
-        return Hz_inv*pow(chi_inv,2)*q_1*q_2*_1_over_n_h_z;
+        return Hz_inv*chi_inv*chi_inv*q_1*q_2*_1_over_n_h_z;
     }
 
     else
-        return Hz_inv*pow(chi_inv,2)*q_1*q_2*P(l*chi_inv,z,class_obj,use_pk_nl);
+        return Hz_inv*chi_inv*chi_inv*q_1*q_2*P(l*chi_inv,z,class_obj,use_pk_nl);
 }
 
 // Gaussian-quadrature

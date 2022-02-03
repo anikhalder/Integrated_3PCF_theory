@@ -235,7 +235,7 @@ double W3D_TH_FS(const double &k, const double &R)
     // see eqn (A.114) of Dodelson & Schmidt (2020)
     // k in [1/Mpc] and R in [Mpc] --> both are in comoving coordinates
     double x = k*R;
-    return -3./(pow(x,3))*(-x*cos(x) + sin(x));
+    return -3./(x*x*x)*(-x*cos(x) + sin(x));
 }
 
 double W3D_prime_TH_FS(const double &k, const double &R)
@@ -244,7 +244,7 @@ double W3D_prime_TH_FS(const double &k, const double &R)
     // d W(kR) / d R = (d W(kR) / d kR)*(d kR / d R) = k * (d W(kR) / d kR)
     // k in [1/Mpc] and R in [Mpc] --> both are in comoving coordinates
     double x = k*R;
-    return k*(-9./(pow(x,4))*(-x*cos(x) + sin(x)) + 3.*sin(x)/(pow(x,2)));
+    return k*(-9./(x*x*x*x)*(-x*cos(x) + sin(x)) + 3.*sin(x)/(x*x));
 }
 
 // ######################################################################################
@@ -253,7 +253,7 @@ double W3D_prime_TH_FS(const double &k, const double &R)
 
 double l_ApB(const double &l_A, const double &phi_A, const double &l_B, const double &phi_B)
 {
-    double val = sqrt(pow(l_A,2)+pow(l_B,2)+2*l_A*l_B*cos(phi_A-phi_B));
+    double val = sqrt(l_A*l_A+l_B*l_B+2*l_A*l_B*cos(phi_A-phi_B));
 
     if (isnan(val))
         return 0;
@@ -275,7 +275,7 @@ double phi_ApB(const double &l_A, const double &phi_A, const double &l_B, const 
 
 double l_ApBpC(const double &l_A, const double &phi_A, const double &l_B, const double &phi_B, const double &l_C, const double &phi_C)
 {
-    double val = sqrt(pow(l_A,2)+pow(l_B,2)+pow(l_C,2)
+    double val = sqrt(l_A*l_A+l_B*l_B+l_C*l_C
                 +2*l_A*l_B*cos(phi_A-phi_B)
                 +2*l_A*l_C*cos(phi_A-phi_C)
                 +2*l_B*l_C*cos(phi_B-phi_C));
@@ -330,7 +330,7 @@ double sigma_squared_R_z_integrand(double k, void *params)
     double z = p->z;
     double P_L = p->class_obj->pk_lin(k,z);
 
-    return k*k*P_L*pow(W3D_TH_FS(k,R),2);
+    return k*k*P_L*W3D_TH_FS(k,R)*W3D_TH_FS(k,R);
 }
 
 double sigma_squared_R_z(const double &R, const double &z,  ClassEngine *class_obj)
@@ -385,7 +385,7 @@ double pk_lin_manual(const double &k, const double &z, ClassEngine *class_obj, L
     // TODO: THIS IS INCORRECT!!! FIX THIS!!!
     // Units: k [1/Mpc] and P(k) [Mpc^3]
     // reproduce the same linear power spectrum as given out by class (for a non-running scalar spectral index)
-    return 2*M_PI*M_PI / pow(k,3) *  pow(class_obj->get_D_plus_z(z)*Tk_z0_d_tot.interp(k),2) *
+    return 2.*M_PI*M_PI / (k*k*k) *  pow(class_obj->get_D_plus_z(z)*Tk_z0_d_tot.interp(k),2) *
             class_obj->get_A_s() * pow(k/class_obj->get_k_pivot(), class_obj->get_n_s()-1);
 }
 
@@ -438,8 +438,9 @@ double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_inter
     qag_1D_integration_abs_rel(&W_k_zs_distribution_integrand, static_cast<void *>(&args), z, z_max, 5*calls_1e3, W_k_z, error);
 
     double chi_z = class_obj->get_chi_z(z);
+    double H_0 = class_obj->get_H_z(0);
 
-    return 3/2.0 * pow(class_obj->get_H_z(0),2) * class_obj->get_Omega0_m() * (1+z) * chi_z * W_k_z;
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * W_k_z;
 }
 
 double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs)
@@ -453,8 +454,9 @@ double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs)
 
     double chi_z = class_obj->get_chi_z(z);
     double chi_zs = class_obj->get_chi_z(zs);
+    double H_0 = class_obj->get_H_z(0);
 
-    return 3/2.0 * pow(class_obj->get_H_z(0),2) * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_zs - chi_z) / chi_zs;
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_zs - chi_z) / chi_zs;
 }
 
 double cmb_lensing_convergence_kernel(const double &z, ClassEngine *class_obj)
@@ -466,8 +468,9 @@ double cmb_lensing_convergence_kernel(const double &z, ClassEngine *class_obj)
 
     double chi_z = class_obj->get_chi_z(z);
     double chi_z_cmb = class_obj->get_chi_z(z_cmb);
+    double H_0 = class_obj->get_H_z(0);
 
-    return 3/2.0 * pow(class_obj->get_H_z(0),2) * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_z_cmb - chi_z) / chi_z_cmb; // / class_obj->get_Hz(z)  (should this H(z) be here?)
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_z_cmb - chi_z) / chi_z_cmb; // / class_obj->get_Hz(z)  (should this H(z) be here?)
 }
 
 double q_h_b1_integrand(double M, void *params)
@@ -497,7 +500,7 @@ double q_h_b1_unnormalised(const double &z, ClassEngine *class_obj, const double
 
     double chi_z = class_obj->get_chi_z(z);
 
-    return 4.*M_PI*pow(chi_z,2)*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
+    return 4.*M_PI*chi_z*chi_z*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
 }
 
 double q_h_b2_integrand(double M, void *params)
@@ -527,7 +530,7 @@ double q_h_b2_unnormalised(const double &z, ClassEngine *class_obj, const double
 
     double chi_z = class_obj->get_chi_z(z);
 
-    return 4.*M_PI*pow(chi_z,2)*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
+    return 4.*M_PI*chi_z*chi_z*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
 }
 
 double q_h_bs2_integrand(double M, void *params)
@@ -553,7 +556,7 @@ double q_h_bs2_unnormalised(const double &z, ClassEngine *class_obj, const doubl
 
     double chi_z = class_obj->get_chi_z(z);
 
-    return 4.*M_PI*pow(chi_z,2)*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
+    return 4.*M_PI*chi_z*chi_z*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
 }
 
 double q_h_without_b_integrand(double M, void *params)
@@ -577,7 +580,7 @@ double q_h_without_b_unnormalised(const double &z, ClassEngine *class_obj, const
 
     double chi_z = class_obj->get_chi_z(z);
 
-    return 4.*M_PI*pow(chi_z,2)*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
+    return 4.*M_PI*chi_z*chi_z*W_h_z; // this is an unnormalised quantity --> divide by the total number of halos in bin, N_h, to normalise
 }
 
 double n_h_z(const double &z, ClassEngine *class_obj, const double &M_min, const double &M_max)
@@ -681,7 +684,10 @@ projection_kernel_q_h::projection_kernel_q_h(ClassEngine *class_obj, const doubl
 
     m_N_h = N_h_hcubature(class_obj, m_z_min, m_z_max, m_M_min, m_M_max);
 
-    double V = 4*M_PI/3.0*( pow(class_obj->get_chi_z(z_max),3) - pow(class_obj->get_chi_z(z_min),3) );
+    double chi_z_max = class_obj->get_chi_z(z_max);
+    double chi_z_min = class_obj->get_chi_z(z_min);
+
+    double V = 4.*M_PI/3.*( chi_z_max*chi_z_max*chi_z_max - chi_z_min*chi_z_min*chi_z_min );
     m_n_h = m_N_h / V ; // [Mpc^-3]
 
     double z = m_z_min;
@@ -741,7 +747,10 @@ projection_kernel_q_h_b1::projection_kernel_q_h_b1(ClassEngine *class_obj, const
 
     m_N_h = N_h_hcubature(class_obj, m_z_min, m_z_max, m_M_min, m_M_max);
 
-    double V = 4*M_PI/3.0*( pow(class_obj->get_chi_z(z_max),3) - pow(class_obj->get_chi_z(z_min),3) );
+    double chi_z_max = class_obj->get_chi_z(z_max);
+    double chi_z_min = class_obj->get_chi_z(z_min);
+
+    double V = 4.*M_PI/3.*( chi_z_max*chi_z_max*chi_z_max - chi_z_min*chi_z_min*chi_z_min );
     m_n_h = m_N_h / V ; // [Mpc^-3]
 
     double z = m_z_min;
@@ -789,7 +798,10 @@ projection_kernel_q_h_b2::projection_kernel_q_h_b2(ClassEngine *class_obj, const
 
     m_N_h = N_h_hcubature(class_obj, m_z_min, m_z_max, m_M_min, m_M_max);
 
-    double V = 4*M_PI/3.0*( pow(class_obj->get_chi_z(z_max),3) - pow(class_obj->get_chi_z(z_min),3) );
+    double chi_z_max = class_obj->get_chi_z(z_max);
+    double chi_z_min = class_obj->get_chi_z(z_min);
+
+    double V = 4.*M_PI/3.*( chi_z_max*chi_z_max*chi_z_max - chi_z_min*chi_z_min*chi_z_min );
     m_n_h = m_N_h / V ; // [Mpc^-3]
 
     double z = m_z_min;
@@ -837,7 +849,10 @@ projection_kernel_q_h_bs2::projection_kernel_q_h_bs2(ClassEngine *class_obj, con
 
     m_N_h = N_h_hcubature(class_obj, m_z_min, m_z_max, m_M_min, m_M_max);
 
-    double V = 4*M_PI/3.0*( pow(class_obj->get_chi_z(z_max),3) - pow(class_obj->get_chi_z(z_min),3) );
+    double chi_z_max = class_obj->get_chi_z(z_max);
+    double chi_z_min = class_obj->get_chi_z(z_min);
+
+    double V = 4.*M_PI/3.*( chi_z_max*chi_z_max*chi_z_max - chi_z_min*chi_z_min*chi_z_min );
     m_n_h = m_N_h / V ; // [Mpc^-3]
 
     double z = m_z_min;
@@ -904,7 +919,7 @@ double T17_resolution_correction(const double &ell)
 {
     // finite angular resolution healpy map effect in T17
 
-    return 1.0 / (1+pow(ell/ell_res_T17,2));
+    return 1. / ( 1. + ell*ell/(ell_res_T17*ell_res_T17) );
 }
 
 double evaluate_Pk_shell_correction_integrand(const double &k_parallel, const double &k_perpendicular, const double &z, const double &delta_r, ClassEngine *class_obj)
@@ -913,7 +928,8 @@ double evaluate_Pk_shell_correction_integrand(const double &k_parallel, const do
 
     double k = sqrt(k_perpendicular*k_perpendicular + k_parallel*k_parallel);
     double x = k_parallel*delta_r/2.0;
-    return class_obj->pk_nl(k,z)*pow((sin(x)/x), 2);
+    double sinc_x = sin(x)/x;
+    return class_obj->pk_nl(k,z)*sinc_x*sinc_x;
 }
 
 double Pk_shell_correction_qag_integrand(double k_parallel, void *params)
@@ -947,8 +963,8 @@ double F2_EdS(const double &k_1, const double &k_2, const double &k_3)
     if(k_1 == 0 || k_2 == 0)
         return 0;
 
-    double cos_phi_12 = 0.5*(k_3*k_3-k_1*k_1-k_2*k_2)/(k_1*k_2); // law of cosines
-    return 5/7.0 + 0.5*cos_phi_12*(k_1/k_2 + k_2/k_1) + 2/7.0*pow(cos_phi_12,2);
+    double cos_phi_12 = 0.5*(k_3*k_3-k_1*k_1-k_2*k_2)/(k_1*k_2); // law of cosines (with a negative sign to get the complementary angle outside the triangle)
+    return 5./7. + 0.5*cos_phi_12*(k_1/k_2 + k_2/k_1) + 2./7.*cos_phi_12*cos_phi_12;
 }
 
 double F2_EdS_angular(const double &k_1, const double &k_2, const double &cos_phi_12)
@@ -956,8 +972,8 @@ double F2_EdS_angular(const double &k_1, const double &k_2, const double &cos_ph
     if(k_1 == 0 || k_2 == 0)
         return 0;
 
-    //return 1/2.0*((1+k_1/k_2*cos_phi_12)+(1+k_2/k_1*cos_phi_12)) + 2/7.0*(pow(cos_phi_12,2)-1);
-    return 5/7.0 + 1/2.0*cos_phi_12*(k_1/k_2 + k_2/k_1) + 2/7.0*pow(cos_phi_12,2);
+    //return 0.5*((1+k_1/k_2*cos_phi_12)+(1+k_2/k_1*cos_phi_12)) + 2./7.*(cos_phi_12*cos_phi_12-1);
+    return 5./7. + 0.5*cos_phi_12*(k_1/k_2 + k_2/k_1) + 2./7.*cos_phi_12*cos_phi_12;
 }
 
 double kF2_EdS(const double &k_1, const double &k_2, const double &k_3)
@@ -967,7 +983,7 @@ double kF2_EdS(const double &k_1, const double &k_2, const double &k_3)
 
     // multiply k_1*k_2 throughout the F2_EdS kernel expression
     double cos_phi_12 = 0.5*(k_3*k_3-k_1*k_1-k_2*k_2)/(k_1*k_2);
-    return 5/7.0*k_1*k_2 + 1/2.0*cos_phi_12*(k_1*k_1 + k_2*k_2) + 2/7.0*k_1*k_2*pow(cos_phi_12,2);
+    return 5./7.*k_1*k_2 + 0.5*cos_phi_12*(k_1*k_1 + k_2*k_2) + 2./7.*k_1*k_2*cos_phi_12*cos_phi_12;
 }
 
 double kF2_EdS_angular(const double &k_1, const double &k_2, const double &cos_phi_12)
@@ -976,8 +992,8 @@ double kF2_EdS_angular(const double &k_1, const double &k_2, const double &cos_p
         return 0;
 
     // multiply k_1*k_2 throughout the F2_EdS kernel expression
-    //return 1/2.0*((k_1*k_2+k_1*k_1*cos_phi_12)+(k_1*k_2+k_2*k_2*cos_phi_12)) + 2/7.0*k_1*k_2*(pow(cos_phi_12,2)-1);
-    return 5/7.0*k_1*k_2 + 1/2.0*cos_phi_12*(k_1*k_1 + k_2*k_2) + 2/7.0*k_1*k_2*pow(cos_phi_12,2);
+    //return 0.5*((k_1*k_2+k_1*k_1*cos_phi_12)+(k_1*k_2+k_2*k_2*cos_phi_12)) + 2./7.*k_1*k_2*(cos_phi_12*cos_phi_12-1);
+    return 5./7.*k_1*k_2 + 0.5*cos_phi_12*(k_1*k_1 + k_2*k_2) + 2./7.*k_1*k_2*cos_phi_12*cos_phi_12;
 }
 
 double S2(const double &k_1, const double &k_2, const double &k_3)
@@ -986,12 +1002,12 @@ double S2(const double &k_1, const double &k_2, const double &k_3)
         return 0;
 
     double cos_phi_12 = 0.5*(k_3*k_3-k_1*k_1-k_2*k_2)/(k_1*k_2); // law of cosines
-    return pow(cos_phi_12,2) - 1.0/3.0;
+    return cos_phi_12*cos_phi_12 - 1./3.;
 }
 
 double S2_angular(const double &cos_phi_12)
 {
-    return pow(cos_phi_12,2) - 1.0/3.0;
+    return cos_phi_12*cos_phi_12 - 1./3.;
 }
 
 // ######################################################################################

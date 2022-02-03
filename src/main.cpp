@@ -2378,7 +2378,8 @@ int main()
             counter = 0;
 
             //#pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
-            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            //for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
                 size_t calls_iB;
 
