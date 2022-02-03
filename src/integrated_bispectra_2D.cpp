@@ -194,13 +194,13 @@ double A2pt_angle_averaged_qag(double alpha, double theta_T)
 // ######################################################################################
 
 double W_products(const std::string &key, const double &l_1, const double &phi_1, const double &l_2, const double &phi_2, const double &l, const double &phi_l,
-                  const struct_iB_W_FS &info_iB_W_FS)
+                  const struct_iB2D_W_FS &info_iB2D_W_FS)
 {
     if (key == "X")
     {
-        double W_1 = info_iB_W_FS.W_meandelta_FS(l_1,info_iB_W_FS.theta_T_meandelta);
-        double W_2pl = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,phi_l), info_iB_W_FS.theta_T_2pt);
-        double W_m1m2ml = info_iB_W_FS.W_2pt_FS(l_ApBpC(l_1,M_PI+phi_1, l_2,M_PI+phi_2, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
+        double W_1 = info_iB2D_W_FS.W_meandelta_FS(l_1,info_iB2D_W_FS.theta_T_meandelta);
+        double W_2pl = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,phi_l), info_iB2D_W_FS.theta_T_2pt);
+        double W_m1m2ml = info_iB2D_W_FS.W_2pt_FS(l_ApBpC(l_1,M_PI+phi_1, l_2,M_PI+phi_2, l,M_PI+phi_l), info_iB2D_W_FS.theta_T_2pt);
 
         return W_1*W_2pl*W_m1m2ml;
     }
@@ -208,27 +208,27 @@ double W_products(const std::string &key, const double &l_1, const double &phi_1
     else if (key == "X_v2")
     {
         // this is for another version of the argument form of the window functions; TODO: Need to investigate this further
-        double W_m1m2 = info_iB_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB_W_FS.theta_T_meandelta);
-        double W_1pl = info_iB_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,phi_l), info_iB_W_FS.theta_T_2pt);
-        double W_2ml = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
+        double W_m1m2 = info_iB2D_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB2D_W_FS.theta_T_meandelta);
+        double W_1pl = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,phi_l), info_iB2D_W_FS.theta_T_2pt);
+        double W_2ml = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB2D_W_FS.theta_T_2pt);
         
         return W_m1m2*W_1pl*W_2ml;
     }
 
     else if (key == "Y")
     {
-        double W_1 = info_iB_W_FS.W_meandelta_FS(l_1, info_iB_W_FS.theta_T_meandelta);
-        double W_m1m2pl = info_iB_W_FS.W_2pt_FS(l_ApBpC(l_1,M_PI+phi_1, l_2,M_PI+phi_2, l,phi_l), info_iB_W_FS.theta_T_2pt);
-        double W_2ml = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
+        double W_1 = info_iB2D_W_FS.W_meandelta_FS(l_1, info_iB2D_W_FS.theta_T_meandelta);
+        double W_m1m2pl = info_iB2D_W_FS.W_2pt_FS(l_ApBpC(l_1,M_PI+phi_1, l_2,M_PI+phi_2, l,phi_l), info_iB2D_W_FS.theta_T_2pt);
+        double W_2ml = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,M_PI+phi_l), info_iB2D_W_FS.theta_T_2pt);
 
         return W_1*W_m1m2pl*W_2ml;
     }
 
     else if (key == "Z")
     {
-        double W_m1m2 = info_iB_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB_W_FS.theta_T_meandelta);
-        double W_2pl = info_iB_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,phi_l), info_iB_W_FS.theta_T_2pt);
-        double W_1ml = info_iB_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,M_PI+phi_l), info_iB_W_FS.theta_T_2pt);
+        double W_m1m2 = info_iB2D_W_FS.W_meandelta_FS(l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2), info_iB2D_W_FS.theta_T_meandelta);
+        double W_2pl = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_2,phi_2, l,phi_l), info_iB2D_W_FS.theta_T_2pt);
+        double W_1ml = info_iB2D_W_FS.W_2pt_FS(l_ApB(l_1,phi_1, l,M_PI+phi_l), info_iB2D_W_FS.theta_T_2pt);
 
         return W_m1m2*W_2pl*W_1ml;
     }
@@ -236,14 +236,14 @@ double W_products(const std::string &key, const double &l_1, const double &phi_1
     return 0.0;
 }
 
-double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB_W_FS &info_iB_W_FS,
+double evaluate_iB2D_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS,
                                          const double &l_1, const double &l_2, const double &phi_1, const double &phi_2)
 {
     if (key == "X_lF2")
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return lF2_1_2*X_W;
     }
@@ -252,7 +252,7 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return lF2_1_2*Y_W;
     }
@@ -261,7 +261,7 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return lF2_1_2*Z_W;
     }
@@ -270,32 +270,32 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return lF2_1_2*(X_W + Y_W + Z_W);
     }
 
     else if (key == "X_W" || key == "P_1" || key == "P_2" || key == "A")
     {
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return X_W;
     }
 
     else if (key == "Y_W")
     {
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Y_W;
     }
 
     else if (key == "Z_W" || key == "P_3")
     {
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Z_W;
     }
@@ -304,7 +304,7 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return S2_1_2*X_W;
     }
@@ -313,7 +313,7 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return S2_1_2*Y_W;
     }
@@ -322,7 +322,7 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return S2_1_2*Z_W;
     }
@@ -332,36 +332,36 @@ double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l
 
 // h-cubature
 
-int iB_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int iB2D_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 2);
     assert(fdim == 1);
 
     double phi_1 = k[0],  phi_2 = k[1];
 
-    params_iB_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_1_phi_2_integrand *>(params);
+    params_iB2D_phi_1_phi_2_integrand *p = static_cast<params_iB2D_phi_1_phi_2_integrand *>(params);
 
-    value[0] = evaluate_iB_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->l_1, p->l_2, phi_1, phi_2);
+    value[0] = evaluate_iB2D_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->l_1, p->l_2, phi_1, phi_2);
 
     return 0;
 }
 
-void iB_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, const double &l_1, const double &l_2,
+void iB2D_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, const double &l_1, const double &l_2,
                               double &result, double &error, size_t max_evals)
 {
     double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, l_1, l_2};
+    params_iB2D_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB2D_W_FS, l_1, l_2};
 
     std::vector<double> lower_limits = { 0, 0};
     std::vector<double> upper_limits = { 2*M_PI, 2*M_PI};
 
-    hcubature_integration(iB_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 2, max_evals, result, error);
+    hcubature_integration(iB2D_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 2, max_evals, result, error);
 }
 
 // ######################################################################################
 
-double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj,
+double evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj,
                                                      bool use_pk_nl, const double &z, const double &l_1, const double &l_2, const double &phi_1, const double &phi_2,
                                                      projection_kernel *q1, projection_kernel *q2, projection_kernel *q3)
 {
@@ -374,8 +374,8 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     double chi_inv = 1/class_obj->get_chi_z(z);
     double Hz_inv = 1/class_obj->get_H_z(z);
-    double X_windows = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS); // default settings
-    //double X_windows = W_products("X_v2", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+    double X_windows = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS); // default settings
+    //double X_windows = W_products("X_v2", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
     // outdated code (To be DELETED)
     /*
@@ -383,7 +383,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -395,7 +395,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -407,7 +407,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -419,11 +419,11 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -433,7 +433,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "X_W")
     {
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -443,7 +443,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "Y_W")
     {
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -453,7 +453,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "Z_W")
     {
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -465,7 +465,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -477,7 +477,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -489,7 +489,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double S2_1_2 = S2_angular(cos(phi_1-phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -499,7 +499,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "P_1")
     {
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -509,7 +509,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "P_2")
     {
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*
@@ -519,7 +519,7 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
     else if (key == "P_3")
     {
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS);
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS);
 
         return Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 l_1*class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -531,11 +531,11 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) - phi_2));
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) - phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 - phi_1));
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_2 - phi_1));
 
         return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -547,11 +547,11 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) - phi_2));
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) - phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 - phi_1));
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_2 - phi_1));
 
         return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -563,11 +563,11 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) + phi_2));
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) + phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*cos(2*(phi_2 + phi_1));
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*cos(2*(phi_2 + phi_1));
 
         return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -579,11 +579,11 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
     {
         double lF2_1_2 = kF2_EdS_angular(l_1,l_2,cos(phi_1-phi_2));
 
-        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+        double X_W = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
 
-        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) + phi_2));
+        double Y_W = W_products("Y", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2) + phi_2));
 
-        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB_W_FS)*sin(2*(phi_2 + phi_1));
+        double Z_W = W_products("Z", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS)*sin(2*(phi_2 + phi_1));
 
         return 2*Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*
                 class_obj->pk(l_1*chi_inv, z, use_pk_nl)*
@@ -673,20 +673,20 @@ double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, con
 
 // Monte-Carlo
 
-double iB_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
+double iB2D_z_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
 {
     (void)(dim); // avoid unused parameter warnings
 
     double z = k[0], l_1 = k[1], l_2 = k[2], phi_1 = k[3], phi_2 = k[4];
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    return evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                          p->q1, p->q2, p->q3);
 
 }
 
-void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                    projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
@@ -694,9 +694,9 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, cons
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    gsl_monte_function G = { &iB_los_l_1_l_2_phi_1_phi_2_mc_integrand, 5, static_cast<void *>(&args)};
+    gsl_monte_function G = { &iB2D_z_l_1_l_2_phi_1_phi_2_mc_integrand, 5, static_cast<void *>(&args)};
 
     if (mc_integration_type == "plain" )
         monte_carlo_plain_integration(&G, lower_limits, upper_limits, 5, calls, T, result, error);
@@ -706,7 +706,7 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, cons
         monte_carlo_vegas_integration(&G, lower_limits, upper_limits, 5, calls, T, result, error);
 }
 
-void iB_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
            projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
            const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
@@ -714,108 +714,108 @@ void iB_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_i
     error = 0.0;
 
     if (key == "B_lF2")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_lF2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_lF2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "X_W")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("X_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("X_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Y_W")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("Y_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("Y_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Z_W")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("Z_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("Z_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "X_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("X_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("X_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Y_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("Y_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("Y_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Z_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("Z_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("Z_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_1")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_los_l_1_l_2_phi_1_phi_2_mc("P_1", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("P_1", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_2")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("P_2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("P_2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_3")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("P_3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("P_3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "A")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_los_l_1_l_2_phi_1_phi_2_mc("A", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("A", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     // components for tracer integrated bispectrum
 
     else if (key == "B_nothing")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_P")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_P", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_P", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_PP")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_PP", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_S2PP")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_hhh_delta_eps_eps")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_hhh_eps_eps_eps")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_P2P3")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_S2P2P3")
-        iB_los_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // Monte-Carlo angle averaged
 
-double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
+double iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
 {
     (void)(dim); // avoid unused parameter warnings
 
     double phi_l = k[0], z = k[1], l_1 = k[2], l_2 = k[3], phi_1 = k[4], phi_2 = k[5];
 
-    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    return evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                          p->q1, p->q2, p->q3);
 
 }
 
-void iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                          projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                          const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
-    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    gsl_monte_function G = { &iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand, 6, static_cast<void *>(&args)};
+    gsl_monte_function G = { &iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc_integrand, 6, static_cast<void *>(&args)};
 
     if (mc_integration_type == "plain" )
         monte_carlo_plain_integration(&G, lower_limits, upper_limits, 6, calls, T, result, error);
@@ -825,7 +825,7 @@ void iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l
         monte_carlo_vegas_integration(&G, lower_limits, upper_limits, 6, calls, T, result, error);
 }
 
-void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc_angle_averaged(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
            projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
            const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
 {
@@ -833,91 +833,91 @@ void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_
     error = 0.0;
 
     if (key == "B_lF2")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_lF2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_lF2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "X_W")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("X_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("X_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Y_W")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Y_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("Y_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Z_W")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Z_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("Z_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "X_S2")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("X_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("X_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Y_S2")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Y_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("Y_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "Z_S2")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("Z_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("Z_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_1")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_1", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("P_1", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_2")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("P_2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "P_3")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("P_3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("P_3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "A")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("A", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("A", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     if (key == "B")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xip_cos")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xip_sin")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xim_cos")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xim_sin")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     // components for tracer integrated bispectrum
 
     else if (key == "B_nothing")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_P")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_P", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_P", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_PP")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_PP", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_S2PP")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_hhh_delta_eps_eps")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_hhh_eps_eps_eps")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_P2P3")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_S2P2P3")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // Monte-Carlo CIGAR
 
-double iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params)
+double iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params)
 {
-    params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *>(params);
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand *>(params);
 
     // need the limits of the integrand because the cigar implementation of vegas only performs interation within the [0,1] hypercube
     double z_ll = p->lower_limits[0];
@@ -938,11 +938,11 @@ double iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void
     double phi_1 = phi_1_ll + phi_1_ul_m_ll*k[3];
     double phi_2 = phi_2_ll + phi_2_ul_m_ll*k[4];
 
-    return evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    return evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                          p->q1, p->q2, p->q3)*z_ul_m_ll*l_1_ul_m_ll*l_2_ul_m_ll*phi_1_ul_m_ll*phi_2_ul_m_ll;
 }
 
-void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                          projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                          VEGAS_Integrator &cigar, double &result, double &error, int thread_count)
 {
@@ -950,11 +950,11 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits};
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand args = {key, l, phi_l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits};
 
     //VEGAS_Integrator cigar;
     //cigar.Set_Verbose(NONE);
-    cigar.Set_Integrand(iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
+    cigar.Set_Integrand(iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand, 5, static_cast<void *>(&args));
     cigar.Improve_Grid();
     cigar.Integration();
 
@@ -962,7 +962,7 @@ void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l
     error = cigar.Get_Error();
 }
 
-void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                  VEGAS_Integrator &cigar, double &result, double &error, int thread_count)
 {
@@ -973,43 +973,43 @@ void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &
     //cigar.Set_Verbose(NONE);
 
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
+        iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, cigar, result, error, thread_count);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // h-cubature
 
-int iB_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 5);
     assert(fdim == 1);
 
     double z = k[0], l_1 = k[1], l_2 = k[2], phi_1 = k[3], phi_2 = k[4];
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    value[0] = evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    value[0] = evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                              p->q1, p->q2, p->q3);
 
     return 0;
 }
 
-void iB_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                           double &result, double &error, size_t max_evals)
 {
@@ -1017,12 +1017,12 @@ void iB_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &
 //    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 //    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    hcubature_integration(iB_los_l_1_l_2_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 5, max_evals, result, error);
+    hcubature_integration(iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 5, max_evals, result, error);
 }
 
-void iB_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                   projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                   double &result, double& error, size_t max_evals)
 {
@@ -1030,75 +1030,75 @@ void iB_hcubature(const std::string &key, const double &l, const struct_iB_W_FS 
     error = 0.0;
 
     if (key == "B_lF2")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_lF2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_lF2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "X_W")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("X_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("X_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "Y_W")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("Y_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("Y_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "Z_W")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("Z_W", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("Z_W", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "X_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("X_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("X_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "Y_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("Y_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("Y_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "Z_S2")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("Z_S2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("Z_S2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "P_1")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("P_1", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("P_1", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "P_2")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("P_2", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("P_2", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "P_3")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("P_3", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("P_3", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "A")
         // passing l = 0 explicitly as there is no l dependence for the integrals (depends only on l_1 and l_2)
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("A", 0, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("A", 0, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_lF2_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_lF2_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_lF2_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_lF2_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_lF2_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
 // h-cubature with 4 dimensions
 
-int iB_los_l_1_l_2_phi_1_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int iB2D_z_l_1_l_2_phi_1_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 4);
     assert(fdim == 1);
@@ -1107,26 +1107,26 @@ int iB_los_l_1_l_2_phi_1_hcubature_integrand(unsigned ndim, const double *k, voi
 
     double phi_1 = 0;
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    value[0] = evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    value[0] = evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                              p->q1, p->q2, p->q3);
 
     return 0;
 }
 
-void iB_los_l_1_l_2_phi_1_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                     projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits,
                                     std::vector<double> upper_limits, double &result, double &error, size_t max_evals)
 {
     double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    hcubature_integration(iB_los_l_1_l_2_phi_1_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 4, max_evals, result, error);
+    hcubature_integration(iB2D_z_l_1_l_2_phi_1_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 4, max_evals, result, error);
 }
 
-void iB_hcubature_4dim(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature_4dim(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                        projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                        double &result, double& error, size_t max_evals)
 {
@@ -1134,21 +1134,21 @@ void iB_hcubature_4dim(const std::string &key, const double &l, const struct_iB_
     error = 0.0;
 
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_hcubature("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_hcubature("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_hcubature("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_hcubature("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_hcubature("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_hcubature("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_hcubature("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_hcubature("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_hcubature("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * 2*M_PI* patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * 2*M_PI* patch_sqradians * patch_sqradians * error;
 }
@@ -1156,38 +1156,38 @@ void iB_hcubature_4dim(const std::string &key, const double &l, const struct_iB_
 
 // h-cubature vectorized
 
-int iB_los_l_1_l_2_phi_1_phi_2_hcubature_v_integrand(unsigned ndim, size_t npts, const double *k, void *params, unsigned fdim, double *value)
+int iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v_integrand(unsigned ndim, size_t npts, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 5);
     assert(fdim == 1);
 
     double z, l_1, l_2, phi_1, phi_2;
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
     for (unsigned j = 0; j < npts; ++j) { // evaluate the integrand for npts points
 
         z = k[j*ndim+0], l_1 = k[j*ndim+1], l_2 = k[j*ndim+2], phi_1 = k[j*ndim+3], phi_2 = k[j*ndim+4];
 
-        value[j] = evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+        value[j] = evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                                  p->q1, p->q2, p->q3);
     }
 
     return 0;
 }
 
-void iB_los_l_1_l_2_phi_1_phi_2_hcubature_v(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                             projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                             double &result, double &error, size_t max_evals)
 {
     double phi_l = 0;           // assuming angular-independency we can just fix the phi_l to any angle we want
 
-    params_iB_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    hcubature_v_integration(iB_los_l_1_l_2_phi_1_phi_2_hcubature_v_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 5, max_evals, result, error);
+    hcubature_v_integration(iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 5, max_evals, result, error);
 }
 
-double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+double iB2D_hcubature_v(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                       projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                       size_t max_evals, double &result, double& error)
 {
@@ -1195,21 +1195,21 @@ double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W
     error = 0.0;
 
     if (key == "B")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_cos")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_sin")
-        iB_los_l_1_l_2_phi_1_phi_2_hcubature_v("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 
@@ -1218,31 +1218,31 @@ double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W
 
 // h-cubature angle averaged
 
-int iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 6);
     assert(fdim == 1);
 
     double phi_l = k[0], z = k[1], l_1 = k[2], l_2 = k[3], phi_1 = k[4], phi_2 = k[5];
 
-    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand *>(params);
+    params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    value[0] = evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
+    value[0] = evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, phi_l, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, z, l_1, l_2, phi_1, phi_2,
                                                              p->q1, p->q2, p->q3);
 
     return 0;
 }
 
-void iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                                 projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                                 double &result, double &error, size_t max_evals)
 {
-    params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand args = {key, l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3};
+    params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand args = {key, l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3};
 
-    hcubature_integration(iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 6, max_evals, result, error);
+    hcubature_integration(iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature_integrand, static_cast<void *>(&args), lower_limits, upper_limits, 6, max_evals, result, error);
 }
 
-void iB_hcubature_angle_averaged(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature_angle_averaged(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                  double &result, double &error, size_t max_evals)
 {
@@ -1250,21 +1250,21 @@ void iB_hcubature_angle_averaged(const std::string &key, const double &l, const 
     error = 0.0;
 
     if (key == "B")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature("B", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_cos")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B_xip_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature("B_xip_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xip_sin")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B_xip_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature("B_xip_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_cos")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_cos", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature("B_xim_cos", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
     else if (key == "B_xim_sin")
-        iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
+        iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature("B_xim_sin", l, info_iB2D_W_FS, class_obj, use_pk_nl, q1, q2, q3, lower_limits, upper_limits, result, error, max_evals);
 
-    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB_W_FS.theta_T_2pt);
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
     result = integration_pre_factor * patch_sqradians * patch_sqradians * result / (2*M_PI);
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error / (2*M_PI);
 }

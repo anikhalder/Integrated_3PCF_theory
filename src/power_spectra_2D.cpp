@@ -28,7 +28,7 @@
  * with q_1(x(z)) = q_2(x(z) = q_k_zs_fixed(z, class_obj, z_cmb) i.e. eqn (6.22) of https://arxiv.org/pdf/astro-ph/9912508.pdf */
 
 
-double evaluate_P_los_integrand(const std::string &key, const double &l, ClassEngine *class_obj, bool use_pk_nl, const double &z,
+double evaluate_P2D_z_integrand(const std::string &key, const double &l, ClassEngine *class_obj, bool use_pk_nl, const double &z,
                                 projection_kernel *q1, projection_kernel *q2)
 {
     double q_1 = q1->evaluate(z);
@@ -58,49 +58,49 @@ double evaluate_P_los_integrand(const std::string &key, const double &l, ClassEn
 
 // Gaussian-quadrature
 
-double P_los_qag_integrand(double z, void *params)
+double P2D_z_qag_integrand(double z, void *params)
 {
-    params_P_los_integrand *p = static_cast<params_P_los_integrand *>(params);
+    params_P2D_z_integrand *p = static_cast<params_P2D_z_integrand *>(params);
 
-    return evaluate_P_los_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
+    return evaluate_P2D_z_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
 }
 
-double P_los_qag(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
+double P2D_z_qag(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, const double &z_lower, const double &z_upper)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_P_los_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
+    params_P2D_z_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
 
-    qag_1D_integration(&P_los_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    qag_1D_integration(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
 
     return result;
 }
 
 // Monte-Carlo
 
-double P_los_mc_integrand(double *k, size_t dim, void *params)
+double P2D_z_mc_integrand(double *k, size_t dim, void *params)
 {
     (void)(dim); // avoid unused parameter warnings
 
-    params_P_los_integrand *p = static_cast<params_P_los_integrand *>(params);
+    params_P2D_z_integrand *p = static_cast<params_P2D_z_integrand *>(params);
 
     double z = k[0];
 
-    return evaluate_P_los_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
+    return evaluate_P2D_z_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
 }
 
-double P_los_mc(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
+double P2D_z_mc(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
                 projection_kernel *q1, projection_kernel *q2, std::vector<double> &z_lower, std::vector<double> &z_upper,
                 const gsl_rng_type *T, const std::string &mc_integration_type)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_P_los_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
+    params_P2D_z_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
 
-    gsl_monte_function G = { &P_los_mc_integrand, 1, static_cast<void *>(&args)};
+    gsl_monte_function G = { &P2D_z_mc_integrand, 1, static_cast<void *>(&args)};
 
     size_t calls = 2*calls_1e3;
 
@@ -116,29 +116,29 @@ double P_los_mc(const std::string &key, const double &l, ClassEngine *class_obj,
 
 // h-cubature
 
-int P_los_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int P2D_z_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 1);
     assert(fdim == 1);
 
-    params_P_los_integrand *p = static_cast<params_P_los_integrand *>(params);
+    params_P2D_z_integrand *p = static_cast<params_P2D_z_integrand *>(params);
 
     double z = k[0];
 
-    value[0] = evaluate_P_los_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
+    value[0] = evaluate_P2D_z_integrand(p->key, p->l, p->class_obj, p->use_pk_nl, z, p->q1, p->q2);
 
     return 0;
 }
 
-double P_los_hcubature(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
+double P2D_z_hcubature(const std::string &key, const double &l, ClassEngine *class_obj, const bool &use_pk_nl,
                        projection_kernel *q1, projection_kernel *q2, std::vector<double> &z_lower, std::vector<double> &z_upper)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_P_los_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
+    params_P2D_z_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
 
-    hcubature_integration(P_los_hcubature_integrand, static_cast<void *>(&args), z_lower, z_upper, 1, 0, result, error);
+    hcubature_integration(P2D_z_hcubature_integrand, static_cast<void *>(&args), z_lower, z_upper, 1, 0, result, error);
 
     return result;
 }

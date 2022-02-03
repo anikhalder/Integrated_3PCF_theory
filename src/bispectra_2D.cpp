@@ -14,7 +14,7 @@
  * B(l1,l2,l3) = \int dx q_1(x)q_2(x)q_3(x)/(x^4) B_3D(l1/x, l2/x, l3/x, eta0 - x)
  * => P(l) = \int dz/H(z) q_1(x(z))q_2(x(z))/(x(z)^3) B_3D(l1/x(z), l2/x(z), l3/x(z), eta0 - x(z)) */
 
-double evaluate_B_los_integrand(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, bool use_pk_nl, const double &z,
+double evaluate_B2D_z_integrand(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, bool use_pk_nl, const double &z,
                                 const double &q_1, const double &q_2, const double &q_3)
 {
     if (q_1 == 0 || q_2 == 0 || q_3 == 0)
@@ -36,49 +36,49 @@ double evaluate_B_los_integrand(const std::string &key, const double &l1, const 
 
 // Gaussian-quadrature
 
-double B_los_qag_integrand(double z, void *params)
+double B2D_z_qag_integrand(double z, void *params)
 {
-    params_B_los_integrand *p = static_cast<params_B_los_integrand *>(params);
+    params_B2D_z_integrand *p = static_cast<params_B2D_z_integrand *>(params);
 
-    return evaluate_B_los_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, z, p->q1->evaluate(z), p->q2->evaluate(z), p->q3->evaluate(z));
+    return evaluate_B2D_z_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, z, p->q1->evaluate(z), p->q2->evaluate(z), p->q3->evaluate(z));
 }
 
-double B_los_qag(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
+double B2D_z_qag(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, const double &z_lower, const double &z_upper)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_B_los_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
+    params_B2D_z_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
 
-    qag_1D_integration(&B_los_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    qag_1D_integration(&B2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
 
     return result;
 }
 
 // Monte-Carlo
 
-double B_los_mc_integrand(double *k, size_t dim, void *params)
+double B2D_z_mc_integrand(double *k, size_t dim, void *params)
 {
     (void)(dim); // avoid unused parameter warnings
 
 //    double z = k[0];
 
-    params_B_los_integrand *p = static_cast<params_B_los_integrand *>(params);
+    params_B2D_z_integrand *p = static_cast<params_B2D_z_integrand *>(params);
 
-    return evaluate_B_los_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, k[0], p->q1->evaluate(k[0]), p->q2->evaluate(k[0]), p->q3->evaluate(k[0]));
+    return evaluate_B2D_z_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, k[0], p->q1->evaluate(k[0]), p->q2->evaluate(k[0]), p->q3->evaluate(k[0]));
 }
 
-double B_los_mc(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
+double B2D_z_mc(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
                 projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> &z_lower, std::vector<double> &z_upper,
                 const gsl_rng_type *T, const std::string &mc_integration_type)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_B_los_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
+    params_B2D_z_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
 
-    gsl_monte_function G = { &B_los_mc_integrand, 1, static_cast<void *>(&args)};
+    gsl_monte_function G = { &B2D_z_mc_integrand, 1, static_cast<void *>(&args)};
 
     size_t calls = 2*calls_1e3;
 
@@ -94,29 +94,29 @@ double B_los_mc(const std::string &key, const double &l1, const double &l2, cons
 
 // h-cubature
 
-int B_los_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
+int B2D_z_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value)
 {
     assert(ndim == 1);
     assert(fdim == 1);
 
-    params_B_los_integrand *p = static_cast<params_B_los_integrand *>(params);
+    params_B2D_z_integrand *p = static_cast<params_B2D_z_integrand *>(params);
 
     double z = k[0];
 
-    value[0] = evaluate_B_los_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, z, p->q1->evaluate(z), p->q2->evaluate(z), p->q3->evaluate(z));
+    value[0] = evaluate_B2D_z_integrand(p->key, p->l1, p->l2, p->l3, p->class_obj, p->use_pk_nl, z, p->q1->evaluate(z), p->q2->evaluate(z), p->q3->evaluate(z));
 
     return 0;
 }
 
-double B_los_hcubature(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
+double B2D_z_hcubature(const std::string &key, const double &l1, const double &l2, const double &l3, ClassEngine *class_obj, const bool &use_pk_nl,
                        projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> &z_lower, std::vector<double> &z_upper)
 {
     double result = 0, error = 0;
 
     //parameters in integrand
-    params_B_los_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
+    params_B2D_z_integrand args = {key, l1, l2, l3, class_obj, use_pk_nl, q1, q2, q3};
 
-    hcubature_integration(B_los_hcubature_integrand, static_cast<void *>(&args), z_lower, z_upper, 1, 0, result, error);
+    hcubature_integration(B2D_z_hcubature_integrand, static_cast<void *>(&args), z_lower, z_upper, 1, 0, result, error);
 
     return result;
 }

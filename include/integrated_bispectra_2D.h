@@ -56,122 +56,122 @@ double A2pt_angle_averaged_qag(double alpha, double theta_T);
 // ######################################################################################
 // ######################################################################################
 
-struct struct_iB_W_FS { double (*W_meandelta_FS)(const double &l, const double &theta_T); const double &theta_T_meandelta;
+struct struct_iB2D_W_FS { double (*W_meandelta_FS)(const double &l, const double &theta_T); const double &theta_T_meandelta;
                         double (*W_2pt_FS)(const double &l, const double &theta_T); const double &theta_T_2pt;};
 
 double W_products(const std::string &key, const double &l_1, const double &phi_1, const double &l_2, const double &phi_2, const double &l, const double &phi_l,
-                  const struct_iB_W_FS &info_iB_W_FS);
+                  const struct_iB2D_W_FS &info_iB2D_W_FS);
 
-struct params_iB_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB_W_FS &info_iB_W_FS; const double &l_1;  const double &l_2;};
+struct params_iB2D_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; const double &l_1;  const double &l_2;};
 
-double evaluate_iB_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB_W_FS &info_iB_W_FS,
+double evaluate_iB2D_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS,
                                          const double &l_1, const double &l_2, const double &phi_1, const double &phi_2);
 
 // h-cubature
 
-int iB_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
+int iB2D_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
 
-void iB_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, const double &l_1, const double &l_2,
+void iB2D_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, const double &l_1, const double &l_2,
                               double &result, double &error, size_t max_evals = calls_1e5);
 
 // ######################################################################################
 
-struct params_iB_los_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB_W_FS &info_iB_W_FS; ClassEngine *class_obj;
+struct params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
                                                      const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3;};
 
-double evaluate_iB_los_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj,
+double evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj,
                                                      bool use_pk_nl, const double &z, const double &l_1, const double &l_2, const double &phi_1, const double &phi_2,
                                                      projection_kernel *q1, projection_kernel *q2, projection_kernel *q3);
 
-struct params_iB_phi_l_los_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const struct_iB_W_FS &info_iB_W_FS; ClassEngine *class_obj;
+struct params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
                                                            const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3;};
 
 // Monte-Carlo
 
-double iB_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params);
+double iB2D_z_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params);
 
-void iB_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                    projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
 
-void iB_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
            projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
            const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
 
 // Monte-Carlo angle averaged
 
-double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params);
+double iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params);
 
-void iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                         projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                         const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
 
-void iB_mc_angle_averaged(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc_angle_averaged(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                           const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
 
 // Monte-Carlo CIGAR
 
-struct params_iB_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB_W_FS &info_iB_W_FS; ClassEngine *class_obj;
+struct params_iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
                                                               const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3; 
                                                               std::vector<double> &lower_limits; std::vector<double> &upper_limits;};
 
-double iB_phi_l_los_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params);
+double iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params);
 
-void iB_los_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                          projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                          VEGAS_Integrator &cigar, double &result, double &error, int thread_count);
 
-void iB_mc_cigar(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                  VEGAS_Integrator &cigar, double &result, double &error, int thread_count);
 
 // h-cubature
 
-int iB_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
+int iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
 
-void iB_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                           double &result, double &error, size_t max_evals);
 
-void iB_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                   projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                   double &result, double &error, size_t max_evals);
 
 // h-cubature with 4 dimensions
 
-int iB_los_l_1_l_2_phi_1_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
+int iB2D_z_l_1_l_2_phi_1_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
 
-void iB_los_l_1_l_2_phi_1_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                           double &result, double &error, size_t max_evals);
 
-void iB_hcubature_4dim(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature_4dim(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                        projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                        double &result, double& error, size_t max_evals);
 
 // h-cubature vectorized
 
-int iB_los_l_1_l_2_phi_1_phi_2_hcubature_v_integrand(unsigned ndim, unsigned npts, const double *k, void *params, unsigned fdim, double *value);
+int iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v_integrand(unsigned ndim, unsigned npts, const double *k, void *params, unsigned fdim, double *value);
 
-void iB_los_l_1_l_2_phi_1_phi_2_hcubature_v(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                             projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                             double &result, double &error, size_t max_evals);
 
-double iB_hcubature_v(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+double iB2D_hcubature_v(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                       projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                       double &result, double &error, size_t max_evals);
 
 
 // h-cubature angle averaged
 
-int iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
+int iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature_integrand(unsigned ndim, const double *k, void *params, unsigned fdim, double *value);
 
-void iB_phi_l_los_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_hcubature(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                                 projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                                 double &result, double &error, size_t max_evals);
 
-void iB_hcubature_angle_averaged(const std::string &key, const double &l, const struct_iB_W_FS &info_iB_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+void iB2D_hcubature_angle_averaged(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                                  projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                                  double &result, double &error, size_t max_evals);
 
