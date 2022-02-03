@@ -140,7 +140,6 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
         B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
 
     }
-
     */
 
     if (apply_T17_corrections)

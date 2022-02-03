@@ -28,7 +28,7 @@
  * - bispectrum type (tree, GM, SC, bihalofit, GM+RF etc.)
  *
  * integrated_bispectra_2D.cpp:
- * - in the iB2D_z_l_1_l_2_phi_1_phi_2_mc() or iB2D_z_l_1_l_2_phi_1_phi_2_hcubature() check the phi_l value
+ * - in the iB_z_l_1_l_2_phi_1_phi_2_mc() or iB_z_l_1_l_2_phi_1_phi_2_hcubature() check the phi_l value
  * - also check whether you are using X or X_v2 form of the window functions
  * 
  * main.cpp:
@@ -39,8 +39,8 @@
  * - spectra_folder and correlations_folder names
  * - l_array
  * - zs_bins
- * - filename_P and filename_iB2D names
- * - calls_iB2D_initial
+ * - filename_P and filename_iB names
+ * - calls_iB_initial
  * - bin averaging or not for computing correlation functions
  *
  */
@@ -503,17 +503,17 @@ int main()
 
         // Folder settings
 
-        //std::string spectra_folder = "./takahashi_B_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
-        //std::string correlations_folder = "./takahashi_B_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
+        //std::string spectra_folder = "./takahashi_B2D_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
+        //std::string correlations_folder = "./takahashi_B2D_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000/";
 
-        //std::string spectra_folder = "./takahashi_B_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000_with_hmcode_correct_change_params/";
-        //std::string correlations_folder = "./takahashi_B_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000_with_hmcode_correct_change_params/";
+        //std::string spectra_folder = "./takahashi_B2D_GM_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000_with_hmcode_correct_change_params/";
+        //std::string correlations_folder = "./takahashi_B2D_GM_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000_with_hmcode_correct_change_params/";
 
-        //std::string spectra_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000_squeezed_9_with_hmcode_correct_change_params/";
-        //std::string correlations_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000_squeezed_9_with_hmcode_correct_change_params/";
+        //std::string spectra_folder = "./takahashi_B2D_GM_squeezed_RF_stitched_157_iBkxi_U70W75W75_cross_zs10_zs16_1e7_20000_squeezed_9_with_hmcode_correct_change_params/";
+        //std::string correlations_folder = "./takahashi_B2D_GM_squeezed_RF_stitched_157_iZkxi_U70W75W75_cross_zs10_zs16_1e7_20000_squeezed_9_with_hmcode_correct_change_params/";
 
-        //std::string spectra_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iBkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
-        //std::string correlations_folder = "./takahashi_B_GM_squeezed_RF_stitched_157_iZkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
+        //std::string spectra_folder = "./takahashi_B2D_GM_squeezed_RF_stitched_157_iBkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
+        //std::string correlations_folder = "./takahashi_B2D_GM_squeezed_RF_stitched_157_iZkxi_U70W75W75_zs10_mc_2e6_x2_150_20000_squeezed_9_with_baryons_change_params_nonsq_GM_sq_RF/";
 
         // -------------------------
         // With 157 ells upto ell_max=20000; MC integration (2e6 and double of it for ell<150)
@@ -700,18 +700,18 @@ int main()
         //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs1));
         //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs2));
 
-        std::vector<double> P2D_ss_lower_limit = { zs_lower };
-        std::vector<double> P2D_ss_upper_limit = { zs_upper };
+        std::vector<double> P_ss_lower_limit = { zs_lower };
+        std::vector<double> P_ss_upper_limit = { zs_upper };
 
         std::vector<double> B2D_sss_lower_limit = { zs_lower };
         std::vector<double> B2D_sss_upper_limit = { zs_upper };
 
-        std::vector<double> iB2D_sss_lower_limits = { zs_lower, 1, 1, 0, 0};
-        std::vector<double> iB2D_sss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
-        //std::vector<double> iB2D_sss_upper_limits = { zs_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
+        std::vector<double> iB_sss_lower_limits = { zs_lower, 1, 1, 0, 0};
+        std::vector<double> iB_sss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+        //std::vector<double> iB_sss_upper_limits = { zs_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
 
-        std::vector<double> iB2D_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
-        std::vector<double> iB2D_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+        std::vector<double> iB_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
+        std::vector<double> iB_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
 
@@ -757,12 +757,12 @@ int main()
         std::shared_ptr<projection_kernel> qh1_bs2(new projection_kernel_q_h_bs2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
         std::shared_ptr<projection_kernel> qh1(new projection_kernel_q_h(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
 
-        std::vector<double> P2D_ll_lower_limit = { zl_lower };
-        std::vector<double> P2D_ll_upper_limit = { zl_upper };
+        std::vector<double> P_ll_lower_limit = { zl_lower };
+        std::vector<double> P_ll_upper_limit = { zl_upper };
 
-        std::vector<double> iB2D_lll_lower_limits = { zl_lower, 1, 1, 0, 0};
-        std::vector<double> iB2D_lll_upper_limits = { zl_upper, 25000, 25000, 2*M_PI, 2*M_PI};
-        //std::vector<double> iB2D_lll_upper_limits = { zl_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
+        std::vector<double> iB_lll_lower_limits = { zl_lower, 1, 1, 0, 0};
+        std::vector<double> iB_lll_upper_limits = { zl_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+        //std::vector<double> iB_lll_upper_limits = { zl_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
 
         std::vector<std::shared_ptr<projection_kernel>> ql_b1_kernels;
         std::vector<std::shared_ptr<projection_kernel>> ql_b2_kernels;
@@ -783,8 +783,8 @@ int main()
         // Lens (halo/galaxy) x Source (shear/convergence) cross-correlations settings
         // ----------------------------------------------------------------------------
 
-        std::vector<double> iB2D_lss_lower_limits = { zl_lower, 1, 1, 0, 0};
-        std::vector<double> iB2D_lss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+        std::vector<double> iB_lss_lower_limits = { zl_lower, 1, 1, 0, 0};
+        std::vector<double> iB_lss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
         // -------------------------------------------------------------------------------------
 
@@ -793,20 +793,20 @@ int main()
 
         // -------------------------
 
-        std::string filename_P2D;
+        std::string filename_P;
 
         //filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
-        filename_P2D = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
+        filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
         //filename_P = "P_hh.dat"; // with bias
 
-        std::string P2D_integration_algorithm = "qag"; // -- current settings for papers
-        //std::string P2D_integration_algorithm = "mc";
-        //std::string P2D_integration_algorithm = "hcubature"; // -- previous settings
+        std::string P_integration_algorithm = "qag"; // -- current settings for papers
+        //std::string P_integration_algorithm = "mc";
+        //std::string P_integration_algorithm = "hcubature"; // -- previous settings
 
         // -------------------------
 
         std::string filename_B2D;
-        filename_B2D = "B_kkk.dat"; // B_kkk kappa equilateral bispectrum
+        filename_B2D = "B2D_kkk.dat"; // B2D_kkk kappa equilateral bispectrum
 
         //std::string B2D_integration_algorithm = "qag";
         //std::string B2D_integration_algorithm = "mc";
@@ -820,41 +820,41 @@ int main()
 
         // -------------------------
 
-        std::string filename_iB2D;
-        //filename_iB2D = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        filename_iB2D = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
-        //filename_iB2D = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
-        //filename_iB2D = "iB_hkk.dat"; // halo integrated bispectra with bias
-        //filename_iB2D = "iB_hhh.dat"; // halo integrated bispectra with bias
+        std::string filename_iB;
+        //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
+        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        //filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
+        //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
+        //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
 
         // OLD STUFF --> TO BE DELETED
         // for cross correlations with halos
-        //filename_iB2D = "iBhhh_mc.dat"; // with bias
-        //filename_iB2D = "iBhhh_hcubature.dat"; // with bias
+        //filename_iB = "iBhhh_mc.dat"; // with bias
+        //filename_iB = "iBhhh_hcubature.dat"; // with bias
 
         // for cross correlations with galaxy - TODO: STILL NEEDS to be verified
-        //filename_iB2D = "iBgkk_hcubature.dat"; // without bias
-        //filename_iB2D = "iBggk_hcubature.dat"; // without bias
-        //filename_iB2D = "iBggg_hcubature.dat"; // without bias
+        //filename_iB = "iBgkk_hcubature.dat"; // without bias
+        //filename_iB = "iBggk_hcubature.dat"; // without bias
+        //filename_iB = "iBggg_hcubature.dat"; // without bias
 
-        //filename_iB2D = "iBkkk_hcubature.dat"; // for convergence integrated bispectra
-        //filename_iB2D = "iBkxi_hcubature.dat"; // for shear integrated bispectra
-        //filename_iB2D = "iBkxi_hcubature_v.dat"; // for shear integrated bispectra - vectorized integration TODO: still needs to be verified
+        //filename_iB = "iBkkk_hcubature.dat"; // for convergence integrated bispectra
+        //filename_iB = "iBkxi_hcubature.dat"; // for shear integrated bispectra
+        //filename_iB = "iBkxi_hcubature_v.dat"; // for shear integrated bispectra - vectorized integration TODO: still needs to be verified
 
-        //filename_iB2D = "iBkxi_hcubature_angle_averaged.dat"; // for shear integrated bispectra - angle averaged TODO: still needs to be verified
-        //filename_iB2D = "iBkxi_mc.dat"; // for shear integrated bispectra - using MC integration
+        //filename_iB = "iBkxi_hcubature_angle_averaged.dat"; // for shear integrated bispectra - angle averaged TODO: still needs to be verified
+        //filename_iB = "iBkxi_mc.dat"; // for shear integrated bispectra - using MC integration
 
-        //std::string iB2D_integration_algorithm = "mc";
-        std::string iB2D_integration_algorithm = "mc_cigar";
-        //std::string iB2D_integration_algorithm = "hcubature";
+        //std::string iB_integration_algorithm = "mc";
+        std::string iB_integration_algorithm = "mc_cigar";
+        //std::string iB_integration_algorithm = "hcubature";
 
-        size_t calls_iB2D_initial;
+        size_t calls_iB_initial;
 
-        if (iB2D_integration_algorithm == "mc")
-            //calls_iB2D_initial = 2*calls_1e6; // -- current settings for papers
-            calls_iB2D_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
-        else if (iB2D_integration_algorithm == "hcubature")
-            calls_iB2D_initial = calls_1e7;
+        if (iB_integration_algorithm == "mc")
+            //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
+            calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+        else if (iB_integration_algorithm == "hcubature")
+            calls_iB_initial = calls_1e7;
 
         // ######################################################################################
         // ######################################################################################
@@ -1074,7 +1074,7 @@ int main()
             double z=0.4;
             double delta_r=delta_r_T17 / h; // in units of Mpc
 
-            std::vector<std::vector<double>> P_k(num_pts, std::vector<double>(4, 0));
+            std::vector<std::vector<double>> P3D_k(num_pts, std::vector<double>(4, 0));
 
             #pragma omp parallel for num_threads(thread_count)
             for(int i=0; i<num_pts; i++)
@@ -1085,15 +1085,15 @@ int main()
 
                 std::cout << k << std::endl;
 
-                P_k[i][0] = k_h;
-                P_k[i][1] = P_nl(k,z,class_obj.get())*pow(h,3);
-                P_k[i][2] = Pk_shell_correction_qag(k, z, delta_r, class_obj.get())*pow(h,3);
-                P_k[i][3] = P_k[i][2]/P_k[i][1];
+                P3D_k[i][0] = k_h;
+                P3D_k[i][1] = P_nl(k,z,class_obj.get())*pow(h,3);
+                P3D_k[i][2] = Pk_shell_correction_qag(k, z, delta_r, class_obj.get())*pow(h,3);
+                P3D_k[i][3] = P3D_k[i][2]/P3D_k[i][1];
             }
 
             for(int idx = 0; idx<num_pts; idx++)
             {
-                P_shell_integration_k_h_table << P_k.at(idx).at(0) << " " <<  P_k.at(idx).at(1) <<  " " <<  P_k.at(idx).at(2) <<  " " <<  P_k.at(idx).at(3) << "\n";
+                P_shell_integration_k_h_table << P3D_k.at(idx).at(0) << " " <<  P3D_k.at(idx).at(1) <<  " " <<  P3D_k.at(idx).at(2) <<  " " <<  P3D_k.at(idx).at(3) << "\n";
             }
 
             P_shell_integration_k_h_table.close();
@@ -1114,15 +1114,15 @@ int main()
         {
             gettimeofday(&start, nullptr);
 
-            std::ofstream P_k_h_table;
-            std::ofstream B_kkk_h_table;
+            std::ofstream P3D_k_h_table;
+            std::ofstream B3D_kkk_h_table;
 
-            P_k_h_table.precision(20);
-            B_kkk_h_table.precision(20);
+            P3D_k_h_table.precision(20);
+            B3D_kkk_h_table.precision(20);
 
-            P_k_h_table.open ("./output/P_k_h_table.tab", std::ofstream::trunc);
-            B_kkk_h_table.open ("./output/B_kkk_h_table.tab", std::ofstream::trunc);
-            //B_kkk_h_table.open ("./output/B_kh_kh_ks_h_table.tab", std::ofstream::trunc); // for hard and soft k - response function tests
+            P3D_k_h_table.open ("./output/P3D_k_h_table.tab", std::ofstream::trunc);
+            B3D_kkk_h_table.open ("./output/B3D_kkk_h_table.tab", std::ofstream::trunc);
+            //B3D_kkk_h_table.open ("./output/B3D_kh_kh_ks_h_table.tab", std::ofstream::trunc); // for hard and soft k - response function tests
 
             double a=-3,b=2;
             //double a=-3,b=4.20411998266;
@@ -1130,9 +1130,9 @@ int main()
             int num_pts = 100;
             double z=0.0;
 
-            std::vector<std::vector<double>> P_k(num_pts, std::vector<double>(3, 0));
-            std::vector<std::vector<double>> B_kkk(num_pts, std::vector<double>(3, 0));
-            //std::vector<std::vector<double>> B_kkk(num_pts, std::vector<double>(5, 0));
+            std::vector<std::vector<double>> P3D_k(num_pts, std::vector<double>(3, 0));
+            std::vector<std::vector<double>> B3D_kkk(num_pts, std::vector<double>(3, 0));
+            //std::vector<std::vector<double>> B3D_kkk(num_pts, std::vector<double>(5, 0));
 
             //#pragma omp parallel for num_threads(thread_count)
             for(int i=0; i<num_pts; i++)
@@ -1143,34 +1143,34 @@ int main()
 
                 //std::cout << k << std::endl;
 
-                P_k[i][0] = k_h;
-                P_k[i][1] = P_tree(k,z,class_obj.get())*pow(h,3);
-                P_k[i][2] = P_nl(k,z,class_obj.get())*pow(h,3);
+                P3D_k[i][0] = k_h;
+                P3D_k[i][1] = P_tree(k,z,class_obj.get())*pow(h,3);
+                P3D_k[i][2] = P_nl(k,z,class_obj.get())*pow(h,3);
 
-                B_kkk[i][0] = k_h;
-                B_kkk[i][1] = B_tree(k,k,k,z,class_obj.get(),false)*pow(h,6);
-                B_kkk[i][2] = B_SC(k,k,k,z,class_obj.get(),true)*pow(h,6);
-                //B_kkk[i][3] = B_bihalofit(k, k, k, z,class_obj.get(),true)*pow(h,6);
-                //B_kkk[i][4] = B_1_loop_hcubature(k,k,k,z,class_obj.get(),false)*pow(h,6);
+                B3D_kkk[i][0] = k_h;
+                B3D_kkk[i][1] = B_tree(k,k,k,z,class_obj.get(),false)*pow(h,6);
+                B3D_kkk[i][2] = B_SC(k,k,k,z,class_obj.get(),true)*pow(h,6);
+                //B3D_kkk[i][3] = B_bihalofit(k, k, k, z,class_obj.get(),true)*pow(h,6);
+                //B3D_kkk[i][4] = B_1_loop_hcubature(k,k,k,z,class_obj.get(),false)*pow(h,6);
 
                  // for hard and soft k - response function tests
     //            double k_hard = k; // in units of 1/Mpc
     //            double k_soft = 0.1*h; // in units of 1/Mpc
-    //            B_kkk[i][1] = B_tree(k_hard, k_hard, k_soft,z,class_obj.get(),false)*pow(h,6);
-    //            B_kkk[i][2] = B_GM(k_hard, k_hard, k_soft,z,class_obj.get(),true)*pow(h,6);
-    //            B_kkk[i][3] = B_squeezed_RF(k_hard, k_hard, k_soft, z,class_obj.get(),true)*pow(h,6);
+    //            B3D_kkk[i][1] = B_tree(k_hard, k_hard, k_soft,z,class_obj.get(),false)*pow(h,6);
+    //            B3D_kkk[i][2] = B_GM(k_hard, k_hard, k_soft,z,class_obj.get(),true)*pow(h,6);
+    //            B3D_kkk[i][3] = B_squeezed_RF(k_hard, k_hard, k_soft, z,class_obj.get(),true)*pow(h,6);
             }
 
             for(int idx = 0; idx<num_pts; idx++)
             {
-                P_k_h_table << P_k.at(idx).at(0) << " " <<  P_k.at(idx).at(1) <<  " " <<  P_k.at(idx).at(2) << "\n";
-    //            B_kkk_h_table << B_kkk.at(idx).at(0) << " " <<  B_kkk.at(idx).at(1) <<  " " <<  B_kkk.at(idx).at(2) << " " <<  B_kkk.at(idx).at(3) <<
-    //                             " " << B_kkk.at(idx).at(4) << "\n";
-                B_kkk_h_table << B_kkk.at(idx).at(0) << " " <<  B_kkk.at(idx).at(1) <<  " " <<  B_kkk.at(idx).at(2) << "\n";
+                P3D_k_h_table << P3D_k.at(idx).at(0) << " " <<  P3D_k.at(idx).at(1) <<  " " <<  P3D_k.at(idx).at(2) << "\n";
+    //            B3D_kkk_h_table << B3D_kkk.at(idx).at(0) << " " <<  B3D_kkk.at(idx).at(1) <<  " " <<  B3D_kkk.at(idx).at(2) << " " <<  B3D_kkk.at(idx).at(3) <<
+    //                             " " << B3D_kkk.at(idx).at(4) << "\n";
+                B3D_kkk_h_table << B3D_kkk.at(idx).at(0) << " " <<  B3D_kkk.at(idx).at(1) <<  " " <<  B3D_kkk.at(idx).at(2) << "\n";
             }
 
-            P_k_h_table.close();
-            B_kkk_h_table.close();
+            P3D_k_h_table.close();
+            B3D_kkk_h_table.close();
 
             gettimeofday(&end, nullptr);
 
@@ -1401,29 +1401,29 @@ int main()
 
         l_array = read_1_column_table("../data/ell_array_test.tab");
 
-        std::vector<double> iB2D_phi_1_phi_2_lF2_array = read_1_column_table("iB2D_phi_1_phi_2_lF2.dat");
+        std::vector<double> iB_phi_1_phi_2_lF2_array = read_1_column_table("iB_phi_1_phi_2_lF2.dat");
 
         double exact_value, error;
 
-        iB2D_phi_1_phi_2_hcubature("lF2", 344, theta_T, 344, 344, exact_value, error);
+        iB_phi_1_phi_2_hcubature("lF2", 344, theta_T, 344, 344, exact_value, error);
 
-        Linear_interp_3D test(l_array, l_array, l_array, iB2D_phi_1_phi_2_lF2_array);
+        Linear_interp_3D test(l_array, l_array, l_array, iB_phi_1_phi_2_lF2_array);
 
         std::cout << exact_value << " ; " << test.interp(344, 344, 344) << std::endl;
 
-        iB2D_phi_1_phi_2_hcubature("X_W", 342, theta_T, 2, 502, exact_value, error);
+        iB_phi_1_phi_2_hcubature("X_W", 342, theta_T, 2, 502, exact_value, error);
 
         std::cout << exact_value << std::endl;
 
-        iB2D_phi_1_phi_2_hcubature("X_W", 342, theta_T, 502, 2, exact_value, error);
+        iB_phi_1_phi_2_hcubature("X_W", 342, theta_T, 502, 2, exact_value, error);
 
         std::cout << exact_value << std::endl;
 
-        iB2D_phi_1_phi_2_hcubature("A", 342, theta_T, 2, 502, exact_value, error);
+        iB_phi_1_phi_2_hcubature("A", 342, theta_T, 2, 502, exact_value, error);
 
         std::cout << exact_value << std::endl;
 
-        iB2D_phi_1_phi_2_hcubature("A", 342, theta_T, 502, 2, exact_value, error);
+        iB_phi_1_phi_2_hcubature("A", 342, theta_T, 502, 2, exact_value, error);
 
         std::cout << exact_value << std::endl;
 
@@ -1433,7 +1433,7 @@ int main()
 
         /*
 
-        // Make interpolation table for iB2D_phi_phi_2 integrand
+        // Make interpolation table for iB_phi_phi_2 integrand
 
         gettimeofday(&start, nullptr);
 
@@ -1448,13 +1448,13 @@ int main()
 
         std::cout << "Total number of evaluations to perform: " << nd << std::endl;
 
-        std::vector<double> iB2D_phi_1_phi_2_lF2_array(nd,0);
+        std::vector<double> iB_phi_1_phi_2_lF2_array(nd,0);
 
-        filename = "iB2D_phi_1_phi_2_lF2.dat";
+        filename = "iB_phi_1_phi_2_lF2.dat";
 
         counter = 0;
 
-        #pragma omp parallel for num_threads(thread_count) shared(iB2D_phi_1_phi_2_lF2_array)
+        #pragma omp parallel for num_threads(thread_count) shared(iB_phi_1_phi_2_lF2_array)
         for (size_t i = 0; i < l_nd; i++)
         {
             for (size_t j = 0; j < l_1_nd; j++)
@@ -1466,12 +1466,12 @@ int main()
                     double result = 0;
                     double error = 0;
 
-    //                iB2D_phi_1_phi_2_mc("X_lF2", l, theta_T, l_1, l_2, T, "vegas", phi_1_phi_2_integrand_val, error, calls_1e5);
-                    iB2D_phi_1_phi_2_hcubature("lF2", l_array.at(i), theta_T, l_array.at(j), l_array.at(k), result, error, calls_1e5);
+    //                iB_phi_1_phi_2_mc("X_lF2", l, theta_T, l_1, l_2, T, "vegas", phi_1_phi_2_integrand_val, error, calls_1e5);
+                    iB_phi_1_phi_2_hcubature("lF2", l_array.at(i), theta_T, l_array.at(j), l_array.at(k), result, error, calls_1e5);
 
-                    iB2D_phi_1_phi_2_lF2_array[idx] = result;
+                    iB_phi_1_phi_2_lF2_array[idx] = result;
 
-    //                std::cout << l_array.at(i) << " " << l_array.at(j) << " " << l_array.at(k) << " " << iB2D_phi_1_phi_2_lF2_array[idx] << std::endl;
+    //                std::cout << l_array.at(i) << " " << l_array.at(j) << " " << l_array.at(k) << " " << iB_phi_1_phi_2_lF2_array[idx] << std::endl;
 
                     counter++;
 
@@ -1488,19 +1488,19 @@ int main()
 
         std::cout << "Time taken : " << time_taken << " sec" << std::endl;
 
-        std::ofstream iB2D_phi_1_phi_2_lF2;
+        std::ofstream iB_phi_1_phi_2_lF2;
 
-        iB2D_phi_1_phi_2_lF2.open (filename, std::ofstream::trunc);
-        iB2D_phi_1_phi_2_lF2.precision(16);
+        iB_phi_1_phi_2_lF2.open (filename, std::ofstream::trunc);
+        iB_phi_1_phi_2_lF2.precision(16);
 
         for (size_t idx = 0; idx < nd; idx++)
         {
-            iB2D_phi_1_phi_2_lF2 << iB2D_phi_1_phi_2_lF2_array.at(idx) << "\n";
+            iB_phi_1_phi_2_lF2 << iB_phi_1_phi_2_lF2_array.at(idx) << "\n";
         }
 
-        std::cout<<"\niB2D_phi_1_phi_2_lF2 output file created\n";
+        std::cout<<"\niB_phi_1_phi_2_lF2 output file created\n";
 
-        iB2D_phi_1_phi_2_lF2.close();
+        iB_phi_1_phi_2_lF2.close();
 
         */
 
@@ -1515,18 +1515,18 @@ int main()
             if (verbose_print_outs)
                 std::cout << "\nClock started (2D power spectra calculations started)" << std::endl;
 
-            std::vector<std::vector<std::vector<double>>> P2D_ss_array;
-            std::vector<std::vector<std::vector<double>>> P2D_ll_array;
+            std::vector<std::vector<std::vector<double>>> P_ss_array;
+            std::vector<std::vector<std::vector<double>>> P_ll_array;
 
-            P2D_ss_array = std::vector<std::vector<std::vector<double>>>(1, std::vector<std::vector<double>>(num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
-            P2D_ll_array = std::vector<std::vector<std::vector<double>>>(2, std::vector<std::vector<double>>(num_2pt_ll_correlations, std::vector<double>(l_array.size(), 0)));
+            P_ss_array = std::vector<std::vector<std::vector<double>>>(1, std::vector<std::vector<double>>(num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
+            P_ll_array = std::vector<std::vector<std::vector<double>>>(2, std::vector<std::vector<double>>(num_2pt_ll_correlations, std::vector<double>(l_array.size(), 0)));
 
             counter = 0;
 
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels)
             for (size_t idx = 0; idx < l_array.size(); idx++)
             {
-                if (filename_P2D == "P_kk.dat" || filename_P2D == "P_ss.dat")
+                if (filename_P == "P_kk.dat" || filename_P == "P_ss.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1535,21 +1535,21 @@ int main()
                         {
                             assert(corr_idx != num_2pt_ss_correlations);
 
-                            if (P2D_integration_algorithm == "qag")
-                                P2D_ss_array[0][corr_idx][idx] = P2D_z_qag("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P2D_ss_lower_limit.at(0), P2D_ss_upper_limit.at(0));
+                            if (P_integration_algorithm == "qag")
+                                P_ss_array[0][corr_idx][idx] = P2D_z_qag("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P_ss_lower_limit.at(0), P_ss_upper_limit.at(0));
 
-                            else if (P2D_integration_algorithm == "mc")
-                                P2D_ss_array[0][corr_idx][idx] = P2D_z_mc("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P2D_ss_lower_limit, P2D_ss_upper_limit, T, "vegas");
+                            else if (P_integration_algorithm == "mc")
+                                P_ss_array[0][corr_idx][idx] = P2D_z_mc("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P_ss_lower_limit, P_ss_upper_limit, T, "vegas");
 
-                            else if (P2D_integration_algorithm == "hcubature")
-                                P2D_ss_array[0][corr_idx][idx] = P2D_z_hcubature("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P2D_ss_lower_limit, P2D_ss_upper_limit);
+                            else if (P_integration_algorithm == "hcubature")
+                                P_ss_array[0][corr_idx][idx] = P2D_z_hcubature("P", l_array.at(idx), class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), P_ss_lower_limit, P_ss_upper_limit);
 
                             corr_idx++;
                         }
                     }
                 }
 
-                else if (filename_P2D == "P_hh.dat")
+                else if (filename_P == "P_hh.dat")
                 {
                     size_t corr_idx = 0;
 
@@ -1557,31 +1557,31 @@ int main()
                     {
                         assert(corr_idx != num_2pt_ll_correlations);
 
-                        if (P2D_integration_algorithm == "qag")
+                        if (P_integration_algorithm == "qag")
                         {
                             // b1 term
-                            P2D_ll_array[0][corr_idx][idx] = P2D_z_qag("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P2D_ll_lower_limit.at(0), P2D_ll_upper_limit.at(0));
+                            P_ll_array[0][corr_idx][idx] = P2D_z_qag("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P_ll_lower_limit.at(0), P_ll_upper_limit.at(0));
 
                             // Shot noise term
-                            P2D_ll_array[1][corr_idx][idx] = P2D_z_qag("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P2D_ll_lower_limit.at(0), P2D_ll_upper_limit.at(0));
+                            P_ll_array[1][corr_idx][idx] = P2D_z_qag("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P_ll_lower_limit.at(0), P_ll_upper_limit.at(0));
                         }
 
-                        else if (P2D_integration_algorithm == "mc")
+                        else if (P_integration_algorithm == "mc")
                         {
                             // b1 term
-                            P2D_ll_array[0][corr_idx][idx] = P2D_z_mc("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P2D_ll_lower_limit, P2D_ll_upper_limit, T, "vegas");
+                            P_ll_array[0][corr_idx][idx] = P2D_z_mc("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit, T, "vegas");
 
                             // Shot noise term
-                            P2D_ll_array[1][corr_idx][idx] = P2D_z_mc("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P2D_ll_lower_limit, P2D_ll_upper_limit, T, "vegas");
+                            P_ll_array[1][corr_idx][idx] = P2D_z_mc("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit, T, "vegas");
                         }
 
-                        else if (P2D_integration_algorithm == "hcubature")
+                        else if (P_integration_algorithm == "hcubature")
                         {
                             // b1 term
-                            P2D_ll_array[0][corr_idx][idx] = P2D_z_hcubature("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P2D_ll_lower_limit, P2D_ll_upper_limit);
+                            P_ll_array[0][corr_idx][idx] = P2D_z_hcubature("P", l_array.at(idx), class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit);
 
                             // Shot noise term
-                            P2D_ll_array[1][corr_idx][idx] = P2D_z_hcubature("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P2D_ll_lower_limit, P2D_ll_upper_limit);
+                            P_ll_array[1][corr_idx][idx] = P2D_z_hcubature("P_hh_eps_eps", l_array.at(idx), class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit);
                         }
 
                         corr_idx++;
@@ -1597,7 +1597,7 @@ int main()
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
             std::cout << "Time taken for 2D power spectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_P2D == "P_kk.dat" || filename_P2D == "P_ss.dat")
+            if (filename_P == "P_kk.dat" || filename_P == "P_ss.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1616,7 +1616,7 @@ int main()
                         assert(corr_idx != num_2pt_ss_correlations);
 
                         for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-                            file_P << l_array.at(l_idx) << " " << P2D_ss_array.at(0).at(corr_idx).at(l_idx) << "\n";
+                            file_P << l_array.at(l_idx) << " " << P_ss_array.at(0).at(corr_idx).at(l_idx) << "\n";
 
                         file_P.close();
 
@@ -1625,7 +1625,7 @@ int main()
                 }
             }
 
-           else if (filename_P2D == "P_hh.dat") // only auto-P for lens bins
+           else if (filename_P == "P_hh.dat") // only auto-P for lens bins
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -1642,7 +1642,7 @@ int main()
                     assert(corr_idx != num_2pt_ll_correlations);
 
                     for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-                        file_P << l_array.at(l_idx) << " " << P2D_ll_array.at(0).at(corr_idx).at(l_idx) << " " << P2D_ll_array.at(1).at(corr_idx).at(l_idx) << "\n";
+                        file_P << l_array.at(l_idx) << " " << P_ll_array.at(0).at(corr_idx).at(l_idx) << " " << P_ll_array.at(1).at(corr_idx).at(l_idx) << "\n";
 
                     file_P.close();
 
@@ -1657,7 +1657,7 @@ int main()
 
             if (compute_2D_power_spectra_spherical_sky)
             {
-                if (filename_P2D == "P_kk.dat" || filename_P2D == "P_ss.dat")
+                if (filename_P == "P_kk.dat" || filename_P == "P_ss.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1668,7 +1668,7 @@ int main()
 
                             std::vector<int> ells;
                             std::vector<double> C_ells;
-                            C_ells_spherical_sky(l_array, P2D_ss_array.at(0).at(corr_idx), ells, C_ells);
+                            C_ells_spherical_sky(l_array, P_ss_array.at(0).at(corr_idx), ells, C_ells);
 
                             std::stringstream s_C_ells;
                             s_C_ells << spectra_folder << "Cl_" << std::to_string(a+1) << std::to_string(b+1) << filename_extension;
@@ -1687,7 +1687,7 @@ int main()
                     }
                 }
 
-                else if (filename_P2D == "P_hh.dat")
+                else if (filename_P == "P_hh.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -1696,11 +1696,11 @@ int main()
 
                         std::vector<int> ells;
                         std::vector<double> C_ells;
-                        C_ells_spherical_sky(l_array, P2D_ll_array.at(0).at(corr_idx), ells, C_ells);
+                        C_ells_spherical_sky(l_array, P_ll_array.at(0).at(corr_idx), ells, C_ells);
 
                         std::vector<int> ells_n_bar;
                         std::vector<double> C_ells_n_bar;
-                        C_ells_spherical_sky(l_array, P2D_ll_array.at(1).at(corr_idx), ells_n_bar, C_ells_n_bar);
+                        C_ells_spherical_sky(l_array, P_ll_array.at(1).at(corr_idx), ells_n_bar, C_ells_n_bar);
 
                         std::stringstream s_C_ells;
                         s_C_ells << spectra_folder << "Cl_" << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
@@ -1735,7 +1735,7 @@ int main()
         {
             gettimeofday(&start, nullptr);
 
-            if (filename_P2D == "P_kk.dat")
+            if (filename_P == "P_kk.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1758,9 +1758,9 @@ int main()
 
                         xi = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, P_matrix.at(0), P_matrix.at(1), "xi", thread_count);
 
-                        std::stringstream s_xi;
-                        s_xi << correlations_folder << "xi_" << std::to_string(a+1) << std::to_string(b+1) << filename_extension;
-                        std::ofstream file_xi( s_xi.str(), std::ofstream::trunc);
+                        std::stringstream s_xi2D;
+                        s_xi2D << correlations_folder << "xi_" << std::to_string(a+1) << std::to_string(b+1) << filename_extension;
+                        std::ofstream file_xi( s_xi2D.str(), std::ofstream::trunc);
 
                         file_xi.precision(40);
 
@@ -1776,7 +1776,7 @@ int main()
                 }
             }
 
-            if (filename_P2D == "P_ss.dat")
+            if (filename_P == "P_ss.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1826,7 +1826,7 @@ int main()
                 }
             }
 
-            else if (filename_P2D == "P_hh.dat")
+            else if (filename_P == "P_hh.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -1863,7 +1863,7 @@ int main()
                         file_xi_component.close();
                     }
 
-                    std::vector<double> P2D(P_matrix.at(0).size(), 0);
+                    std::vector<double> P(P_matrix.at(0).size(), 0);
 
                     // Total sum of the bias modelling components
                     for (size_t l_idx = 0; l_idx < P_matrix.at(0).size(); l_idx++)
@@ -1874,17 +1874,17 @@ int main()
                                 continue;
 
                             else
-                                P2D[l_idx] += P_matrix[b_idx][l_idx];
+                                P[l_idx] += P_matrix[b_idx][l_idx];
                         }
                     }
 
-                    //xi = xi_theta_array(alpha_table, P_matrix.at(0), P2D, "xi", thread_count);
+                    //xi = xi_theta_array(alpha_table, P_matrix.at(0), P, "xi", thread_count);
 
-                    xi = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, P_matrix.at(0), P2D, "xi", thread_count);
+                    xi = xi_theta_array_bin_averaged(alpha_min_table, alpha_max_table, P_matrix.at(0), P, "xi", thread_count);
 
-                    std::stringstream s_xi;
-                    s_xi << correlations_folder << "xi_" << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
-                    std::ofstream file_xi( s_xi.str(), std::ofstream::trunc);
+                    std::stringstream s_xi2D;
+                    s_xi2D << correlations_folder << "xi_" << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
+                    std::ofstream file_xi( s_xi2D.str(), std::ofstream::trunc);
 
                     file_xi.precision(40);
 
@@ -1930,7 +1930,7 @@ int main()
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             {
-                if (filename_B2D == "B_kkk.dat")
+                if (filename_B2D == "B2D_kkk.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1967,7 +1967,7 @@ int main()
 
             std::cout << "Time taken for 2D bispectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_B2D == "B_kkk.dat")
+            if (filename_B2D == "B2D_kkk.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -1978,17 +1978,17 @@ int main()
                         {
                             assert(corr_idx != num_3pt_sss_correlations);
 
-                            std::stringstream s_B;
-                            s_B << spectra_folder << "B_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
+                            std::stringstream s_B2D;
+                            s_B2D << spectra_folder << "B2D_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
 
-                            std::ofstream file_B;
-                            file_B.open (s_B.str(), std::ofstream::trunc);
-                            file_B.precision(40);
+                            std::ofstream file_B2D;
+                            file_B2D.open (s_B2D.str(), std::ofstream::trunc);
+                            file_B2D.precision(40);
 
                             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-                                file_B << l_array.at(l_idx) << " " << B2D_sss_array.at(0).at(corr_idx).at(l_idx) << "\n";
+                                file_B2D << l_array.at(l_idx) << " " << B2D_sss_array.at(0).at(corr_idx).at(l_idx) << "\n";
 
-                            file_B.close();
+                            file_B2D.close();
 
                             corr_idx++;
                         }
@@ -2071,22 +2071,22 @@ int main()
             struct_iB2D_W_FS info_iB_W_FS = {&W2D_U_FS, theta_U, &W2D_TH_FS, theta_T};
             struct_iB2D_W_FS info_iB_W_FS_halos = {&W2D_TH_FS, theta_T, &W2D_TH_FS, theta_T};
 
-            if (filename_iB2D == "iBggg_mc.dat")
+            if (filename_iB == "iBggg_mc.dat")
             {
-                iB_P_1_val = iB2D_mc("P_1", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", calls_iB2D_initial);
+                iB_P_1_val = iB2D_mc("P_1", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", calls_iB_initial);
                 std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
 
-                iB_A_val = iB2D_mc("A", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", calls_iB2D_initial);
+                iB_A_val = iB2D_mc("A", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", calls_iB_initial);
 
                 std::cout << "\niB_A = " << iB_A_val << std::endl;
             }
 
-            else if (filename_iB2D == "iBggg_hcubature.dat")
+            else if (filename_iB == "iBggg_hcubature.dat")
             {
-                iB_P_1_val = iB2D_hcubature("P_1", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, calls_iB2D_initial);
+                iB_P_1_val = iB2D_hcubature("P_1", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_lll_lower_limits, iB_lll_upper_limits, calls_iB_initial);
                 std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
 
-                iB_A_val = iB2D_hcubature("A", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, calls_iB2D_initial);
+                iB_A_val = iB2D_hcubature("A", 0, info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_lll_lower_limits, iB_lll_upper_limits, calls_iB_initial);
 
                 std::cout << "\niB_A = " << iB_A_val << std::endl;
             }
@@ -2098,172 +2098,172 @@ int main()
             {
                 size_t calls_iB;
 
-                calls_iB2D = calls_iB2D_initial;
+                calls_iB = calls_iB_initial;
 
                 if (l_array.at(l_idx) <= 150)
-                    calls_iB2D = 2*calls_iB2D_initial;
+                    calls_iB = 2*calls_iB_initial;
                 else
-                    calls_iB2D = calls_iB2D_initial;
+                    calls_iB = calls_iB_initial;
 
-                if (filename_iB2D == "iBhhh_mc.dat") // with bias
+                if (filename_iB == "iBhhh_mc.dat") // with bias
                 {
-                    iB_111[l_idx][0] = iB2D_mc("B", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_mc("B_PP", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b2.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_mc("B", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b1.get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", calls_iB);
+                    iB_111[l_idx][1] = iB2D_mc("B_PP", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b2.get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", calls_iB);
                 }
 
-                if (filename_iB2D == "iBhhh_hcubature.dat") // with bias
+                if (filename_iB == "iBhhh_hcubature.dat") // with bias
                 {
-                    iB_111[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b1.get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS_halos, class_obj.get(), true, qh1_b1.get(), qh1_b1.get(), qh1_b1.get(), iB_lll_lower_limits, iB_lll_upper_limits, calls_iB);
                 }
 
-                if (filename_iB2D == "iBgkk_hcubature.dat")
+                if (filename_iB == "iBgkk_hcubature.dat")
                 {
                      // without bias
-                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
                 }
 
-                else if (filename_iB2D == "iBggk_hcubature.dat")
+                else if (filename_iB == "iBggk_hcubature.dat")
                 {
                      // without bias
-                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][2] = iB2D_hcubature("Y_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][5] = iB2D_hcubature("Y_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][9] = iB2D_hcubature("P_3", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][2] = iB2D_hcubature("Y_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][5] = iB2D_hcubature("Y_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][9] = iB2D_hcubature("P_3", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
                 }
 
-                else if (filename_iB2D == "iBggg_hcubature.dat")
+                else if (filename_iB == "iBggg_hcubature.dat")
                 {
                      // without bias
-                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_hcubature("X_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][2] = iB2D_hcubature("Y_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][4] = iB2D_hcubature("X_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][5] = iB2D_hcubature("Y_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B_lF2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][1] = iB2D_hcubature("X_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][2] = iB2D_hcubature("Y_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][3] = iB2D_hcubature("Z_W", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][4] = iB2D_hcubature("X_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][5] = iB2D_hcubature("Y_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][6] = iB2D_hcubature("Z_S2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
                     iB_111[l_idx][7] = iB_P_1_val;
-                    iB_111[l_idx][8] = iB2D_hcubature("P_2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][9] = iB2D_hcubature("P_3", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                    iB_111[l_idx][8] = iB2D_hcubature("P_2", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][9] = iB2D_hcubature("P_3", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
                     iB_111[l_idx][10] = iB_A_val;
                 }
 
-                if (filename_iB2D == "iBkkk_hcubature.dat")
+                if (filename_iB == "iBkkk_hcubature.dat")
                 {
-                    iB_111[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
 
                     if (do_cross_fields)
                     {
-                        iB_112[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_122[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_222[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
+                        iB_112[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_122[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_222[l_idx][0] = iB2D_hcubature("B", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
                    }
                 }
 
-                else if (filename_iB2D == "iBkxi_hcubature.dat")
+                else if (filename_iB == "iBkxi_hcubature.dat")
                 {
-                    iB_111[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //            iB_111[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //            iB_111[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //            iB_111[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //            iB_111[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
                     if (do_cross_fields)
                     {
-                        iB_112[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_112[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_112[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_112[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_112[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_112[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_112[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_112[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_122[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_122[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_122[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_122[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_122[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_122[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_122[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_122[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_222[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_222[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_222[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_222[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_222[l_idx][0] = iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_222[l_idx][1] = iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_222[idx][2] = iB2D_hcubature("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_222[idx][3] = iB2D_hcubature("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
                     }
                 }
 
-                else if (filename_iB2D == "iBkxi_hcubature_v.dat")
+                else if (filename_iB == "iBkxi_hcubature_v.dat")
                 {
-                    iB_111[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //            iB_111[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //            iB_111[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //            iB_111[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //            iB_111[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
                     if (do_cross_fields)
                     {
-                        iB_112[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_112[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_112[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_112[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_112[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_112[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_112[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_112[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_122[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_122[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_122[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_122[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_122[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_122[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_122[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_122[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_222[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_222[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_222[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_222[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_222[l_idx][0] = iB2D_hcubature_v("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_222[l_idx][1] = iB2D_hcubature_v("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_222[idx][2] = iB2D_hcubature_v("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_222[idx][3] = iB2D_hcubature_v("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
                     }
                 }
 
-                else if (filename_iB2D == "iBkxi_hcubature_angle_averaged.dat")
+                else if (filename_iB == "iBkxi_hcubature_angle_averaged.dat")
                 {
-                    iB_111[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //            iB_111[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //            iB_111[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                    iB_111[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //            iB_111[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //            iB_111[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
                     if (do_cross_fields)
                     {
-                        iB_112[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_112[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_112[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_112[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_112[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_112[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_112[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_112[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_122[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_122[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_122[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_122[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_122[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_122[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_122[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_122[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
 
-                        iB_222[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-                        iB_222[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, calls_iB2D);
-        //                iB_222[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
-        //                iB_222[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, calls_iB2D);
+                        iB_222[l_idx][0] = iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+                        iB_222[l_idx][1] = iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, calls_iB);
+        //                iB_222[idx][2] = iB2D_hcubature_angle_averaged("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
+        //                iB_222[idx][3] = iB2D_hcubature_angle_averaged("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, calls_iB);
                     }
                 }
 
-                else if (filename_iB2D == "iBkxi_mc.dat")
+                else if (filename_iB == "iBkxi_mc.dat")
                 {
-                    iB_111[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-                    iB_111[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-        //            iB_111[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
-        //            iB_111[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
+                    iB_111[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+                    iB_111[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+        //            iB_111[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
+        //            iB_111[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk1.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
 
                     if (do_cross_fields)
                     {
-                        iB_112[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-                        iB_112[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_112[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_112[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
+                        iB_112[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+                        iB_112[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+        //                iB_112[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
+        //                iB_112[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk1.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
 
-                        iB_122[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-                        iB_122[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_122[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_122[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
+                        iB_122[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+                        iB_122[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+        //                iB_122[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
+        //                iB_122[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk1.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
 
-                        iB_222[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-                        iB_222[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_222[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
-        //                iB_222[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB2D_lower_limits, iB_upper_limits, T, "vegas", calls_iB2D);
+                        iB_222[l_idx][0] = iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+                        iB_222[l_idx][1] = iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", calls_iB);
+        //                iB_222[idx][2] = iB2D_mc("B_xip_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
+        //                iB_222[idx][3] = iB2D_mc("B_xim_sin", l_array.at(idx), info_iB_W_FS, class_obj.get(), true, qk2.get(), qk2.get(), qk2.get(), iB_lower_limits, iB_upper_limits, T, "vegas", calls_iB);
 
                     }
                 }
@@ -2343,37 +2343,37 @@ int main()
 
     //        double iB_P_1_val = 0, iB_A_val = 0;
 
-            struct_iB2D_W_FS info_iB2D_UWW_FS = {&W2D_U_FS, theta_U, &W2D_TH_FS, theta_T};
-            struct_iB2D_W_FS info_iB2D_WWW_FS = {&W2D_TH_FS, theta_T, &W2D_TH_FS, theta_T};
+            struct_iB2D_W_FS info_iB_UWW_FS = {&W2D_U_FS, theta_U, &W2D_TH_FS, theta_T};
+            struct_iB2D_W_FS info_iB_WWW_FS = {&W2D_TH_FS, theta_T, &W2D_TH_FS, theta_T};
 
-    //        if (filename_iB2D == "iB_ggg_mc.dat")
+    //        if (filename_iB == "iB_ggg_mc.dat")
     //        {
-    //            iB_P_1_val = iB2D_mc("P_1", 0, info_iB2D_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_source_lower_limits, iB2D_source_upper_limits, T, "vegas", calls_iB2D_initial);
+    //            iB_P_1_val = iB2D_mc("P_1", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, T, "vegas", calls_iB_initial);
     //            std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
 
-    //            iB_A_val = iB2D_mc("A", 0, info_iB2D_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_source_lower_limits, iB2D_source_upper_limits, T, "vegas", calls_iB2D_initial);
+    //            iB_A_val = iB2D_mc("A", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, T, "vegas", calls_iB_initial);
 
     //            std::cout << "\niB_A = " << iB_A_val << std::endl;
     //        }
 
-    //        else if (filename_iB2D == "iB_ggg_hcubature.dat")
+    //        else if (filename_iB == "iB_ggg_hcubature.dat")
     //        {
-    //            iB_P_1_val = iB2D_hcubature("P_1", 0, info_iB2D_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_source_lower_limits, iB2D_source_upper_limits, calls_iB2D_initial);
+    //            iB_P_1_val = iB2D_hcubature("P_1", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, calls_iB_initial);
     //            std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
 
-    //            iB_A_val = iB2D_hcubature("A", 0, info_iB2D_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB2D_source_lower_limits, iB2D_source_upper_limits, calls_iB2D_initial);
+    //            iB_A_val = iB2D_hcubature("A", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, calls_iB_initial);
 
     //            std::cout << "\niB_A = " << iB_A_val << std::endl;
     //        }
 
-            std::vector<std::vector<std::vector<double>>> iB2D_sss_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0))); // 2 columns to accommodate either (iB_Mkk) or (iB_Mxip and iB_Mxim) columns
-            std::vector<std::vector<std::vector<double>>> iB2D_lll_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
-            //std::vector<std::vector<std::vector<double>>> iB2D_lls_array(5, std::vector<std::vector<double>>(num_i3pt_lls_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
-            std::vector<std::vector<std::vector<double>>> iB2D_lss_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0))); // 6 columns to accommodate either (iB_hkk_b1, iB_hkk_b2, iB_hkk_bs2) or (iB_hxip_b1, iB_hxip_b2, iB_hxip_bs2, iB_hxim_b1, iB_hxim_b2, iB_hxim_bs2)
+            std::vector<std::vector<std::vector<double>>> iB_sss_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0))); // 2 columns to accommodate either (iB_Mkk) or (iB_Mxip and iB_Mxim) columns
+            std::vector<std::vector<std::vector<double>>> iB_lll_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
+            //std::vector<std::vector<std::vector<double>>> iB_lls_array(5, std::vector<std::vector<double>>(num_i3pt_lls_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
+            std::vector<std::vector<std::vector<double>>> iB_lss_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0))); // 6 columns to accommodate either (iB_hkk_b1, iB_hkk_b2, iB_hkk_bs2) or (iB_hxip_b1, iB_hxip_b2, iB_hxip_bs2, iB_hxim_b1, iB_hxim_b2, iB_hxim_bs2)
 
-            std::vector<std::vector<std::vector<double>>> iB2D_sss_error_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0)));
-            std::vector<std::vector<std::vector<double>>> iB2D_lll_error_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0)));
-            std::vector<std::vector<std::vector<double>>> iB2D_lss_error_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
+            std::vector<std::vector<std::vector<double>>> iB_sss_error_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0)));
+            std::vector<std::vector<std::vector<double>>> iB_lll_error_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0)));
+            std::vector<std::vector<std::vector<double>>> iB_lss_error_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
 
             counter = 0;
 
@@ -2384,16 +2384,16 @@ int main()
             //for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
-                size_t calls_iB2D;
+                size_t calls_iB;
 
                 if (l_array.at(l_idx) <= 220)
-                    calls_iB2D = 2*calls_iB2D_initial;
+                    calls_iB = 2*calls_iB_initial;
                 else
-                    calls_iB2D = calls_iB2D_initial;
+                    calls_iB = calls_iB_initial;
 
                 // --------------------------------------------------------
 
-                if (filename_iB2D == "iB_Mkk.dat")
+                if (filename_iB == "iB_Mkk.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2406,31 +2406,31 @@ int main()
 
                                 double result = 0.0, error = 0.0;
 
-                                if (iB2D_integration_algorithm == "mc")
+                                if (iB_integration_algorithm == "mc")
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
 
-                                if (iB2D_integration_algorithm == "mc_cigar")
+                                if (iB_integration_algorithm == "mc_cigar")
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
 
-                                else if (iB2D_integration_algorithm == "hcubature")
+                                else if (iB_integration_algorithm == "hcubature")
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
 
                                 corr_idx++;
@@ -2439,7 +2439,7 @@ int main()
                     }
                 }
 
-                else if (filename_iB2D == "iB_Mss.dat")
+                else if (filename_iB == "iB_Mss.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2452,49 +2452,49 @@ int main()
 
                                 double result = 0.0, error = 0.0;
 
-                                if (iB2D_integration_algorithm == "mc")
+                                if (iB_integration_algorithm == "mc")
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_sss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
 
-                                if (iB2D_integration_algorithm == "mc_cigar")
+                                if (iB_integration_algorithm == "mc_cigar")
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB2D_sss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
 
-                                else if (iB2D_integration_algorithm == "hcubature")
+                                else if (iB_integration_algorithm == "hcubature")
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_lower_limits, iB2D_sss_upper_limits, result, error, calls_iB2D);
-                                    iB2D_sss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
 
                                 corr_idx++;
@@ -2503,7 +2503,7 @@ int main()
                     }
                 }
 
-                else if (filename_iB2D == "iB_Mss_angle_averaged.dat")
+                else if (filename_iB == "iB_Mss_angle_averaged.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2516,34 +2516,34 @@ int main()
 
                                 double result = 0.0, error = 0.0;
 
-                                if (iB2D_integration_algorithm == "mc")
+                                if (iB_integration_algorithm == "mc")
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_angle_averaged_lower_limits, iB2D_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_angle_averaged_lower_limits, iB2D_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_sss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
 
-                                else if (iB2D_integration_algorithm == "hcubature")
+                                else if (iB_integration_algorithm == "hcubature")
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_angle_averaged_lower_limits, iB2D_sss_angle_averaged_upper_limits, result, error, calls_iB2D);
-                                    iB2D_sss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB2D_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_sss_angle_averaged_lower_limits, iB2D_sss_angle_averaged_upper_limits, result, error, calls_iB2D);
-                                    iB2D_sss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_sss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
 
                                 corr_idx++;
@@ -2552,7 +2552,7 @@ int main()
                     }
                 }
 
-                else if (filename_iB2D == "iB_hkk.dat")
+                else if (filename_iB == "iB_hkk.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -2565,25 +2565,25 @@ int main()
 
                                 double result = 0.0, error = 0.0;
 
-                                if (iB2D_integration_algorithm == "mc")
+                                if (iB_integration_algorithm == "mc")
                                 {
                                     // b1 term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_lss_array[0][corr_idx][l_idx] = result;
-                                    iB2D_lss_error_array[0][corr_idx][l_idx] = error;
+                                    iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[0][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[0][corr_idx][l_idx] = error;
 
                                     // b2 term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_P2P3", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_lss_array[1][corr_idx][l_idx] = result;
-                                    iB2D_lss_error_array[1][corr_idx][l_idx] = error;
+                                    iB2D_mc("B_P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[1][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[1][corr_idx][l_idx] = error;
 
                                     // bs2 term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_S2P2P3", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_bs2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                                    iB2D_lss_array[2][corr_idx][l_idx] = result;
-                                    iB2D_lss_error_array[2][corr_idx][l_idx] = error;
+                                    iB2D_mc("B_S2P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_bs2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[2][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[2][corr_idx][l_idx] = error;
                                 }
 
                                 corr_idx++;
@@ -2592,7 +2592,7 @@ int main()
                     }
                 }
 
-                else if (filename_iB2D == "iB_hhh.dat")
+                else if (filename_iB == "iB_hhh.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -2601,37 +2601,37 @@ int main()
 
                         double result = 0.0, error = 0.0;
 
-                        if (iB2D_integration_algorithm == "mc")
+                        if (iB_integration_algorithm == "mc")
                         {
                             // b1 term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                            iB2D_lll_array[0][corr_idx][l_idx] = result;
-                            iB2D_lll_error_array[0][corr_idx][l_idx] = error;
+                            iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[0][corr_idx][l_idx] = result;
+                            iB_lll_error_array[0][corr_idx][l_idx] = error;
 
                             // b2 term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B_PP", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b2_kernels.at(a).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                            iB2D_lll_array[1][corr_idx][l_idx] = result;
-                            iB2D_lll_error_array[1][corr_idx][l_idx] = error;
+                            iB2D_mc("B_PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[1][corr_idx][l_idx] = result;
+                            iB_lll_error_array[1][corr_idx][l_idx] = error;
 
                             // bs2 term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B_S2PP", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_bs2_kernels.at(a).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                            iB2D_lll_array[2][corr_idx][l_idx] = result;
-                            iB2D_lll_error_array[2][corr_idx][l_idx] = error;
+                            iB2D_mc("B_S2PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_bs2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[2][corr_idx][l_idx] = result;
+                            iB_lll_error_array[2][corr_idx][l_idx] = error;
 
                             // Shot noise 1 term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B_hhh_delta_eps_eps", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_kernels.at(a).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                            iB2D_lll_array[3][corr_idx][l_idx] = result;
-                            iB2D_lll_error_array[3][corr_idx][l_idx] = error;
+                            iB2D_mc("B_hhh_delta_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[3][corr_idx][l_idx] = result;
+                            iB_lll_error_array[3][corr_idx][l_idx] = error;
 
                             // Shot noise 2 term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B_hhh_eps_eps_eps", l_array.at(l_idx), info_iB2D_WWW_FS, class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), ql_kernels.at(a).get(), iB2D_lll_lower_limits, iB2D_lll_upper_limits, T, "vegas", result, error, calls_iB2D);
-                            iB2D_lll_array[4][corr_idx][l_idx] = result;
-                            iB2D_lll_error_array[4][corr_idx][l_idx] = error;
+                            iB2D_mc("B_hhh_eps_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[4][corr_idx][l_idx] = result;
+                            iB_lll_error_array[4][corr_idx][l_idx] = error;
                         }
 
                         corr_idx++;
@@ -2647,7 +2647,7 @@ int main()
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
             std::cout << "Time taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_iB2D == "iB_Mkk.dat" || filename_iB2D == "iB_Mss.dat" || filename_iB2D == "iB_Mss_angle_averaged.dat")
+            if (filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2674,8 +2674,8 @@ int main()
 
                             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                             {
-                                file_iB << l_array.at(l_idx) << " " << iB2D_sss_array[0][corr_idx][l_idx] <<  " " << iB2D_sss_array[1][corr_idx][l_idx] << " " << "\n";
-                                file_iB_error << l_array.at(l_idx) << " " << iB2D_sss_error_array[0][corr_idx][l_idx] <<  " " << iB2D_sss_error_array[1][corr_idx][l_idx] << " " << "\n";
+                                file_iB << l_array.at(l_idx) << " " << iB_sss_array[0][corr_idx][l_idx] <<  " " << iB_sss_array[1][corr_idx][l_idx] << " " << "\n";
+                                file_iB_error << l_array.at(l_idx) << " " << iB_sss_error_array[0][corr_idx][l_idx] <<  " " << iB_sss_error_array[1][corr_idx][l_idx] << " " << "\n";
                             }
 
                             file_iB.close();
@@ -2687,7 +2687,7 @@ int main()
                 }
             }
 
-            else if (filename_iB2D == "iB_hkk.dat")
+            else if (filename_iB == "iB_hkk.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -2714,13 +2714,13 @@ int main()
 
                             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                             {
-                                file_iB << l_array.at(l_idx) << " " << iB2D_lss_array[0][corr_idx][l_idx] <<  " " << iB2D_lss_array[1][corr_idx][l_idx] << " " <<
-                                           iB2D_lss_array[2][corr_idx][l_idx] << " " << iB2D_lss_array[3][corr_idx][l_idx] << " " << iB2D_lss_array[4][corr_idx][l_idx] << " " <<
-                                           iB2D_lss_array[5][corr_idx][l_idx] << " " << "\n";
+                                file_iB << l_array.at(l_idx) << " " << iB_lss_array[0][corr_idx][l_idx] <<  " " << iB_lss_array[1][corr_idx][l_idx] << " " <<
+                                           iB_lss_array[2][corr_idx][l_idx] << " " << iB_lss_array[3][corr_idx][l_idx] << " " << iB_lss_array[4][corr_idx][l_idx] << " " <<
+                                           iB_lss_array[5][corr_idx][l_idx] << " " << "\n";
 
-                                file_iB_error << l_array.at(l_idx) << " " << iB2D_lss_error_array[0][corr_idx][l_idx] <<  " " << iB2D_lss_error_array[1][corr_idx][l_idx] << " " <<
-                                                 iB2D_lss_error_array[2][corr_idx][l_idx] << " " << iB2D_lss_error_array[3][corr_idx][l_idx] << " " << iB2D_lss_error_array[4][corr_idx][l_idx] << " " <<
-                                                 iB2D_lss_error_array[5][corr_idx][l_idx] << " " << "\n";
+                                file_iB_error << l_array.at(l_idx) << " " << iB_lss_error_array[0][corr_idx][l_idx] <<  " " << iB_lss_error_array[1][corr_idx][l_idx] << " " <<
+                                                 iB_lss_error_array[2][corr_idx][l_idx] << " " << iB_lss_error_array[3][corr_idx][l_idx] << " " << iB_lss_error_array[4][corr_idx][l_idx] << " " <<
+                                                 iB_lss_error_array[5][corr_idx][l_idx] << " " << "\n";
 
                             }
 
@@ -2733,7 +2733,7 @@ int main()
                 }
             }
 
-            else if (filename_iB2D == "iB_hhh.dat")
+            else if (filename_iB == "iB_hhh.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -2756,11 +2756,11 @@ int main()
 
                     for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                     {
-                        file_iB << l_array.at(l_idx) << " " << iB2D_lll_array[0][corr_idx][l_idx] <<  " " << iB2D_lll_array[1][corr_idx][l_idx] << " " <<
-                                   iB2D_lll_array[2][corr_idx][l_idx] << " " << iB2D_lll_array[3][corr_idx][l_idx] << " " << iB2D_lll_array[4][corr_idx][l_idx] << " " << "\n";
+                        file_iB << l_array.at(l_idx) << " " << iB_lll_array[0][corr_idx][l_idx] <<  " " << iB_lll_array[1][corr_idx][l_idx] << " " <<
+                                   iB_lll_array[2][corr_idx][l_idx] << " " << iB_lll_array[3][corr_idx][l_idx] << " " << iB_lll_array[4][corr_idx][l_idx] << " " << "\n";
 
-                        file_iB_error << l_array.at(l_idx) << " " << iB2D_lll_error_array[0][corr_idx][l_idx] <<  " " << iB2D_lll_error_array[1][corr_idx][l_idx] << " " <<
-                                         iB2D_lll_error_array[2][corr_idx][l_idx] << " " << iB2D_lll_error_array[3][corr_idx][l_idx] << " " << iB2D_lll_error_array[4][corr_idx][l_idx] << " " << "\n";
+                        file_iB_error << l_array.at(l_idx) << " " << iB_lll_error_array[0][corr_idx][l_idx] <<  " " << iB_lll_error_array[1][corr_idx][l_idx] << " " <<
+                                         iB_lll_error_array[2][corr_idx][l_idx] << " " << iB_lll_error_array[3][corr_idx][l_idx] << " " << iB_lll_error_array[4][corr_idx][l_idx] << " " << "\n";
 
                     }
 
@@ -2787,7 +2787,7 @@ int main()
         {
             gettimeofday(&start, nullptr);
 
-            if (filename_iB2D == "iB_Mkk.dat")
+            if (filename_iB == "iB_Mkk.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2830,7 +2830,7 @@ int main()
                 }
             }
 
-            else if (filename_iB2D == "iB_Mss.dat" || filename_iB2D == "iB_Mss_angle_averaged.dat")
+            else if (filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2881,7 +2881,7 @@ int main()
                 }
             }
 
-            if (filename_iB2D == "iB_hkk.dat") // with bias
+            if (filename_iB == "iB_hkk.dat") // with bias
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -2953,7 +2953,7 @@ int main()
                 }
             }
 
-            if (filename_iB2D == "iB_hhh.dat") // with bias
+            if (filename_iB == "iB_hhh.dat") // with bias
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
