@@ -76,15 +76,36 @@ void iB2D_phi_1_phi_2_hcubature(const std::string &key, const double &l, const s
 
 // ######################################################################################
 
+struct params_iB2D_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const double &z; 
+                                                   const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj; const bool &use_pk_nl;};
+
+double evaluate_iB2D_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const double &z, 
+                                                   const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, bool use_pk_nl, 
+                                                   const double &l_1, const double &l_2, const double &phi_1, const double &phi_2);
+
+// Monte-Carlo
+
+double iB2D_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params);
+
+void iB2D_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const double &z, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                                   std::vector<double> lower_limits, std::vector<double> upper_limits,
+                                   const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
+
+void iB2D_mc_4_dim(const std::string &key, const double &l, const double &z, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                    std::vector<double> lower_limits, std::vector<double> upper_limits,
+                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
+
+// ######################################################################################
+
 struct params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
                                                      const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3;};
+
+struct params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
+                                                           const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3;};                                                     
 
 double evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj,
                                                      bool use_pk_nl, const double &z, const double &l_1, const double &l_2, const double &phi_1, const double &phi_2,
                                                      projection_kernel *q1, projection_kernel *q2, projection_kernel *q3);
-
-struct params_iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
-                                                           const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3;};
 
 // Monte-Carlo
 

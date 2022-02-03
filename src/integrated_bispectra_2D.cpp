@@ -361,6 +361,150 @@ void iB2D_phi_1_phi_2_hcubature(const std::string &key, const double &l, const s
 
 // ######################################################################################
 
+double evaluate_iB2D_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const double &z, const struct_iB2D_W_FS &info_iB2D_W_FS, 
+                                                   ClassEngine *class_obj, bool use_pk_nl, const double &l_1, const double &l_2, const double &phi_1, const double &phi_2)
+{
+    double chi_inv = 1/class_obj->get_chi_z(z);
+    double X_windows = W_products("X", l_1, phi_1, l_2, phi_2, l, phi_l, info_iB2D_W_FS); // default settings
+
+    // for lll integared bispectra
+    if (key == "B_nothing" || key == "A")
+        return l_1*l_2*X_windows;
+
+    else if (key == "B_P")
+        return B_P(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    else if (key == "B_PP")
+        return B_PP(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    else if (key == "B_S2PP")
+        return B_S2PP(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    else if (key == "B_hhh_eps_eps_eps")
+        return l_1*l_2*X_windows;
+
+    else if (key == "B_hhh_delta_eps_eps")
+        return B_P(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    else if (key == "B_P2P3")
+        return B_PaPb(l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    else if (key == "B_S2P2P3")
+        return B_S2PaPb(l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, l_1*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+
+    // for sss integrated bispectra
+    if (key == "B")
+        X_windows *= 1;
+
+    // default settings
+    else if (key == "B_xip_cos")
+        X_windows *= cos(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    else if (key == "B_xip_sin")
+        X_windows *= sin(2*(phi_2 - phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    else if (key == "B_xim_cos")
+        X_windows *= cos(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    else if (key == "B_xim_sin")
+        X_windows *= sin(2*(phi_2 + phi_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)));
+
+    return B(l_1*chi_inv, l_2*chi_inv, l_ApB(l_1,M_PI+phi_1, l_2,M_PI+phi_2)*chi_inv, z, class_obj, use_pk_nl)*l_1*l_2*X_windows;
+}
+
+// Monte-Carlo
+
+double iB2D_l_1_l_2_phi_1_phi_2_mc_integrand(double *k, size_t dim, void *params)
+{
+    (void)(dim); // avoid unused parameter warnings
+
+    double l_1 = k[0], l_2 = k[1], phi_1 = k[2], phi_2 = k[3];
+
+    params_iB2D_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_l_1_l_2_phi_1_phi_2_integrand *>(params);
+
+    return evaluate_iB2D_l_1_l_2_phi_1_phi_2_integrand(p->key, p->l, p->phi_l, p->z, p->info_iB2D_W_FS, p->class_obj, p->use_pk_nl, l_1, l_2, phi_1, phi_2);
+
+}
+
+void iB2D_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l, const double &z, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                                   std::vector<double> lower_limits, std::vector<double> upper_limits,
+                                   const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
+{
+    double phi_l = 0.;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 0.625*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+//    double phi_l = 1.378*M_PI;           // assuming angular-independency we can just fix the phi_l to any angle we want
+
+    params_iB2D_l_1_l_2_phi_1_phi_2_integrand args = {key, l, phi_l, z, info_iB2D_W_FS, class_obj, use_pk_nl};
+
+    gsl_monte_function G = { &iB2D_l_1_l_2_phi_1_phi_2_mc_integrand, 4, static_cast<void *>(&args)};
+
+    if (mc_integration_type == "plain" )
+        monte_carlo_plain_integration(&G, lower_limits, upper_limits, 4, calls, T, result, error);
+    else if (mc_integration_type == "miser" )
+        monte_carlo_miser_integration(&G, lower_limits, upper_limits, 4, calls, T, result, error);
+    else if (mc_integration_type == "vegas" )
+        monte_carlo_vegas_integration(&G, lower_limits, upper_limits, 4, calls, T, result, error);
+}
+
+void iB2D_mc_4_dim(const std::string &key, const double &l, const double &z, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
+                    std::vector<double> lower_limits, std::vector<double> upper_limits,
+                    const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls)
+{
+    result = 0.0;
+    error = 0.0;
+
+    if (key == "A")
+        // passing l = 0 and z = 0explicitly as there is no l or z dependence for the integrals (depends only on l_1 and l_2)
+        iB2D_l_1_l_2_phi_1_phi_2_mc("A", 0, 0, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    if (key == "B")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xip_cos")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_xip_cos", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xip_sin")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_xip_sin", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xim_cos")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_xim_cos", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_xim_sin")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_xim_sin", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    // components for tracer integrated bispectrum
+
+    else if (key == "B_nothing")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_nothing", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_P")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_P", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_PP")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_PP", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_S2PP")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_S2PP", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_hhh_delta_eps_eps")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_hhh_delta_eps_eps", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_hhh_eps_eps_eps")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_hhh_eps_eps_eps", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_P2P3")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_P2P3", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    else if (key == "B_S2P2P3")
+        iB2D_l_1_l_2_phi_1_phi_2_mc("B_S2P2P3", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
+
+    double patch_sqradians = spherical_cap_radius_2_sqradians(info_iB2D_W_FS.theta_T_2pt);
+    result = integration_pre_factor * patch_sqradians * patch_sqradians * result;
+    error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
+}
+
+// ######################################################################################
+
 double evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj,
                                                      bool use_pk_nl, const double &z, const double &l_1, const double &l_2, const double &phi_1, const double &phi_2,
                                                      projection_kernel *q1, projection_kernel *q2, projection_kernel *q3)

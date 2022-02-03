@@ -59,6 +59,7 @@ void VEGAS_Integrator::Improve_Grid()
         cout<<"======================================================================================"<<endl;
         cout<<"|  Iter  |    N_Eval    |     Result     |      Error     |    Acc    |  Map Changes |"<<endl;
     }
+    #pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
     for (int warm_iter = 0; warm_iter < 5; warm_iter++)
     {
         Results.push_back(0);
@@ -229,7 +230,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
         Results.push_back(0);
         Sigma2.push_back(0);
         NEVAL_REAL = 0;
-        //#pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
+        #pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
         for (int inc = 0; inc < strat.Get_NHYPERCUBICS(); inc++)
         {
             Jf = 0;
