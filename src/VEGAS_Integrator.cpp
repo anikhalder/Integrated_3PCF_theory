@@ -122,6 +122,7 @@ void VEGAS_Integrator::Improve_Grid()
         Results.push_back(0);
         Sigma2.push_back(0);
         NEVAL_REAL = 0;
+        #pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
         for (int inc = 0; inc < strat.Get_NHYPERCUBICS(); inc++)
         {
             Jf = 0;
