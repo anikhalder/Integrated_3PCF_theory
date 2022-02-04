@@ -32,6 +32,7 @@
  * - also check whether you are using X or X_v2 form of the window functions
  * 
  * main.cpp:
+ * - thread_count
  * - index i
  * - k_max
  * - non linear halofit or hmcode
@@ -110,7 +111,8 @@ int main()
         }
     }
 
-    const int thread_count = static_cast<int>(omp_get_max_threads())-1;
+    //const int thread_count = static_cast<int>(omp_get_max_threads())-1;
+    const int thread_count = 120;
     
     if (verbose_print_outs)
         std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
