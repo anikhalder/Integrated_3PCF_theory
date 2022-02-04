@@ -593,8 +593,8 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_3000_Mpc/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_3000_Mpc/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_3000_Mpc/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_3000_Mpc/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
@@ -2395,7 +2395,8 @@ int main()
                 size_t calls_iB;
 
                 if (l_array.at(l_idx) <= 220)
-                    calls_iB = 2*calls_iB_initial;
+                    //calls_iB = 2*calls_iB_initial;
+                    calls_iB = calls_iB_initial;
                 else
                     calls_iB = calls_iB_initial;
 
