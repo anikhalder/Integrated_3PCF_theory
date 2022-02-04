@@ -402,14 +402,14 @@ int main()
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -591,8 +591,8 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_30_Mpc/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_30_Mpc/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_3000_Mpc/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_3000_Mpc/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
