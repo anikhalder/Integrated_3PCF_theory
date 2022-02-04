@@ -369,19 +369,27 @@ int main()
         //pars.add("A_s",A_s);
 
         // for dark energy
-        pars.add("Omega_Lambda",0.0);
-        pars.add("fluid_equation_of_state","CLP");
-        pars.add("w0_fld",w_0);
-        pars.add("wa_fld",w_a);
+        // pars.add("Omega_Lambda",0.0);
+        // pars.add("fluid_equation_of_state","CLP");
+        // pars.add("w0_fld",w_0);
+        // pars.add("wa_fld",w_a);
 
         // TODO: for massive neutrinos !!!!
+
+        pars.add("N_ur",3.046);
+        pars.add("N_ncdm",0.0);
+        pars.add("Omega_k",0.0);
+        pars.add("Omega_fld",0.0);
+        pars.add("Omega_scf",0.0);
+        pars.add("YHe",0.24);
+        
 
         // -------------------------
 
         // for the computational output of the 3D matter power spectrum, total density and velocity transfer functions
 
-        pars.add("output","mPk, dTk, vTk"); // settings for papers
-        //pars.add("output","mPk");
+        //pars.add("output","mPk, dTk, vTk"); // settings for papers
+        pars.add("output","mPk");
 
         // -------------------------
 
@@ -404,14 +412,14 @@ int main()
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
+        pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -593,8 +601,8 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_3000_Mpc/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_3000_Mpc/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
