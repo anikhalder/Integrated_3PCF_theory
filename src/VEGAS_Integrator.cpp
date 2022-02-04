@@ -122,7 +122,7 @@ void VEGAS_Integrator::Improve_Grid()
         Results.push_back(0);
         Sigma2.push_back(0);
         NEVAL_REAL = 0;
-        #pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
+        //#pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
         for (int inc = 0; inc < strat.Get_NHYPERCUBICS(); inc++)
         {
             Jf = 0;
@@ -231,7 +231,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
         Results.push_back(0);
         Sigma2.push_back(0);
         NEVAL_REAL = 0;
-        #pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
+        //#pragma omp parallel for num_threads(m_thread_count) shared(strat, map)
         for (int inc = 0; inc < strat.Get_NHYPERCUBICS(); inc++)
         {
             Jf = 0;
@@ -268,6 +268,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
         {
             cout<<"| "<<setw(6)<<iter<<" | "<<setw(12)<<NEVAL_REAL<<" | "<<setw(14)<<scientific<<setprecision(5)<<Results[Results.size()-1]<<" | "<<setw(14)<<scientific<<setprecision(5)<<sqrt(Sigma2[Sigma2.size()-1])<<" | "<<resetiosflags(ios::scientific)<<fixed<<setw(8)<<setprecision(3)<<acc*100<<"% |"<<endl;
         }
+        /*
         if (iter==5)
         {
             Res = Get_Result();
@@ -280,7 +281,7 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
             }
             break;
         }
-        /*
+        */
         if (iter%5==0)
         {
             // Every 5 iteration, we check whether we fullfil the condition
@@ -312,7 +313,6 @@ void VEGAS_Integrator::Integration(double eps_rel, double eps_abs)
                 continue;
             }
         }
-        */
     }
     if (verb >= INFO)
     {

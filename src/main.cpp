@@ -206,11 +206,11 @@ int main()
 
         // MICE simulations cosmology
 
-        //double omega_b = 0.02156; // Omega_b*h*h
-        //double omega_cdm = 0.10094; // Omega_cdm*h*h
-        //double h = 0.7;
-        //double sigma8 = 0.8;
-        //double n_s = 0.95;
+        double omega_b = 0.02156; // Omega_b*h*h
+        double omega_cdm = 0.10094; // Omega_cdm*h*h
+        double h = 0.7;
+        double sigma8 = 0.8;
+        double n_s = 0.95;
 
         // Planck 2015 (e.g. used in bihalofit)
 
@@ -238,23 +238,23 @@ int main()
 
         // MassiveNus simulations cosmology
 
-        //double omega_b = 0.0223; // Omega_b*h*h
-        //double omega_cdm = 0.1247; // Omega_cdm*h*h
-        //double h = 0.7;
-        //double A_s = 2.1e-9;
-        //double n_s = 0.97;
+        // double omega_b = 0.0223; // Omega_b*h*h
+        // double omega_cdm = 0.1247; // Omega_cdm*h*h
+        // double h = 0.7;
+        // double A_s = 2.1e-9;
+        // double n_s = 0.97;
 
         // TODO: add equations for massive neutrinos and set the CLASS massive neutrino parameters!!!!
 
         // Takahashi simulations cosmology
 
-        //double omega_b = 0.02254; // Omega_b*h*h i.e. the physical baryon density 
-        //double omega_cdm = 0.11417; // Omega_cdm*h*h i.e. the physical cdm density 
-        double Omega_b = 0.046;
-        double Omega_cdm = 0.233;
-        double h = 0.7;
-        double sigma8 = 0.82;
-        double n_s = 0.97;
+        ////double omega_b = 0.02254; // Omega_b*h*h i.e. the physical baryon density 
+        ////double omega_cdm = 0.11417; // Omega_cdm*h*h i.e. the physical cdm density 
+        // double Omega_b = 0.046;
+        // double Omega_cdm = 0.233;
+        // double h = 0.7;
+        // double sigma8 = 0.82;
+        // double n_s = 0.97;
 
         double w_0 = -1.0;
         double w_a = 0.0;
@@ -267,8 +267,8 @@ int main()
         //double eta_0 = 0.76; // owls_agn
         //double c_min = 2.32; // owls_agn
 
-        //double Omega_b = omega_b/h/h;
-        //double Omega_cdm = omega_cdm/h/h;
+        double Omega_b = omega_b/h/h;
+        double Omega_cdm = omega_cdm/h/h;
 
         // Useful only for Fisher forecasting i.e. i>0
 //        if (i==1)
@@ -344,8 +344,8 @@ int main()
         else if (i==32)
             h *= 1.04;
 
-        double omega_b = Omega_b*h*h;
-        double omega_cdm = Omega_cdm*h*h;
+        //double omega_b = Omega_b*h*h;
+        //double omega_cdm = Omega_cdm*h*h;
 
         // -------------------------------------------------------------------------------------
 
@@ -385,31 +385,31 @@ int main()
 
         // for non-linear power spectrum use either halofit or hmcode (comment out the one not being used)
 
-        //pars.add("non linear","halofit");
+        pars.add("non linear","halofit");
         //pars.add("pk_eq","yes"); // can use this when using Halofit and Omega_fld != 0 & w_a != 0 (but this is a 'maybe' as suggested in class)
 
-        pars.add("non linear","hmcode");
+        //pars.add("non linear","hmcode");
 
         // -------------------------
 
         // baryonic parameters (only when using hmcode 2016; otherwise comment these lines out)
 
-        pars.add("eta_0",eta_0);
-        pars.add("c_min",c_min);
+        //pars.add("eta_0",eta_0);
+        //pars.add("c_min",c_min);
 
         // -------------------------
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
+        pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -451,7 +451,7 @@ int main()
         gettimeofday(&end, nullptr);
         time_taken = (end.tv_sec - start.tv_sec) * 1e6;
         time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-        std::cout << "Time taken for setting cosmology and CLASS object creation: " << time_taken << " sec" << std::endl;
+        std::cout << "\nTime taken for setting cosmology and CLASS object creation: " << time_taken << " sec" << std::endl;
 
         // -------------------------------------------------------------------------------------
 
@@ -496,6 +496,9 @@ int main()
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = true;
         bool compute_2D_integrated_3PCF = true;
+
+        //bool compute_2D_integrated_bispectra_4_dim = true;
+
 
         // ######################################################################################
         // ######################################################################################
@@ -588,14 +591,14 @@ int main()
 
         // ########################
         // Test
-        //std::string spectra_folder = "./test_spectra_pars_v3/";
-        //std::string correlations_folder = "./test_correlations_pars_v3/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_30_Mpc/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_x2_220_20000_kmax_30_Mpc/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
 
-        std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
+        //std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
+        //std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
 
         // -------------------------------------------------------------------------------------
 
@@ -654,11 +657,13 @@ int main()
         // Source (shear/convergence) correlations settings
         // --------------------------------------------------------
 
-        //double zs1 = 0.993;  // MICE
+        double zs1 = 0.993;  // MICE
         //double zs1 = z_cmb; // CMB
 
-        double zs1 =  0.5739; // Takahashi zs10
-        double zs2 =  1.0334; // Takahashi zs16
+        double zs2 = 0.993;  // MICE
+
+        //double zs1 =  0.5739; // Takahashi zs10
+        //double zs2 =  1.0334; // Takahashi zs16
 
         //double zs1 =  1.0;
         //double zs2 =  1.5;
@@ -673,9 +678,9 @@ int main()
         double zs_upper = zs2;
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
-        std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
+        //std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
 
-        //std::vector<double> zs_bins{zs2}; // source (shear/convergence) redshift bin median --> for halos
+        std::vector<double> zs_bins{zs2}; // source (shear/convergence) redshift bin median --> for halos
 
         size_t num_2pt_ss_correlations = num_correlations(zs_bins.size(), 2);
         size_t num_3pt_sss_correlations = num_correlations(zs_bins.size(), 3);
@@ -795,8 +800,8 @@ int main()
 
         std::string filename_P;
 
-        //filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
-        filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
+        filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
+        //filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
         //filename_P = "P_hh.dat"; // with bias
 
         std::string P_integration_algorithm = "qag"; // -- current settings for papers
@@ -821,8 +826,9 @@ int main()
         // -------------------------
 
         std::string filename_iB;
+        filename_iB = "iB_kkk.dat"; // kappa integrated bispectra (k stands for tophat kappa mass)
         //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        //filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
         //filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
         //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
         //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
@@ -844,8 +850,8 @@ int main()
         //filename_iB = "iBkxi_hcubature_angle_averaged.dat"; // for shear integrated bispectra - angle averaged TODO: still needs to be verified
         //filename_iB = "iBkxi_mc.dat"; // for shear integrated bispectra - using MC integration
 
-        //std::string iB_integration_algorithm = "mc";
-        std::string iB_integration_algorithm = "mc_cigar";
+        std::string iB_integration_algorithm = "mc";
+        //std::string iB_integration_algorithm = "mc_cigar";
         //std::string iB_integration_algorithm = "hcubature";
 
         size_t calls_iB_initial;
@@ -889,7 +895,7 @@ int main()
 
             std::cout << "\nchi [Mpc] = chi(0.4) = " << class_obj->get_chi_z(0.4) << std::endl;
             std::cout << "k_perp [1/Mpc] = l/chi = 100/chi(0.5) = " << 100/class_obj->get_chi_z(0.5) << std::endl;
-            std::cout << "P_k_z_shell [Mpc^3]  " << Pk_shell_correction_qag(100/class_obj->get_chi_z(0.5), 0.5, 126/class_obj->get_h(), class_obj.get()) << std::endl;
+            std::cout << "P_k_z_shell [Mpc^3]  " << Pk_shell_correction_qag(100/class_obj->get_chi_z(0.5), 0.5, 126./class_obj->get_h(), class_obj.get()) << std::endl;
 
             std::cout << "chi(z=0.001) [Mpc] = " << class_obj->get_chi_z(0.001) << std::endl;
             std::cout << "chi(z=0.005) [Mpc] = " << class_obj->get_chi_z(0.005) << std::endl;
@@ -1651,7 +1657,7 @@ int main()
             }
 
             if (verbose_print_outs)
-                std::cout<<"\n2D power spectra output files created\n";
+                std::cout<<"2D power spectra output files created\n";
 
             // Spherical sky 2D power spectra (e.g. for FLASK config)
 
@@ -1719,7 +1725,7 @@ int main()
                 }
 
                 if (verbose_print_outs)
-                    std::cout<<"\n2D power spectra in spherical sky output files created\n";
+                    std::cout<<"2D power spectra in spherical sky output files created\n";
             }
         }
 
@@ -1902,10 +1908,10 @@ int main()
             gettimeofday(&end, nullptr);
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-            std::cout << "Time taken for 2D 2PCF calculations: " << time_taken << " sec" << std::endl;
+            std::cout << "\nTime taken for 2D 2PCF calculations: " << time_taken << " sec" << std::endl;
 
             if (verbose_print_outs)
-                std::cout<<"\n2D 2PCF output files created\n\n";
+                std::cout<<"2D 2PCF output files created\n\n";
 
         }
 
@@ -1965,7 +1971,7 @@ int main()
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
 
-            std::cout << "Time taken for 2D bispectra calculations: " << time_taken << " sec" << std::endl;
+            std::cout << "\nTime taken for 2D bispectra calculations: " << time_taken << " sec" << std::endl;
 
             if (filename_B2D == "B2D_kkk.dat")
             {
@@ -1997,7 +2003,7 @@ int main()
             }
 
             if (verbose_print_outs)
-                std::cout<<"\n2D bispectra output files created\n";
+                std::cout<<"2D bispectra output files created\n";
         }
 
         // ######################################################################################
@@ -2045,7 +2051,7 @@ int main()
             }
 
             if (verbose_print_outs)
-                std::cout<<"\n2D integrated 3PCF area pre-factors output file created\n";
+                std::cout<<"2D integrated 3PCF area pre-factors output file created\n";
 
             area_pre_factor.close();
         }
@@ -2276,7 +2282,7 @@ int main()
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
 
-            std::cout << "Time taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
+            std::cout << "\nTime taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
             std::ofstream file_iB_111, file_iB_222, file_iB_122, file_iB_211, file_iB_112, file_iB_212;
 
@@ -2331,7 +2337,7 @@ int main()
             file_iB_122.close();
             file_iB_222.close();
 
-            std::cout<<"\n2D integrated bispectra output files created\n";
+            std::cout<<"2D integrated bispectra output files created\n";
         }
         */
 
@@ -2380,9 +2386,9 @@ int main()
             VEGAS_Integrator cigar;
             cigar.Set_Verbose(NONE);
 
-            //#pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
-            //for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-            for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
+            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
+            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            //for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
                 size_t calls_iB;
 
@@ -2393,7 +2399,53 @@ int main()
 
                 // --------------------------------------------------------
 
-                if (filename_iB == "iB_Mkk.dat")
+                if (filename_iB == "iB_kkk.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                if (iB_integration_algorithm == "mc_cigar")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                else if (iB_integration_algorithm == "hcubature")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_Mkk.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2645,9 +2697,9 @@ int main()
             gettimeofday(&end, nullptr);
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-            std::cout << "Time taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
+            std::cout << "\nTime taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
+            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2772,7 +2824,7 @@ int main()
             }
 
             if (verbose_print_outs)
-                std::cout<<"\n2D integrated bispectra output files created\n";
+                std::cout<<"2D integrated bispectra output files created\n";
         }
 
         // ######################################################################################
@@ -2787,7 +2839,7 @@ int main()
         {
             gettimeofday(&start, nullptr);
 
-            if (filename_iB == "iB_Mkk.dat")
+            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -3062,10 +3114,10 @@ int main()
             gettimeofday(&end, nullptr);
             time_taken = (end.tv_sec - start.tv_sec) * 1e6;
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
-            std::cout << "Time taken for 2D integrated 3PCF calculations: " << time_taken << " sec" << std::endl;
+            std::cout << "\nTime taken for 2D integrated 3PCF calculations: " << time_taken << " sec" << std::endl;
 
             if (verbose_print_outs)
-                std::cout<<"\n2D integrated 3PCF output files created\n";
+                std::cout<<"2D integrated 3PCF output files created\n";
         }
 
         //}
