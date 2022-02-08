@@ -599,8 +599,8 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finer_z_spacing/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finer_z_spacing/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
@@ -864,10 +864,16 @@ int main()
         //std::string iB_integration_algorithm = "hcubature";
 
         size_t calls_iB_initial;
+        size_t calls_iB_initial_4_dim;
 
         if (iB_integration_algorithm == "mc")
+        {
             //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
             calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
+            
+            //calls_iB_initial_4_dim = 2*calls_1e5;
+            calls_iB_initial_4_dim = 1*calls_1e5;
+        }
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
 
@@ -2891,24 +2897,24 @@ int main()
                 size_t calls_iB;
 
                 if (l_array.at(l_idx) <= 220)
-                    //calls_iB = 2*calls_iB_initial;
-                    calls_iB = calls_iB_initial;
+                    //calls_iB = 2*calls_iB_initial_4_dim;
+                    calls_iB = calls_iB_initial_4_dim;
                 else
-                    calls_iB = calls_iB_initial;
+                    calls_iB = calls_iB_initial_4_dim;
 
                 // --------------------------------------------------------
 
                 if (filename_iB == "iB_kkk.dat")
                 {
                     std::vector<double> z_array;
-                    for (double zi = 0.001; zi < zs_upper+0.001; zi+=0.1)
+                    for (double zi = 0.001; zi < zs_upper+0.001; zi+=0.05)
                         z_array.push_back(zi);
 
                     std::vector<double> iB2D_z_array(z_array.size(), 0);
                     for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
                         double result = 0.0, error = 0.0;
-                        iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, 1e5);
+                        iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
                         iB2D_z_array[z_idx] = result;
                     }
 
