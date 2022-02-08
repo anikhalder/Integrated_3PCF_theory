@@ -503,6 +503,40 @@ void iB2D_mc_4_dim(const std::string &key, const double &l, const double &z, con
     error = integration_pre_factor * patch_sqradians * patch_sqradians * error;
 }
 
+double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, double &z_upper_limit, ClassEngine *class_obj, 
+                    projection_kernel *q1, projection_kernel *q2, projection_kernel *q3)
+{
+    // uniform trapezoidal integration
+    int N = 100;
+    double delta_z = (z_upper_limit-z_lower_limit)/N;
+
+    double integral = 0.;
+
+    for (int i = 0; i <= N; i++)
+    {
+        double z = z_lower_limit + i*delta_z;
+
+        double q_1 = q1->evaluate(z);
+        double q_2 = q2->evaluate(z);
+        double q_3 = q3->evaluate(z);
+
+        if (q_1 == 0 || q_2 == 0 || q_3 == 0)
+            continue;
+
+        double chi_inv = 1/class_obj->get_chi_z(z);
+        double Hz_inv = 1/class_obj->get_H_z(z);
+
+        double val = Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*iB2D_z_interp->interp(z);
+
+        if (i==0 || i==N)
+            integral += val;       
+        else
+            integral += 2.*val;
+    }
+
+     return integral*delta_z*0.5;
+}
+
 // ######################################################################################
 
 double evaluate_iB2D_z_l_1_l_2_phi_1_phi_2_integrand(const std::string &key, const double &l, const double &phi_l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj,

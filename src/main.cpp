@@ -504,11 +504,9 @@ int main()
         bool compute_2D_2PCF = true;
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        bool compute_2D_integrated_bispectra_v2 = true;
+        bool compute_2D_integrated_bispectra_v2 = false;
+        bool compute_2D_integrated_bispectra_v3 = true;
         bool compute_2D_integrated_3PCF = true;
-
-        //bool compute_2D_integrated_bispectra_4_dim = true;
-
 
         // ######################################################################################
         // ######################################################################################
@@ -601,8 +599,8 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings/";
+        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3/";
+        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
@@ -678,8 +676,8 @@ int main()
         //double zs1 =  1.0;
         //double zs2 =  1.5;
 
-        //double zs1 = 3.5; // KiDS - Pierre
-        //double zs2 = 3.5; // KiDS - Pierre
+        //double zs1 = 2.0; // DESY3
+        //double zs2 = 2.0; // DESY3
 
         //double zs1 = 0.5; // MassiveNus
         //double zs2 = 1.0; // MassiveNus
@@ -702,14 +700,14 @@ int main()
         std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs1));
         std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs2));
 
-        //std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/Kids_nofz/nofz_KiDS1000_bin4-f1.dat");
+        //std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
         //assert(!nofz_s1_table.empty());
-        //normalise_n_of_z(nofz_s1_table);
+        //normalise_nofz(nofz_s1_table);
         //Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
-        //std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/Kids_nofz/nofz_KiDS1000_bin5-f1.dat");
+        //std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
         //assert(!nofz_s2_table.empty());
-        //normalise_n_of_z(nofz_s2_table);
+        //normalise_nofz(nofz_s2_table);
         //Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
 
         //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs1));
@@ -727,6 +725,9 @@ int main()
 
         std::vector<double> iB_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
         std::vector<double> iB_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+
+        std::vector<double> iB_sss_4_dim_lower_limits = { 1, 1, 0, 0};
+        std::vector<double> iB_sss_4_dim_upper_limits = { 25000, 25000, 2*M_PI, 2*M_PI};
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
 
@@ -755,17 +756,15 @@ int main()
         size_t num_2pt_ll_correlations = zl_bins.size();
         size_t num_i3pt_lll_correlations =  zl_bins.size();
 
-        std::vector<std::vector<double>> n_of_z_table = read_2_column_table("../data/nofz/pofz_projected_density_maps.tab");
-        //std::vector<std::vector<double>> n_of_z_table = read_2_column_table("../data/nofz/Kids_nofz/nofz_LRG_bin2_coarse-f1.dat");
-        assert(!n_of_z_table.empty());
-        normalise_n_of_z(n_of_z_table);
+        std::vector<std::vector<double>> nofz_l1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab");
+        assert(!nofz_l1_table.empty());
+        normalise_nofz(nofz_l1_table);
 
-        //for (size_t idx = 0; idx < n_of_z_table.at(0).size(); idx++)
-        //     std::cout << n_of_z_table.at(0).at(idx) << "     " << n_of_z_table.at(1).at(idx) << std::endl;
+        //for (size_t idx = 0; idx < nofz_l1_table.at(0).size(); idx++)
+        //     std::cout << nofz_l1_table.at(0).at(idx) << "     " << nofz_l1_table.at(1).at(idx) << std::endl;
 
-        Linear_interp_1D n_of_z(n_of_z_table.at(0), n_of_z_table.at(1));
-
-        std::shared_ptr<projection_kernel> qg1(new projection_kernel_q_m(class_obj.get(), &n_of_z));
+        Linear_interp_1D nofz_l1(nofz_l1_table.at(0), nofz_l1_table.at(1));
+        std::shared_ptr<projection_kernel> qg1(new projection_kernel_q_m(class_obj.get(), &nofz_l1));
 
         std::shared_ptr<projection_kernel> qh1_b1(new projection_kernel_q_h_b1(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper)); // sample 2 in Takahashi et al.
         std::shared_ptr<projection_kernel> qh1_b2(new projection_kernel_q_h_b2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
@@ -2700,6 +2699,489 @@ int main()
                         corr_idx++;
                     }
                 }
+
+                if (verbose_print_outs)
+                    std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+            }
+
+            gettimeofday(&end, nullptr);
+            time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+            time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+            std::cout << "\nTime taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
+
+            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
+            {
+                size_t corr_idx = 0;
+                for (size_t a = 0; a < zs_bins.size() ; a++)
+                {
+                    for (size_t b = a; b < zs_bins.size() ; b++)
+                    {
+                        for (size_t c = b; c < zs_bins.size() ; c++)
+                        {
+                            std::stringstream s_iB;
+                            s_iB << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
+
+                            std::ofstream file_iB;
+                            file_iB.open (s_iB.str(), std::ofstream::trunc);
+                            file_iB.precision(40);
+
+                            std::stringstream s_iB_error;
+                            s_iB_error << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << "_error" << filename_extension;
+
+                            std::ofstream file_iB_error;
+                            file_iB_error.open (s_iB_error.str(), std::ofstream::trunc);
+                            file_iB_error.precision(40);
+
+                            assert(corr_idx != num_i3pt_sss_correlations);
+
+                            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+                            {
+                                file_iB << l_array.at(l_idx) << " " << iB_sss_array[0][corr_idx][l_idx] <<  " " << iB_sss_array[1][corr_idx][l_idx] << " " << "\n";
+                                file_iB_error << l_array.at(l_idx) << " " << iB_sss_error_array[0][corr_idx][l_idx] <<  " " << iB_sss_error_array[1][corr_idx][l_idx] << " " << "\n";
+                            }
+
+                            file_iB.close();
+                            file_iB_error.close();
+
+                            corr_idx++;
+                        }
+                    }
+                }
+            }
+
+            else if (filename_iB == "iB_hkk.dat")
+            {
+                size_t corr_idx = 0;
+                for (size_t a = 0; a < zl_bins.size() ; a++)
+                {
+                    for (size_t b = 0; b < zs_bins.size() ; b++)
+                    {
+                        for (size_t c = b; c < zs_bins.size() ; c++)
+                        {
+                            std::stringstream s_iB;
+                            s_iB << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
+
+                            std::ofstream file_iB;
+                            file_iB.open (s_iB.str(), std::ofstream::trunc);
+                            file_iB.precision(40);
+
+                            std::stringstream s_iB_error;
+                            s_iB_error << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << "_error" << filename_extension;
+
+                            std::ofstream file_iB_error;
+                            file_iB_error.open (s_iB_error.str(), std::ofstream::trunc);
+                            file_iB_error.precision(40);
+
+                            assert(corr_idx != num_i3pt_lll_correlations);
+
+                            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+                            {
+                                file_iB << l_array.at(l_idx) << " " << iB_lss_array[0][corr_idx][l_idx] <<  " " << iB_lss_array[1][corr_idx][l_idx] << " " <<
+                                           iB_lss_array[2][corr_idx][l_idx] << " " << iB_lss_array[3][corr_idx][l_idx] << " " << iB_lss_array[4][corr_idx][l_idx] << " " <<
+                                           iB_lss_array[5][corr_idx][l_idx] << " " << "\n";
+
+                                file_iB_error << l_array.at(l_idx) << " " << iB_lss_error_array[0][corr_idx][l_idx] <<  " " << iB_lss_error_array[1][corr_idx][l_idx] << " " <<
+                                                 iB_lss_error_array[2][corr_idx][l_idx] << " " << iB_lss_error_array[3][corr_idx][l_idx] << " " << iB_lss_error_array[4][corr_idx][l_idx] << " " <<
+                                                 iB_lss_error_array[5][corr_idx][l_idx] << " " << "\n";
+
+                            }
+
+                            file_iB.close();
+                            file_iB_error.close();
+
+                            corr_idx++;
+                        }
+                    }
+                }
+            }
+
+            else if (filename_iB == "iB_hhh.dat")
+            {
+                size_t corr_idx = 0;
+                for (size_t a = 0; a < zl_bins.size() ; a++)
+                {
+                    std::stringstream s_iB;
+                    s_iB << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
+
+                    std::ofstream file_iB;
+                    file_iB.open (s_iB.str(), std::ofstream::trunc);
+                    file_iB.precision(40);
+
+                    std::stringstream s_iB_error;
+                    s_iB_error << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(a+1) << std::to_string(a+1) << "_error" << filename_extension;
+
+                    std::ofstream file_iB_error;
+                    file_iB_error.open (s_iB_error.str(), std::ofstream::trunc);
+                    file_iB_error.precision(40);
+
+                    assert(corr_idx != num_i3pt_lll_correlations);
+
+                    for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+                    {
+                        file_iB << l_array.at(l_idx) << " " << iB_lll_array[0][corr_idx][l_idx] <<  " " << iB_lll_array[1][corr_idx][l_idx] << " " <<
+                                   iB_lll_array[2][corr_idx][l_idx] << " " << iB_lll_array[3][corr_idx][l_idx] << " " << iB_lll_array[4][corr_idx][l_idx] << " " << "\n";
+
+                        file_iB_error << l_array.at(l_idx) << " " << iB_lll_error_array[0][corr_idx][l_idx] <<  " " << iB_lll_error_array[1][corr_idx][l_idx] << " " <<
+                                         iB_lll_error_array[2][corr_idx][l_idx] << " " << iB_lll_error_array[3][corr_idx][l_idx] << " " << iB_lll_error_array[4][corr_idx][l_idx] << " " << "\n";
+
+                    }
+
+                    file_iB.close();
+                    file_iB_error.close();
+
+                    corr_idx++;
+                }
+            }
+
+            if (verbose_print_outs)
+                std::cout<<"2D integrated bispectra output files created\n";
+        }
+
+        // ######################################################################################
+
+        if (compute_2D_integrated_bispectra_v3)
+        {
+            gettimeofday(&start, nullptr);
+
+            std::cout << "\nClock started (2D integrated bispectra calculations started)" << std::endl;
+
+    //        double iB_P_1_val = 0, iB_A_val = 0;
+
+            struct_iB2D_W_FS info_iB_UWW_FS = {&W2D_U_FS, theta_U, &W2D_TH_FS, theta_T};
+            struct_iB2D_W_FS info_iB_WWW_FS = {&W2D_TH_FS, theta_T, &W2D_TH_FS, theta_T};
+
+    //        if (filename_iB == "iB_ggg_mc.dat")
+    //        {
+    //            iB_P_1_val = iB2D_mc("P_1", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, T, "vegas", calls_iB_initial);
+    //            std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
+
+    //            iB_A_val = iB2D_mc("A", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, T, "vegas", calls_iB_initial);
+
+    //            std::cout << "\niB_A = " << iB_A_val << std::endl;
+    //        }
+
+    //        else if (filename_iB == "iB_ggg_hcubature.dat")
+    //        {
+    //            iB_P_1_val = iB2D_hcubature("P_1", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, calls_iB_initial);
+    //            std::cout << "\niB_P_1 = " << iB_P_1_val << std::endl;
+
+    //            iB_A_val = iB2D_hcubature("A", 0, info_iB_WWW_FS, class_obj.get(), true, qg1.get(), qg1.get(), qg1.get(), iB_source_lower_limits, iB_source_upper_limits, calls_iB_initial);
+
+    //            std::cout << "\niB_A = " << iB_A_val << std::endl;
+    //        }
+
+            std::vector<std::vector<std::vector<double>>> iB_sss_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0))); // 2 columns to accommodate either (iB_Mkk) or (iB_Mxip and iB_Mxim) columns
+            std::vector<std::vector<std::vector<double>>> iB_lll_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
+            //std::vector<std::vector<std::vector<double>>> iB_lls_array(5, std::vector<std::vector<double>>(num_i3pt_lls_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
+            std::vector<std::vector<std::vector<double>>> iB_lss_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0))); // 6 columns to accommodate either (iB_hkk_b1, iB_hkk_b2, iB_hkk_bs2) or (iB_hxip_b1, iB_hxip_b2, iB_hxip_bs2, iB_hxim_b1, iB_hxim_b2, iB_hxim_bs2)
+
+            std::vector<std::vector<std::vector<double>>> iB_sss_error_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0)));
+            std::vector<std::vector<std::vector<double>>> iB_lll_error_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0)));
+            std::vector<std::vector<std::vector<double>>> iB_lss_error_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
+
+            counter = 0;
+
+            VEGAS_Integrator cigar;
+            cigar.Set_Verbose(NONE);
+
+            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
+            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            //for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
+            {
+                size_t calls_iB;
+
+                if (l_array.at(l_idx) <= 220)
+                    //calls_iB = 2*calls_iB_initial;
+                    calls_iB = calls_iB_initial;
+                else
+                    calls_iB = calls_iB_initial;
+
+                // --------------------------------------------------------
+
+                if (filename_iB == "iB_kkk.dat")
+                {
+                    std::vector<double> z_array;
+                    for (double zi = 0.001; zi < zs_upper+0.001; zi+=0.1)
+                        z_array.push_back(zi);
+
+                    std::vector<double> iB2D_z_array(z_array.size(), 0);
+                    for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
+                    {
+                        double result = 0.0, error = 0.0;
+                        iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, 1e5);
+                        iB2D_z_array[z_idx] = result;
+                    }
+
+                    Linear_interp_1D iB2D_z_interp(z_array, iB2D_z_array);
+
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iB term
+                                    iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_Mkk.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                if (iB_integration_algorithm == "mc_cigar")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                else if (iB_integration_algorithm == "hcubature")
+                                {
+                                    // iB term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                /*
+
+                else if (filename_iB == "iB_Mss.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                if (iB_integration_algorithm == "mc_cigar")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                else if (iB_integration_algorithm == "hcubature")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                else if (iB_integration_algorithm == "hcubature")
+                                {
+                                    // iBp term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[0][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // iBm term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    iB_sss_array[1][corr_idx][l_idx] = result;
+                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_hkk.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zl_bins.size() ; a++)
+                    {
+                        for (size_t b = 0; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != zl_bins.size()*num_2pt_ss_correlations);
+
+                                double result = 0.0, error = 0.0;
+
+                                if (iB_integration_algorithm == "mc")
+                                {
+                                    // b1 term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[0][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[0][corr_idx][l_idx] = error;
+
+                                    // b2 term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B_P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[1][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[1][corr_idx][l_idx] = error;
+
+                                    // bs2 term
+                                    result = 0.0, error = 0.0;
+                                    iB2D_mc("B_S2P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_bs2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                                    iB_lss_array[2][corr_idx][l_idx] = result;
+                                    iB_lss_error_array[2][corr_idx][l_idx] = error;
+                                }
+
+                                corr_idx++;
+                            }
+                        }
+                    }
+                }
+
+                else if (filename_iB == "iB_hhh.dat")
+                {
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zl_bins.size() ; a++)
+                    {
+                        assert(corr_idx != num_i3pt_lll_correlations);
+
+                        double result = 0.0, error = 0.0;
+
+                        if (iB_integration_algorithm == "mc")
+                        {
+                            // b1 term
+                            result = 0.0, error = 0.0;
+                            iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[0][corr_idx][l_idx] = result;
+                            iB_lll_error_array[0][corr_idx][l_idx] = error;
+
+                            // b2 term
+                            result = 0.0, error = 0.0;
+                            iB2D_mc("B_PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[1][corr_idx][l_idx] = result;
+                            iB_lll_error_array[1][corr_idx][l_idx] = error;
+
+                            // bs2 term
+                            result = 0.0, error = 0.0;
+                            iB2D_mc("B_S2PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_bs2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[2][corr_idx][l_idx] = result;
+                            iB_lll_error_array[2][corr_idx][l_idx] = error;
+
+                            // Shot noise 1 term
+                            result = 0.0, error = 0.0;
+                            iB2D_mc("B_hhh_delta_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[3][corr_idx][l_idx] = result;
+                            iB_lll_error_array[3][corr_idx][l_idx] = error;
+
+                            // Shot noise 2 term
+                            result = 0.0, error = 0.0;
+                            iB2D_mc("B_hhh_eps_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB_lll_array[4][corr_idx][l_idx] = result;
+                            iB_lll_error_array[4][corr_idx][l_idx] = error;
+                        }
+
+                        corr_idx++;
+                    }
+                }
+                */
 
                 if (verbose_print_outs)
                     std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;

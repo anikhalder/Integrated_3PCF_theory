@@ -20,7 +20,7 @@ std::vector<std::vector<double>> read_7_column_table(const std::string &file_nam
 
 std::vector<std::vector<double>> read_11_column_table(const std::string &file_name);
 
-void normalise_n_of_z(std::vector<std::vector<double>> &matrix);
+void normalise_nofz(std::vector<std::vector<double>> &matrix);
 
 // ######################################################################################
 

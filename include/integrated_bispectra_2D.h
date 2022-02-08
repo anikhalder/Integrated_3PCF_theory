@@ -95,6 +95,9 @@ void iB2D_mc_4_dim(const std::string &key, const double &l, const double &z, con
                     std::vector<double> lower_limits, std::vector<double> upper_limits,
                     const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
 
+double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, double &z_upper_limit, ClassEngine *class_obj, 
+                    projection_kernel *q1, projection_kernel *q2, projection_kernel *q3);
+
 // ######################################################################################
 
 struct params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
