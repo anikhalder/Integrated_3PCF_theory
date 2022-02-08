@@ -2890,7 +2890,11 @@ int main()
             VEGAS_Integrator cigar;
             cigar.Set_Verbose(NONE);
 
-            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
+            std::vector<double> z_array;
+            for (double z = zs_lower; z < zs_upper+0.001; z+=0.05)
+                z_array.push_back(z);
+
+            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             //for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
@@ -2906,10 +2910,6 @@ int main()
 
                 if (filename_iB == "iB_kkk.dat")
                 {
-                    std::vector<double> z_array;
-                    for (double zi = 0.001; zi < zs_upper+0.001; zi+=0.05)
-                        z_array.push_back(zi);
-
                     std::vector<double> iB2D_z_array(z_array.size(), 0);
                     for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
