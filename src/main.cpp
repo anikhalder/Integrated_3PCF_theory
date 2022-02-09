@@ -2403,7 +2403,6 @@ int main()
 
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-            //for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
                 size_t calls_iB;
 
@@ -2415,7 +2414,7 @@ int main()
 
                 // --------------------------------------------------------
 
-                if (filename_iB == "iB_kkk.dat")
+                if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2432,7 +2431,10 @@ int main()
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    if (filename_iB == "iB_kkk.dat")
+                                        iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mkk.dat")
+                                        iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
@@ -2441,7 +2443,10 @@ int main()
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    if (filename_iB == "iB_kkk.dat")
+                                        iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    else if (filename_iB == "iB_Mkk.dat")
+                                        iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
@@ -2450,7 +2455,10 @@ int main()
                                 {
                                     // iB term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    if (filename_iB == "iB_kkk.dat")
+                                        iB2D_hcubature("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mkk.dat")
+                                        iB2D_hcubature("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
@@ -2461,53 +2469,7 @@ int main()
                     }
                 }
 
-                else if (filename_iB == "iB_Mkk.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zs_bins.size() ; a++)
-                    {
-                        for (size_t b = a; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != num_i3pt_sss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                if (iB_integration_algorithm == "mc_cigar")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                else if (iB_integration_algorithm == "hcubature")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                else if (filename_iB == "iB_Mss.dat")
+                else if (filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2524,13 +2486,19 @@ int main()
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                                        iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                                        iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2539,13 +2507,15 @@ int main()
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2554,62 +2524,19 @@ int main()
                                 {
                                     // iBp term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                                        iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);                  
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
                                     // iBm term
                                     result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                else if (filename_iB == "iB_Mss_angle_averaged.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zs_bins.size() ; a++)
-                    {
-                        for (size_t b = a; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != num_i3pt_sss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                else if (iB_integration_algorithm == "hcubature")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
+                                    if (filename_iB == "iB_Mss.dat")
+                                        iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
+                                    else if (filename_iB == "iB_Mss_angle_averaged.dat")
+                                        iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);                     
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2891,12 +2818,11 @@ int main()
             cigar.Set_Verbose(NONE);
 
             std::vector<double> z_array;
-            for (double z = zs_lower; z < zs_upper+0.02; z+=0.02)
+            for (double z = zs_lower; z < zs_upper+0.025; z+=0.025)
                 z_array.push_back(z);
 
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
-            //for (size_t l_idx = l_array.size()-1; l_idx >= 0; l_idx--)
             {
                 size_t calls_iB;
 
@@ -2908,14 +2834,20 @@ int main()
 
                 // --------------------------------------------------------
 
-                if (filename_iB == "iB_kkk.dat")
+                if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
                 {
                     std::vector<double> iB2D_z_array(z_array.size(), 0);
                     for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
                         double result = 0.0, error = 0.0;
-                        iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                        iB2D_z_array[z_idx] = result;
+                        if (iB_integration_algorithm == "mc")
+                        {
+                            if (filename_iB == "iB_kkk.dat")
+                                iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                            else if (filename_iB == "iB_Mkk.dat")
+                                iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                            iB2D_z_array[z_idx] = result;
+                        }
                     }
 
                     Linear_interp_1D iB2D_z_interp(z_array, iB2D_z_array);
@@ -2929,265 +2861,59 @@ int main()
                             {
                                 assert(corr_idx != num_i3pt_sss_correlations);
 
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iB term
-                                    iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
-                                }
+                                // iB term
+                                iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
 
                                 corr_idx++;
                             }
                         }
                     }
                 }
-
-                else if (filename_iB == "iB_Mkk.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zs_bins.size() ; a++)
-                    {
-                        for (size_t b = a; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != num_i3pt_sss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                if (iB_integration_algorithm == "mc_cigar")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                else if (iB_integration_algorithm == "hcubature")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                /*
 
                 else if (filename_iB == "iB_Mss.dat")
                 {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    std::vector<double> iBp2D_z_array(z_array.size(), 0);
+                    std::vector<double> iBm2D_z_array(z_array.size(), 0);
+                    for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
-                        for (size_t b = a; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != num_i3pt_sss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                if (iB_integration_algorithm == "mc_cigar")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                else if (iB_integration_algorithm == "hcubature")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                else if (filename_iB == "iB_Mss_angle_averaged.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zs_bins.size() ; a++)
-                    {
-                        for (size_t b = a; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != num_i3pt_sss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                else if (iB_integration_algorithm == "hcubature")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                else if (filename_iB == "iB_hkk.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zl_bins.size() ; a++)
-                    {
-                        for (size_t b = 0; b < zs_bins.size() ; b++)
-                        {
-                            for (size_t c = b; c < zs_bins.size() ; c++)
-                            {
-                                assert(corr_idx != zl_bins.size()*num_2pt_ss_correlations);
-
-                                double result = 0.0, error = 0.0;
-
-                                if (iB_integration_algorithm == "mc")
-                                {
-                                    // b1 term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_lss_array[0][corr_idx][l_idx] = result;
-                                    iB_lss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // b2 term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B_P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_lss_array[1][corr_idx][l_idx] = result;
-                                    iB_lss_error_array[1][corr_idx][l_idx] = error;
-
-                                    // bs2 term
-                                    result = 0.0, error = 0.0;
-                                    iB2D_mc("B_S2P2P3", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_bs2_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_lss_array[2][corr_idx][l_idx] = result;
-                                    iB_lss_error_array[2][corr_idx][l_idx] = error;
-                                }
-
-                                corr_idx++;
-                            }
-                        }
-                    }
-                }
-
-                else if (filename_iB == "iB_hhh.dat")
-                {
-                    size_t corr_idx = 0;
-                    for (size_t a = 0; a < zl_bins.size() ; a++)
-                    {
-                        assert(corr_idx != num_i3pt_lll_correlations);
-
                         double result = 0.0, error = 0.0;
-
                         if (iB_integration_algorithm == "mc")
                         {
-                            // b1 term
+                            // iBp term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                            iB_lll_array[0][corr_idx][l_idx] = result;
-                            iB_lll_error_array[0][corr_idx][l_idx] = error;
+                            iB2D_mc_4_dim("B_xip_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                            iBp2D_z_array[z_idx] = result;
 
-                            // b2 term
+                            // iBm term
                             result = 0.0, error = 0.0;
-                            iB2D_mc("B_PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_b2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                            iB_lll_array[1][corr_idx][l_idx] = result;
-                            iB_lll_error_array[1][corr_idx][l_idx] = error;
-
-                            // bs2 term
-                            result = 0.0, error = 0.0;
-                            iB2D_mc("B_S2PP", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_bs2_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                            iB_lll_array[2][corr_idx][l_idx] = result;
-                            iB_lll_error_array[2][corr_idx][l_idx] = error;
-
-                            // Shot noise 1 term
-                            result = 0.0, error = 0.0;
-                            iB2D_mc("B_hhh_delta_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_b1_kernels.at(a).get(), ql_b1_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                            iB_lll_array[3][corr_idx][l_idx] = result;
-                            iB_lll_error_array[3][corr_idx][l_idx] = error;
-
-                            // Shot noise 2 term
-                            result = 0.0, error = 0.0;
-                            iB2D_mc("B_hhh_eps_eps_eps", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, ql_kernels.at(a).get(), ql_kernels.at(a).get(), ql_kernels.at(a).get(), iB_lll_lower_limits, iB_lll_upper_limits, T, "vegas", result, error, calls_iB);
-                            iB_lll_array[4][corr_idx][l_idx] = result;
-                            iB_lll_error_array[4][corr_idx][l_idx] = error;
+                            iB2D_mc_4_dim("B_xim_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                            iBp2D_z_array[z_idx] = result;
                         }
+                    }
 
-                        corr_idx++;
+                    Linear_interp_1D iBp2D_z_interp(z_array, iBp2D_z_array);
+                    Linear_interp_1D iBm2D_z_interp(z_array, iBm2D_z_array);
+
+                    size_t corr_idx = 0;
+                    for (size_t a = 0; a < zs_bins.size() ; a++)
+                    {
+                        for (size_t b = a; b < zs_bins.size() ; b++)
+                        {
+                            for (size_t c = b; c < zs_bins.size() ; c++)
+                            {
+                                assert(corr_idx != num_i3pt_sss_correlations);
+
+                                // iBp term
+                                iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iBp2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                
+                                // iBm term
+                                iB_sss_array[1][corr_idx][l_idx] = iB2D_trapz_z(&iBm2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                
+                                corr_idx++;
+                            }
+                        }
                     }
                 }
-                */
 
                 if (verbose_print_outs)
                     std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
