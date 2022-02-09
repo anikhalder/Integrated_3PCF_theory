@@ -457,7 +457,7 @@ void iB2D_mc_4_dim(const std::string &key, const double &l, const double &z, con
         // passing l = 0 and z = 0explicitly as there is no l or z dependence for the integrals (depends only on l_1 and l_2)
         iB2D_l_1_l_2_phi_1_phi_2_mc("A", 0, 0, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
-    if (key == "B")
+    else if (key == "B")
         iB2D_l_1_l_2_phi_1_phi_2_mc("B", l, z, info_iB2D_W_FS, class_obj, use_pk_nl, lower_limits, upper_limits, T, mc_integration_type, result, error, calls);
 
     else if (key == "B_xip_cos")
