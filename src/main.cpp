@@ -208,11 +208,11 @@ int main()
 
         // MICE simulations cosmology
 
-        double omega_b = 0.02156; // Omega_b*h*h
-        double omega_cdm = 0.10094; // Omega_cdm*h*h
-        double h = 0.7;
-        double sigma8 = 0.8;
-        double n_s = 0.95;
+        // double omega_b = 0.02156; // Omega_b*h*h
+        // double omega_cdm = 0.10094; // Omega_cdm*h*h
+        // double h = 0.7;
+        // double sigma8 = 0.8;
+        // double n_s = 0.95;
 
         // Planck 2015 (e.g. used in bihalofit)
 
@@ -250,13 +250,13 @@ int main()
 
         // Takahashi simulations cosmology
 
-        ////double omega_b = 0.02254; // Omega_b*h*h i.e. the physical baryon density 
-        ////double omega_cdm = 0.11417; // Omega_cdm*h*h i.e. the physical cdm density 
-        // double Omega_b = 0.046;
-        // double Omega_cdm = 0.233;
-        // double h = 0.7;
-        // double sigma8 = 0.82;
-        // double n_s = 0.97;
+        //double omega_b = 0.02254; // Omega_b*h*h i.e. the physical baryon density 
+        //double omega_cdm = 0.11417; // Omega_cdm*h*h i.e. the physical cdm density 
+        double Omega_b = 0.046;
+        double Omega_cdm = 0.233;
+        double h = 0.7;
+        double sigma8 = 0.82;
+        double n_s = 0.97;
 
         double w_0 = -1.0;
         double w_a = 0.0;
@@ -269,8 +269,8 @@ int main()
         //double eta_0 = 0.76; // owls_agn
         //double c_min = 2.32; // owls_agn
 
-        double Omega_b = omega_b/h/h;
-        double Omega_cdm = omega_cdm/h/h;
+        // double Omega_b = omega_b/h/h;
+        // double Omega_cdm = omega_cdm/h/h;
 
         // Useful only for Fisher forecasting i.e. i>0
 //        if (i==1)
@@ -346,8 +346,8 @@ int main()
         else if (i==32)
             h *= 1.04;
 
-        //double omega_b = Omega_b*h*h;
-        //double omega_cdm = Omega_cdm*h*h;
+        double omega_b = Omega_b*h*h;
+        double omega_cdm = Omega_cdm*h*h;
 
         // -------------------------------------------------------------------------------------
 
@@ -369,57 +369,59 @@ int main()
         //pars.add("A_s",A_s);
 
         // for dark energy
-        // pars.add("Omega_Lambda",0.0);
-        // pars.add("fluid_equation_of_state","CLP");
-        // pars.add("w0_fld",w_0);
-        // pars.add("wa_fld",w_a);
+        pars.add("Omega_Lambda",0.0);
+        pars.add("fluid_equation_of_state","CLP");
+        pars.add("w0_fld",w_0);
+        pars.add("wa_fld",w_a);
 
         // TODO: for massive neutrinos !!!!
 
-        pars.add("N_ur",3.046);
-        pars.add("N_ncdm",0.0);
-        pars.add("Omega_k",0.0);
-        pars.add("Omega_fld",0.0);
-        pars.add("Omega_scf",0.0);
-        pars.add("YHe",0.24);
+        //Laurence MICE settings
+
+        // pars.add("N_ur",3.046);
+        // pars.add("N_ncdm",0.0);
+        // pars.add("Omega_k",0.0);
+        // pars.add("Omega_fld",0.0);
+        // pars.add("Omega_scf",0.0);
+        // pars.add("YHe",0.24);
         
 
         // -------------------------
 
         // for the computational output of the 3D matter power spectrum, total density and velocity transfer functions
 
-        //pars.add("output","mPk, dTk, vTk"); // settings for papers
-        pars.add("output","mPk");
+        pars.add("output","mPk, dTk, vTk"); // settings for papers
+        //pars.add("output","mPk");
 
         // -------------------------
 
         // for non-linear power spectrum use either halofit or hmcode (comment out the one not being used)
 
-        pars.add("non linear","halofit");
+        //pars.add("non linear","halofit");
         //pars.add("pk_eq","yes"); // can use this when using Halofit and Omega_fld != 0 & w_a != 0 (but this is a 'maybe' as suggested in class)
 
-        //pars.add("non linear","hmcode");
+        pars.add("non linear","hmcode");
 
         // -------------------------
 
         // baryonic parameters (only when using hmcode 2016; otherwise comment these lines out)
 
-        //pars.add("eta_0",eta_0);
-        //pars.add("c_min",c_min);
+        pars.add("eta_0",eta_0);
+        pars.add("c_min",c_min);
 
         // -------------------------
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
         //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
         //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
 
         pars.add("z_max_pk",3.5);
 
@@ -599,11 +601,11 @@ int main()
 
         // ########################
         // Test
-        std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finerq_z_spacing/";
-        std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finerq_z_spacing/";
+        //std::string spectra_folder = "./mice_tree_ell120_iB_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finerq_z_spacing/";
+        //std::string correlations_folder = "./mice_tree_ell120_iZ_kkk_W75W75W75_zs993_mc_1e6_20000_kmax_30_Mpc_Laurence_settings_v3_finerq_z_spacing/";
 
-        //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
-        //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_2e6_x2_220_20000_X_v2_bin_averaged_phi_l_zero/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_bin_averaged/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_bin_averaged/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
@@ -665,13 +667,13 @@ int main()
         // Source (shear/convergence) correlations settings
         // --------------------------------------------------------
 
-        double zs1 = 0.993;  // MICE
+        //double zs1 = 0.993;  // MICE
         //double zs1 = z_cmb; // CMB
 
-        double zs2 = 0.993;  // MICE
+        //double zs2 = 0.993;  // MICE
 
-        //double zs1 =  0.5739; // Takahashi zs10
-        //double zs2 =  1.0334; // Takahashi zs16
+        double zs1 =  0.5739; // Takahashi zs10
+        double zs2 =  1.0334; // Takahashi zs16
 
         //double zs1 =  1.0;
         //double zs2 =  1.5;
@@ -686,9 +688,9 @@ int main()
         double zs_upper = zs2;
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
-        //std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
+        std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
 
-        std::vector<double> zs_bins{zs2}; // source (shear/convergence) redshift bin median --> for halos
+        //std::vector<double> zs_bins{zs2}; // source (shear/convergence) redshift bin median --> for halos
 
         size_t num_2pt_ss_correlations = num_correlations(zs_bins.size(), 2);
         size_t num_3pt_sss_correlations = num_correlations(zs_bins.size(), 3);
@@ -809,8 +811,8 @@ int main()
 
         std::string filename_P;
 
-        filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
-        //filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
+        //filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
+        filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
         //filename_P = "P_hh.dat"; // with bias
 
         std::string P_integration_algorithm = "qag"; // -- current settings for papers
@@ -835,9 +837,9 @@ int main()
         // -------------------------
 
         std::string filename_iB;
-        filename_iB = "iB_kkk.dat"; // kappa integrated bispectra (k stands for tophat kappa mass)
+        //filename_iB = "iB_kkk.dat"; // kappa integrated bispectra (k stands for tophat kappa mass)
         //filename_iB = "iB_Mkk.dat"; // kappa integrated bispectra (M stands for aperture mass)
-        //filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
+        filename_iB = "iB_Mss.dat"; // shear integrated bispectra (M stands for aperture mass)
         //filename_iB = "iB_Mss_angle_averaged.dat"; // shear integrated bispectra (M stands for aperture mass) angle averaged
         //filename_iB = "iB_hkk.dat"; // halo integrated bispectra with bias
         //filename_iB = "iB_hhh.dat"; // halo integrated bispectra with bias
@@ -2490,6 +2492,7 @@ int main()
                                         iB2D_mc("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
                                     else if (filename_iB == "iB_Mss_angle_averaged.dat")
                                         iB2D_mc_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
@@ -2499,6 +2502,7 @@ int main()
                                         iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
                                     else if (filename_iB == "iB_Mss_angle_averaged.dat")
                                         iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
+                                    
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2509,6 +2513,7 @@ int main()
                                     result = 0.0, error = 0.0;
                                     if (filename_iB == "iB_Mss.dat")
                                         iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
@@ -2516,6 +2521,7 @@ int main()
                                     result = 0.0, error = 0.0;
                                     if (filename_iB == "iB_Mss.dat")
                                         iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
+                                    
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }
@@ -2528,6 +2534,7 @@ int main()
                                         iB2D_hcubature("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
                                     else if (filename_iB == "iB_Mss_angle_averaged.dat")
                                         iB2D_hcubature_angle_averaged("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);                  
+                                    
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
 
@@ -2537,6 +2544,7 @@ int main()
                                         iB2D_hcubature("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, result, error, calls_iB);
                                     else if (filename_iB == "iB_Mss_angle_averaged.dat")
                                         iB2D_hcubature_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, result, error, calls_iB);                     
+                                    
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
                                 }

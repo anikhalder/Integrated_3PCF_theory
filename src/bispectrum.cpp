@@ -102,7 +102,7 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
     double k_m = k[2];
     double k_s = k[3]; // soft mode --> MIN(k1,k2,k3)
 
-    double B = B_tree(k_h, k_m, k_s, z, class_obj, false);
+    //double B = B_tree(k_h, k_m, k_s, z, class_obj, false);
     //double B = B_1_loop_hcubature(k_h, k_m, k_s, z, class_obj, false);
     //double B = B_SC(k_h, k_m, k_s, z, class_obj, true);
     //double B = B_GM(k_h, k_m, k_s, z, class_obj, true);
@@ -111,7 +111,7 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
 
     // Use hybrid model of bispectra for squeezed and non-squeezed triangle configurations
 
-    /*
+    
     double B;
 
     if (k_m < f_sq*k_s)
@@ -140,7 +140,7 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
         B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
 
     }
-    */
+    
 
     if (apply_T17_corrections)
         B *= T17_shell_correction(k_h,class_obj)*T17_shell_correction(k_m,class_obj)*T17_shell_correction(k_s,class_obj);
