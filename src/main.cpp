@@ -2904,7 +2904,7 @@ int main()
                             // iBm term
                             result = 0.0, error = 0.0;
                             iB2D_mc_4_dim("B_xim_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                            iBp2D_z_array[z_idx] = result;
+                            iBm2D_z_array[z_idx] = result;
                         }
                     }
 
