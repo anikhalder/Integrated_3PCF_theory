@@ -2870,19 +2870,27 @@ int main()
                 #pragma omp parallel for num_threads(thread_count) collapse(2) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
                 for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                 {
-                    size_t calls_iB;
+                    // size_t calls_iB;
 
-                    if (l_array.at(l_idx) <= 220)
-                        //calls_iB = 2*calls_iB_initial_4_dim;
-                        calls_iB = calls_iB_initial_4_dim;
-                    else
-                        calls_iB = calls_iB_initial_4_dim;
+                    // if (l_array.at(l_idx) <= 220)
+                    //     //calls_iB = 2*calls_iB_initial_4_dim;
+                    //     calls_iB = calls_iB_initial_4_dim;
+                    // else
+                    //     calls_iB = calls_iB_initial_4_dim;
 
                     // --------------------------------------------------------
 
                     //std::vector<double> iB2D_z_array(z_array.size(), 0);
                     for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
+                        size_t calls_iB;
+
+                        if (l_array.at(l_idx) <= 220)
+                            //calls_iB = 2*calls_iB_initial_4_dim;
+                            calls_iB = calls_iB_initial_4_dim;
+                        else
+                            calls_iB = calls_iB_initial_4_dim;
+
                         if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
                         {
                             double result = 0.0, error = 0.0;
