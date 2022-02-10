@@ -2977,8 +2977,8 @@ int main()
                         }
                     }
 
-                    if (verbose_print_outs)
-                        std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+                    //if (verbose_print_outs)
+                    //    std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
                 }
 
                 gettimeofday(&end_grid, nullptr);
