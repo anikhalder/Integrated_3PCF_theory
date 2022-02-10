@@ -3023,6 +3023,7 @@ int main()
                     std::cout<<"2D integrated bispectra grid output files created\n";
             }
 
+            // read the iB_l_z grid
             if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
             {
                 std::stringstream s_iB_l_z;
@@ -3052,7 +3053,7 @@ int main()
                 assert (iBm_l_z_grid.at(0).size() == z_array.size());
             }
 
-            // line of sight projection to get auto and cross-power spectra
+            // line of sight projection using the iB_l_z grid to get auto and cross-power spectra
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             {
