@@ -111,7 +111,7 @@ int main()
         }
     }
 
-    const int thread_count = static_cast<int>(omp_get_max_threads())-1;
+    const int thread_count = static_cast<int>(omp_get_max_threads())-10;
     //const int thread_count = 120;
     
     if (verbose_print_outs)
@@ -511,7 +511,7 @@ int main()
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
         bool compute_2D_integrated_bispectra_v3 = true;
-        bool compute_2D_iB_l_z_grid = true;
+        bool compute_2D_iB_l_z_grid = false;
         bool compute_2D_integrated_3PCF = true;
 
         // ######################################################################################
@@ -3048,14 +3048,14 @@ int main()
                 std::stringstream s_iBp_l_z, s_iBm_l_z;
                 s_iBp_l_z << iB_l_z_folder << "iBp_l_z" << cosmology_name << filename_extension;
                 std::string iBp_l_z_grid_filename =  s_iBp_l_z.str();
-                iBp_l_z_grid = read_n_column_table(iBp_l_z_grid_filename, 7);
+                iBp_l_z_grid = read_n_column_table(iBp_l_z_grid_filename, l_array.size());
 
                 assert (iBp_l_z_grid.size() == l_array.size());
                 assert (iBp_l_z_grid.at(0).size() == z_array.size());
 
                 s_iBm_l_z << iB_l_z_folder << "iBm_l_z" << cosmology_name << filename_extension;
                 std::string iBm_l_z_grid_filename =  s_iBm_l_z.str();
-                iBm_l_z_grid = read_n_column_table(iBm_l_z_grid_filename, 7);
+                iBm_l_z_grid = read_n_column_table(iBm_l_z_grid_filename, l_array.size());
 
                 assert (iBm_l_z_grid.size() == l_array.size());
                 assert (iBm_l_z_grid.at(0).size() == z_array.size());
