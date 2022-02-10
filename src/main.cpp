@@ -174,6 +174,7 @@ int main()
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
 
+        std::string cosmology_name = "_takahashi";
         std::string filename_extension = filename_extension_array.at(i);
 
         // -------------------------------------------------------------------------------------
@@ -491,14 +492,16 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        // bool compute_2D_integrated_3PCF_area_pre_factors = true;
-        // bool compute_2D_power_spectra = true;
+        // bool compute_2D_integrated_3PCF_area_pre_factors = false;
+        // bool compute_2D_power_spectra = false;
         // bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        // bool compute_2D_2PCF = true;
+        // bool compute_2D_2PCF = false;
         // bool compute_2D_bispectra_equilateral = false;
         // bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        // bool compute_2D_integrated_bispectra_v2 = true;
-        // bool compute_2D_integrated_3PCF = true;
+        // bool compute_2D_integrated_bispectra_v2 = false;
+        // bool compute_2D_integrated_bispectra_v3 = false;
+        // bool compute_2D_iB_l_z_grid = true;
+        // bool compute_2D_integrated_3PCF = false;
 
         bool compute_2D_integrated_3PCF_area_pre_factors = true;
         bool compute_2D_power_spectra = true;
@@ -508,6 +511,7 @@ int main()
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
         bool compute_2D_integrated_bispectra_v3 = true;
+        bool compute_2D_iB_l_z_grid = true;
         bool compute_2D_integrated_3PCF = true;
 
         // ######################################################################################
@@ -613,6 +617,8 @@ int main()
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
 
+        //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_bsr/";
         std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
@@ -621,7 +627,12 @@ int main()
 
         // -------------------------------------------------------------------------------------
 
+        std::experimental::filesystem::create_directory(iB_l_z_folder);
+
         // create folders
+
+        if (compute_2D_integrated_bispectra_v3 && compute_2D_iB_l_z_grid)
+            std::experimental::filesystem::create_directory(iB_l_z_folder);
 
         std::experimental::filesystem::create_directory(spectra_folder);
         std::experimental::filesystem::create_directory(correlations_folder);
@@ -711,12 +722,14 @@ int main()
         std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs1));
         std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs2));
 
-        //std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
+        ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
+        //std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
         //assert(!nofz_s1_table.empty());
         //normalise_nofz(nofz_s1_table);
         //Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
-        //std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
+        ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
+        //std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
         //assert(!nofz_s2_table.empty());
         //normalise_nofz(nofz_s2_table);
         //Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
@@ -767,12 +780,13 @@ int main()
         size_t num_2pt_ll_correlations = zl_bins.size();
         size_t num_i3pt_lll_correlations =  zl_bins.size();
 
-        std::vector<std::vector<double>> nofz_l1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab");
+        //std::vector<std::vector<double>> nofz_l1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab");
+        std::vector<std::vector<double>> nofz_l1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab", 2);
         assert(!nofz_l1_table.empty());
         normalise_nofz(nofz_l1_table);
 
-        //for (size_t idx = 0; idx < nofz_l1_table.at(0).size(); idx++)
-        //     std::cout << nofz_l1_table.at(0).at(idx) << "     " << nofz_l1_table.at(1).at(idx) << std::endl;
+        for (size_t idx = 0; idx < nofz_l1_table.at(0).size(); idx++)
+             std::cout << nofz_l1_table.at(0).at(idx) << "     " << nofz_l1_table.at(1).at(idx) << std::endl;
 
         Linear_interp_1D nofz_l1(nofz_l1_table.at(0), nofz_l1_table.at(1));
         std::shared_ptr<projection_kernel> qg1(new projection_kernel_q_m(class_obj.get(), &nofz_l1));
@@ -1782,7 +1796,8 @@ int main()
                         s_P << spectra_folder << "P_" << std::to_string(a+1) << std::to_string(b+1) << filename_extension;
                         std::string P_flat_2D_spectrum =  s_P.str();
 
-                        std::vector<std::vector<double>> P_matrix = read_2_column_table(P_flat_2D_spectrum);
+                        //std::vector<std::vector<double>> P_matrix = read_2_column_table(P_flat_2D_spectrum);
+                        std::vector<std::vector<double>> P_matrix = read_n_column_table(P_flat_2D_spectrum, 2);
 
                         assert (P_matrix.at(0).size() == l_array.size());
 
@@ -1823,7 +1838,8 @@ int main()
                         s_P << spectra_folder << "P_" << std::to_string(a+1) << std::to_string(b+1) << filename_extension;
                         std::string P_flat_2D_spectrum =  s_P.str();
 
-                        std::vector<std::vector<double>> P_matrix = read_2_column_table(P_flat_2D_spectrum);
+                        //std::vector<std::vector<double>> P_matrix = read_2_column_table(P_flat_2D_spectrum);
+                        std::vector<std::vector<double>> P_matrix = read_n_column_table(P_flat_2D_spectrum, 2);
 
                         assert (P_matrix.at(0).size() == l_array.size());
 
@@ -1871,7 +1887,8 @@ int main()
                     s_P << spectra_folder << "P_" << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
                     std::string P_flat_2D_spectrum =  s_P.str();
 
-                    std::vector<std::vector<double>> P_matrix = read_3_column_table(P_flat_2D_spectrum);
+                    //std::vector<std::vector<double>> P_matrix = read_3_column_table(P_flat_2D_spectrum);
+                    std::vector<std::vector<double>> P_matrix = read_n_column_table(P_flat_2D_spectrum, 3);
 
                     assert (P_matrix.at(0).size() == l_array.size());
 
@@ -2842,107 +2859,231 @@ int main()
             std::vector<std::vector<double>> iBp_l_z_grid(l_array.size(), std::vector<double>(z_array.size(), 0));
             std::vector<std::vector<double>> iBm_l_z_grid(l_array.size(), std::vector<double>(z_array.size(), 0));
 
-            //#pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
-            #pragma omp parallel for num_threads(thread_count) collapse(2) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
-            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            if (compute_2D_iB_l_z_grid)
             {
-                size_t calls_iB;
+                struct timeval start_grid, end_grid;
+                gettimeofday(&start_grid, nullptr);
 
-                if (l_array.at(l_idx) <= 220)
-                    //calls_iB = 2*calls_iB_initial_4_dim;
-                    calls_iB = calls_iB_initial_4_dim;
-                else
-                    calls_iB = calls_iB_initial_4_dim;
+                std::cout << "2D integrated bispectrum grid calculations started" << std::endl;
 
-                // --------------------------------------------------------
-
-                //std::vector<double> iB2D_z_array(z_array.size(), 0);
-                for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
+                //#pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
+                #pragma omp parallel for num_threads(thread_count) collapse(2) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
+                for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                 {
-                    if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
+                    size_t calls_iB;
+
+                    if (l_array.at(l_idx) <= 220)
+                        //calls_iB = 2*calls_iB_initial_4_dim;
+                        calls_iB = calls_iB_initial_4_dim;
+                    else
+                        calls_iB = calls_iB_initial_4_dim;
+
+                    // --------------------------------------------------------
+
+                    //std::vector<double> iB2D_z_array(z_array.size(), 0);
+                    for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
-                        double result = 0.0, error = 0.0;
-                        if (iB_integration_algorithm == "mc")
+                        if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
                         {
-                            if (filename_iB == "iB_kkk.dat")
-                                iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                            else if (filename_iB == "iB_Mkk.dat")
-                                iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                            //iB2D_z_array[z_idx] = result;
-                            iB_l_z_grid[l_idx][z_idx] = result;
-                        }
-
-                        //Linear_interp_1D iB2D_z_interp(z_array, iB2D_z_array);
-                        Linear_interp_1D iB2D_z_interp(z_array, iB_l_z_grid[l_idx]);
-
-                        size_t corr_idx = 0;
-                        for (size_t a = 0; a < zs_bins.size() ; a++)
-                        {
-                            for (size_t b = a; b < zs_bins.size() ; b++)
+                            double result = 0.0, error = 0.0;
+                            if (iB_integration_algorithm == "mc")
                             {
-                                for (size_t c = b; c < zs_bins.size() ; c++)
+                                if (filename_iB == "iB_kkk.dat")
+                                    iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                                else if (filename_iB == "iB_Mkk.dat")
+                                    iB2D_mc_4_dim("B", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                                //iB2D_z_array[z_idx] = result;
+                                iB_l_z_grid[l_idx][z_idx] = result;
+                            }
+
+                            /* // TO BE DELETED
+                            //Linear_interp_1D iB2D_z_interp(z_array, iB2D_z_array);
+                            Linear_interp_1D iB2D_z_interp(z_array, iB_l_z_grid[l_idx]);
+
+                            size_t corr_idx = 0;
+                            for (size_t a = 0; a < zs_bins.size() ; a++)
+                            {
+                                for (size_t b = a; b < zs_bins.size() ; b++)
                                 {
-                                    assert(corr_idx != num_i3pt_sss_correlations);
+                                    for (size_t c = b; c < zs_bins.size() ; c++)
+                                    {
+                                        assert(corr_idx != num_i3pt_sss_correlations);
 
-                                    // iB term
-                                    iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                        // iB term
+                                        iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
 
-                                    corr_idx++;
+                                        corr_idx++;
+                                    }
                                 }
                             }
+                            */
+                        }
+
+                        else if (filename_iB == "iB_Mss.dat")
+                        {
+                            //std::vector<double> iBp2D_z_array(z_array.size(), 0);
+                            //std::vector<double> iBm2D_z_array(z_array.size(), 0);
+
+                            double result = 0.0, error = 0.0;
+                            if (iB_integration_algorithm == "mc")
+                            {
+                                // iBp term
+                                result = 0.0, error = 0.0;
+                                iB2D_mc_4_dim("B_xip_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                                //iBp2D_z_array[z_idx] = result;
+                                iBp_l_z_grid[l_idx][z_idx] = result;
+
+                                // iBm term
+                                result = 0.0, error = 0.0;
+                                iB2D_mc_4_dim("B_xim_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
+                                //iBm2D_z_array[z_idx] = result;
+                                iBm_l_z_grid[l_idx][z_idx] = result;
+                            }
+
+                            /* // TO BE DELETED
+                            //Linear_interp_1D iBp2D_z_interp(z_array, iBp2D_z_array);
+                            //Linear_interp_1D iBm2D_z_interp(z_array, iBm2D_z_array);
+                            Linear_interp_1D iBp2D_z_interp(z_array, iBp_l_z_grid[l_idx]);
+                            Linear_interp_1D iBm2D_z_interp(z_array, iBm_l_z_grid[l_idx]);
+
+                            size_t corr_idx = 0;
+                            for (size_t a = 0; a < zs_bins.size() ; a++)
+                            {
+                                for (size_t b = a; b < zs_bins.size() ; b++)
+                                {
+                                    for (size_t c = b; c < zs_bins.size() ; c++)
+                                    {
+                                        assert(corr_idx != num_i3pt_sss_correlations);
+
+                                        // iBp term
+                                        iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iBp2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                        
+                                        // iBm term
+                                        iB_sss_array[1][corr_idx][l_idx] = iB2D_trapz_z(&iBm2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                        
+                                        corr_idx++;
+                                    }
+                                }
+                            }
+                            */
                         }
                     }
 
-                    else if (filename_iB == "iB_Mss.dat")
+                    if (verbose_print_outs)
+                        std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+                }
+
+                gettimeofday(&end_grid, nullptr);
+                time_taken = (end_grid.tv_sec - start_grid.tv_sec) * 1e6;
+                time_taken = (time_taken + (end_grid.tv_usec - start_grid.tv_usec)) * 1e-6;
+                std::cout << "\nTime taken for 2D integrated bispectrum grid calculations: " << time_taken << " sec" << std::endl;
+                                
+                // Write the computed iB_l_z grid out
+                if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
+                {
+                    std::stringstream s_iB_l_z;
+                    s_iB_l_z << iB_l_z_folder << "iB_l_z" << cosmology_name << filename_extension;
+                    std::ofstream file_iB_l_z( s_iB_l_z.str(), std::ofstream::trunc);
+                    file_iB_l_z.precision(40);
+
+                    for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
                     {
-                        //std::vector<double> iBp2D_z_array(z_array.size(), 0);
-                        //std::vector<double> iBm2D_z_array(z_array.size(), 0);
-
-                        double result = 0.0, error = 0.0;
-                        if (iB_integration_algorithm == "mc")
+                        for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                         {
-                            // iBp term
-                            result = 0.0, error = 0.0;
-                            iB2D_mc_4_dim("B_xip_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                            //iBp2D_z_array[z_idx] = result;
-                            iBp_l_z_grid[l_idx][z_idx] = result;
-
-                            // iBm term
-                            result = 0.0, error = 0.0;
-                            iB2D_mc_4_dim("B_xim_cos", l_array.at(l_idx), z_array.at(z_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, iB_sss_4_dim_lower_limits, iB_sss_4_dim_upper_limits, T, "vegas", result, error, calls_iB);
-                            //iBm2D_z_array[z_idx] = result;
-                            iBm_l_z_grid[l_idx][z_idx] = result;
+                            file_iB_l_z << iB_l_z_grid[l_idx][z_idx] <<  " " ;
                         }
+                        file_iB_l_z << "\n";
+                    }
+                }
 
-                        //Linear_interp_1D iBp2D_z_interp(z_array, iBp2D_z_array);
-                        //Linear_interp_1D iBm2D_z_interp(z_array, iBm2D_z_array);
-                        Linear_interp_1D iBp2D_z_interp(z_array, iBp_l_z_grid[l_idx]);
-                        Linear_interp_1D iBm2D_z_interp(z_array, iBm_l_z_grid[l_idx]);
+                else if (filename_iB == "iB_Mss.dat")
+                {
+                    std::stringstream s_iBp_l_z, s_iBm_l_z;
+                    s_iBp_l_z << iB_l_z_folder << "iBp_l_z" << cosmology_name << filename_extension;
+                    std::ofstream file_iBp_l_z( s_iBp_l_z.str(), std::ofstream::trunc);
+                    file_iBp_l_z.precision(40);
 
-                        size_t corr_idx = 0;
-                        for (size_t a = 0; a < zs_bins.size() ; a++)
+                    s_iBm_l_z << iB_l_z_folder << "iBm_l_z" << cosmology_name << filename_extension;
+                    std::ofstream file_iBm_l_z( s_iBm_l_z.str(), std::ofstream::trunc);
+                    file_iBm_l_z.precision(40);
+
+                    for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
+                    {
+                        for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
                         {
-                            for (size_t b = a; b < zs_bins.size() ; b++)
-                            {
-                                for (size_t c = b; c < zs_bins.size() ; c++)
-                                {
-                                    assert(corr_idx != num_i3pt_sss_correlations);
-
-                                    // iBp term
-                                    iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iBp2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
-                                    
-                                    // iBm term
-                                    iB_sss_array[1][corr_idx][l_idx] = iB2D_trapz_z(&iBm2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
-                                    
-                                    corr_idx++;
-                                }
-                            }
+                            file_iBp_l_z << iBp_l_z_grid[l_idx][z_idx] <<  " " ;
+                            file_iBm_l_z << iBm_l_z_grid[l_idx][z_idx] <<  " " ;
                         }
+                        file_iBp_l_z << "\n";
+                        file_iBm_l_z << "\n";
                     }
                 }
 
                 if (verbose_print_outs)
-                    std::cout << ++counter << " " << l_array.at(l_idx) << std::endl;
+                    std::cout<<"2D integrated bispectra grid output files created\n";
+            }
+
+            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
+            {
+                std::stringstream s_iB_l_z;
+                s_iB_l_z << iB_l_z_folder << "iB_l_z" << cosmology_name << filename_extension;
+                std::string iB_l_z_grid_filename =  s_iB_l_z.str();
+                iB_l_z_grid = read_n_column_table(iB_l_z_grid_filename, 7);
+
+                assert (iB_l_z_grid.size() == l_array.size());
+                assert (iB_l_z_grid.at(0).size() == z_array.size());
+            }
+
+            else if (filename_iB == "iB_Mss.dat")
+            {
+                std::stringstream s_iBp_l_z, s_iBm_l_z;
+                s_iBp_l_z << iB_l_z_folder << "iBp_l_z" << cosmology_name << filename_extension;
+                std::string iBp_l_z_grid_filename =  s_iBp_l_z.str();
+                iBp_l_z_grid = read_n_column_table(iBp_l_z_grid_filename, 7);
+
+                assert (iBp_l_z_grid.size() == l_array.size());
+                assert (iBp_l_z_grid.at(0).size() == z_array.size());
+
+                s_iBm_l_z << iB_l_z_folder << "iBm_l_z" << cosmology_name << filename_extension;
+                std::string iBm_l_z_grid_filename =  s_iBm_l_z.str();
+                iBm_l_z_grid = read_n_column_table(iBm_l_z_grid_filename, 7);
+
+                assert (iBm_l_z_grid.size() == l_array.size());
+                assert (iBm_l_z_grid.at(0).size() == z_array.size());
+            }
+
+            // line of sight projection to get auto and cross-power spectra
+            #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels, z_array)
+            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+            {
+                Linear_interp_1D iB2D_z_interp(z_array, iB_l_z_grid[l_idx]);
+                Linear_interp_1D iBp2D_z_interp(z_array, iBp_l_z_grid[l_idx]);
+                Linear_interp_1D iBm2D_z_interp(z_array, iBm_l_z_grid[l_idx]);
+
+                size_t corr_idx = 0;
+                for (size_t a = 0; a < zs_bins.size() ; a++)
+                {
+                    for (size_t b = a; b < zs_bins.size() ; b++)
+                    {
+                        for (size_t c = b; c < zs_bins.size() ; c++)
+                        {
+                            assert(corr_idx != num_i3pt_sss_correlations);
+
+                            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
+                                iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iB2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+
+                            else if (filename_iB == "iB_Mss.dat")
+                            {
+                                // iBp term
+                                iB_sss_array[0][corr_idx][l_idx] = iB2D_trapz_z(&iBp2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());
+                                
+                                // iBm term
+                                iB_sss_array[1][corr_idx][l_idx] = iB2D_trapz_z(&iBm2D_z_interp, zs_lower, zs_upper, class_obj.get(), qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get());  
+                            }
+                            corr_idx++;
+                        }
+                    }
+                }
             }
 
             gettimeofday(&end, nullptr);
@@ -2950,7 +3091,8 @@ int main()
             time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
             std::cout << "\nTime taken for 2D integrated bispectra calculations: " << time_taken << " sec" << std::endl;
 
-            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat" || filename_iB == "iB_Mss_angle_averaged.dat")
+            // write projected spectra to files
+            if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat" || filename_iB == "iB_Mss.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zs_bins.size() ; a++)
@@ -2990,6 +3132,7 @@ int main()
                 }
             }
 
+            /*
             else if (filename_iB == "iB_hkk.dat")
             {
                 size_t corr_idx = 0;
@@ -3073,6 +3216,7 @@ int main()
                     corr_idx++;
                 }
             }
+            */
 
             if (verbose_print_outs)
                 std::cout<<"2D integrated bispectra output files created\n";
@@ -3107,7 +3251,8 @@ int main()
                             s_iB_Re << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
                             std::string iB_flat_2D_spectrum =  s_iB_Re.str();
 
-                            std::vector<std::vector<double>> iB_Re_matrix = read_3_column_table(iB_flat_2D_spectrum);
+                            //std::vector<std::vector<double>> iB_Re_matrix = read_3_column_table(iB_flat_2D_spectrum);
+                            std::vector<std::vector<double>> iB_Re_matrix = read_n_column_table(iB_flat_2D_spectrum, 3);
                             assert (iB_Re_matrix.at(0).size() == l_array.size());
 
                             //iZ = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xi", thread_count);
@@ -3150,7 +3295,8 @@ int main()
                             s_iB_Re << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
                             std::string iB_flat_2D_spectrum =  s_iB_Re.str();
 
-                            std::vector<std::vector<double>> iB_Re_matrix = read_3_column_table(iB_flat_2D_spectrum);
+                            //std::vector<std::vector<double>> iB_Re_matrix = read_3_column_table(iB_flat_2D_spectrum);
+                            std::vector<std::vector<double>> iB_Re_matrix = read_n_column_table(iB_flat_2D_spectrum, 3);
                             assert (iB_Re_matrix.at(0).size() == l_array.size());
 
                             //iZp_Re = xi_theta_array(alpha_table, iB_Re_matrix.at(0), iB_Re_matrix.at(1), "xip", thread_count);
@@ -3199,7 +3345,8 @@ int main()
                             s_iB << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(b+1) << std::to_string(c+1) << filename_extension;
                             std::string iB_flat_2D_spectrum =  s_iB.str();
 
-                            std::vector<std::vector<double>> iB_matrix = read_7_column_table(iB_flat_2D_spectrum);
+                            //std::vector<std::vector<double>> iB_matrix = read_7_column_table(iB_flat_2D_spectrum);
+                            std::vector<std::vector<double>> iB_matrix = read_n_column_table(iB_flat_2D_spectrum, 7);
 
                             assert (iB_matrix.at(0).size() == l_array.size());
 
@@ -3267,7 +3414,8 @@ int main()
                     s_iB << spectra_folder << "iB_" << std::to_string(a+1) << std::to_string(a+1) << std::to_string(a+1) << filename_extension;
                     std::string iB_flat_2D_spectrum =  s_iB.str();
 
-                    std::vector<std::vector<double>> iB_matrix = read_6_column_table(iB_flat_2D_spectrum);
+                    //std::vector<std::vector<double>> iB_matrix = read_6_column_table(iB_flat_2D_spectrum);
+                    std::vector<std::vector<double>> iB_matrix = read_n_column_table(iB_flat_2D_spectrum, 6);
 
                     assert (iB_matrix.at(0).size() == l_array.size());
 

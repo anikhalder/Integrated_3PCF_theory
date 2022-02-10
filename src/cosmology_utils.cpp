@@ -31,9 +31,10 @@ std::vector<double> read_1_column_table(const std::string &file_name)
     return matrix;
 }
 
-
+/*
 std::vector<std::vector<double>> read_2_column_table(const std::string &file_name)
 {
+    // where each column is a vector of interest 
     std::vector<std::vector<double>> matrix(2);
 
     std::ifstream file( file_name );
@@ -55,6 +56,7 @@ std::vector<std::vector<double>> read_2_column_table(const std::string &file_nam
 
 std::vector<std::vector<double> > read_3_column_table(const std::string &file_name)
 {
+    // where each column is a vector of interest 
     std::vector<std::vector<double>> matrix(3);
 
     std::ifstream file( file_name );
@@ -76,6 +78,7 @@ std::vector<std::vector<double> > read_3_column_table(const std::string &file_na
 
 std::vector<std::vector<double> > read_6_column_table(const std::string &file_name)
 {
+    // where each column is a vector of interest 
     std::vector<std::vector<double>> matrix(6);
 
     std::ifstream file( file_name );
@@ -97,6 +100,7 @@ std::vector<std::vector<double> > read_6_column_table(const std::string &file_na
 
 std::vector<std::vector<double> > read_7_column_table(const std::string &file_name)
 {
+    // where each column is a vector of interest 
     std::vector<std::vector<double>> matrix(7);
 
     std::ifstream file( file_name );
@@ -118,6 +122,7 @@ std::vector<std::vector<double> > read_7_column_table(const std::string &file_na
 
 std::vector<std::vector<double> > read_11_column_table(const std::string &file_name)
 {
+    // where each column is a vector of interest 
     std::vector<std::vector<double>> matrix(11);
 
     std::ifstream file( file_name );
@@ -136,7 +141,30 @@ std::vector<std::vector<double> > read_11_column_table(const std::string &file_n
 
     return matrix;
 }
+*/
 
+std::vector<std::vector<double> > read_n_column_table(const std::string &file_name, const size_t &n)
+{
+    // where each column is a vector of interest 
+    std::vector<std::vector<double>> matrix(n);
+
+    std::ifstream file( file_name );
+
+    double c[n];
+
+    for( std::string line; getline( file, line ); )
+    {
+        std::istringstream iss(line);
+
+        for (size_t i=0; i<n; i++)
+        {
+            iss >> c[i];
+            matrix.at(i).push_back(c[i]);
+        }            
+    }
+
+    return matrix;
+}
 
 void normalise_nofz(std::vector<std::vector<double>> &matrix)
 {
