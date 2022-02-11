@@ -507,12 +507,11 @@ double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, doub
                     projection_kernel *q1, projection_kernel *q2, projection_kernel *q3)
 {
     // uniform trapezoidal integration
-    int N = 100;
-    double delta_z = (z_upper_limit-z_lower_limit)/N;
+    double delta_z = (z_upper_limit-z_lower_limit)/num_trapz_steps;
 
     double integral = 0.;
 
-    for (int i = 0; i <= N; i++)
+    for (int i = 0; i <= num_trapz_steps; i++)
     {
         double z = z_lower_limit + i*delta_z;
 
@@ -528,7 +527,7 @@ double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, doub
 
         double val = Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*iB2D_z_interp->interp(z);
 
-        if (i==0 || i==N)
+        if (i==0 || i==num_trapz_steps)
             integral += val;       
         else
             integral += 2.*val;

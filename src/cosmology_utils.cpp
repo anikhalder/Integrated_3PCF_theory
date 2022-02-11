@@ -31,7 +31,6 @@ std::vector<double> read_1_column_table(const std::string &file_name)
     return matrix;
 }
 
-/*
 std::vector<std::vector<double>> read_2_column_table(const std::string &file_name)
 {
     // where each column is a vector of interest 
@@ -53,95 +52,6 @@ std::vector<std::vector<double>> read_2_column_table(const std::string &file_nam
 
     return matrix;
 }
-
-std::vector<std::vector<double> > read_3_column_table(const std::string &file_name)
-{
-    // where each column is a vector of interest 
-    std::vector<std::vector<double>> matrix(3);
-
-    std::ifstream file( file_name );
-
-    double c[3];
-
-    for( std::string line; getline( file, line ); )
-    {
-        std::istringstream iss(line);
-
-        iss >> c[0] >> c[1] >> c[2];
-
-        for (size_t i=0; i<3; i++)
-            matrix.at(i).push_back(c[i]);
-    }
-
-    return matrix;
-}
-
-std::vector<std::vector<double> > read_6_column_table(const std::string &file_name)
-{
-    // where each column is a vector of interest 
-    std::vector<std::vector<double>> matrix(6);
-
-    std::ifstream file( file_name );
-
-    double c[6];
-
-    for( std::string line; getline( file, line ); )
-    {
-        std::istringstream iss(line);
-
-        iss >> c[0] >> c[1] >> c[2] >> c[3] >> c[4] >> c[5];
-
-        for (size_t i=0; i<6; i++)
-            matrix.at(i).push_back(c[i]);
-    }
-
-    return matrix;
-}
-
-std::vector<std::vector<double> > read_7_column_table(const std::string &file_name)
-{
-    // where each column is a vector of interest 
-    std::vector<std::vector<double>> matrix(7);
-
-    std::ifstream file( file_name );
-
-    double c[7];
-
-    for( std::string line; getline( file, line ); )
-    {
-        std::istringstream iss(line);
-
-        iss >> c[0] >> c[1] >> c[2] >> c[3] >> c[4] >> c[5] >> c[6];
-
-        for (size_t i=0; i<7; i++)
-            matrix.at(i).push_back(c[i]);
-    }
-
-    return matrix;
-}
-
-std::vector<std::vector<double> > read_11_column_table(const std::string &file_name)
-{
-    // where each column is a vector of interest 
-    std::vector<std::vector<double>> matrix(11);
-
-    std::ifstream file( file_name );
-
-    double c[11];
-
-    for( std::string line; getline( file, line ); )
-    {
-        std::istringstream iss(line);
-
-        iss >> c[0] >> c[1] >> c[2] >> c[3] >> c[4] >> c[5] >> c[6] >> c[7] >> c[8] >> c[9] >> c[10];
-
-        for (size_t i=0; i<11; i++)
-            matrix.at(i).push_back(c[i]);
-    }
-
-    return matrix;
-}
-*/
 
 std::vector<std::vector<double> > read_n_column_table(const std::string &file_name, const size_t &n)
 {

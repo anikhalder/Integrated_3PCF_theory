@@ -26,6 +26,9 @@ const double z_cmb = 1090;
 
 const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 
+const double delta_z_step = 0.02; // for making grid
+const int num_trapz_steps = 100; // for trapezoidal integration
+
 // Takahashi et al. (2017) Appendix B eqn (28) fitting formula for finite shell thickness - parameter values
 const double c1_T17 = 9.5171e-4;
 const double c2_T17 = 5.1543e-3;
@@ -37,7 +40,7 @@ const double delta_r_T17 = 450.0; // [Mpc/h]
 
 //const double delta_r_T17 = 126.0; // [Mpc/h] for MassiveNus
 
-const bool apply_T17_corrections = true; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
+const bool apply_T17_corrections = false; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
 
 const bool compute_bihalofit = false;
 

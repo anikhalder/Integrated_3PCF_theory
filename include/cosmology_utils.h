@@ -10,15 +10,7 @@
 
 std::vector<double> read_1_column_table(const std::string &file_name);
 
-// std::vector<std::vector<double>> read_2_column_table(const std::string &file_name);
-
-// std::vector<std::vector<double>> read_3_column_table(const std::string &file_name);
-
-// std::vector<std::vector<double>> read_6_column_table(const std::string &file_name);
-
-// std::vector<std::vector<double>> read_7_column_table(const std::string &file_name);
-
-// std::vector<std::vector<double>> read_11_column_table(const std::string &file_name);
+std::vector<std::vector<double>> read_2_column_table(const std::string &file_name);
 
 std::vector<std::vector<double> > read_n_column_table(const std::string &file_name, const size_t &n); // where each column is a feature vector of interest and each row of the file has entries
 

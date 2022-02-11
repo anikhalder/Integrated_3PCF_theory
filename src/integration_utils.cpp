@@ -90,7 +90,7 @@ void monte_carlo_vegas_integration(gsl_monte_function *G, std::vector<double> &l
     gsl_rng *r = gsl_rng_alloc(T);
     gsl_monte_vegas_state *s = gsl_monte_vegas_alloc (dim);
 
-    gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, calls_1e4, r, s, &result, &error); // to warm up the grid
+    gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, 2*calls_1e4, r, s, &result, &error); // to warm up the grid
 
     gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, calls, r, s, &result, &error);
 //    do
