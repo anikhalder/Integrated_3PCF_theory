@@ -528,8 +528,8 @@ int main()
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
 
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
-        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_v2/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
         std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
@@ -2733,6 +2733,28 @@ int main()
             struct_iB2D_W_FS info_iB_UWW_FS = {&W2D_U_FS, theta_U, &W2D_TH_FS, theta_T};
             struct_iB2D_W_FS info_iB_WWW_FS = {&W2D_TH_FS, theta_T, &W2D_TH_FS, theta_T};
 
+            // write the l_array
+            std::stringstream s_l;
+            s_l << iB_l_z_folder << "l_array.tab";
+            std::ofstream file_l( s_l.str(), std::ofstream::trunc);
+            file_l.precision(40);
+
+            for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
+                file_l << l_array.at(l_idx) << "\n";
+
+            file_l.close();
+
+            // write the z_array
+            std::stringstream s_z;
+            s_z << iB_l_z_folder << "z_array.tab";
+            std::ofstream file_z( s_z.str(), std::ofstream::trunc);
+            file_z.precision(40);
+
+            for (size_t z_idx = 0; z_idx < z_array.size(); z_idx++)
+                file_z << z_array.at(z_idx) << "\n";
+            
+            file_z.close();
+
             counter = 0;
 
             std::vector<std::vector<double>> iB_l_z_grid(l_array.size(), std::vector<double>(z_array.size(), 0));
@@ -2870,6 +2892,14 @@ int main()
     //            std::cout << "\niB_A = " << iB_A_val << std::endl;
     //        }
 
+            std::stringstream s_l;
+            s_l << iB_l_z_folder << "l_array.tab";
+            std::vector<double> l_array = read_1_column_table(s_l.str());
+
+            std::stringstream s_z;
+            s_z << iB_l_z_folder << "z_array.tab";
+            std::vector<double> z_array = read_1_column_table(s_z.str());
+
             std::vector<std::vector<std::vector<double>>> iB_sss_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0))); // 2 columns to accommodate either (iB_Mkk) or (iB_Mxip and iB_Mxim) columns
             std::vector<std::vector<std::vector<double>>> iB_lll_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
             //std::vector<std::vector<std::vector<double>>> iB_lls_array(5, std::vector<std::vector<double>>(num_i3pt_lls_correlations, std::vector<double>(l_array.size(), 0))); // 5 columns to accommodate (iB_hhh_b1, iB_hhh_b2, iB_hhh_bs2, iB_hhh_sn1, iB_hhh_sn2)
@@ -2878,10 +2908,6 @@ int main()
             std::vector<std::vector<std::vector<double>>> iB_sss_error_array(2, std::vector<std::vector<double>>(num_i3pt_sss_correlations, std::vector<double>(l_array.size(), 0)));
             std::vector<std::vector<std::vector<double>>> iB_lll_error_array(5, std::vector<std::vector<double>>(num_i3pt_lll_correlations, std::vector<double>(l_array.size(), 0)));
             std::vector<std::vector<std::vector<double>>> iB_lss_error_array(6, std::vector<std::vector<double>>(zl_bins.size()*num_2pt_ss_correlations, std::vector<double>(l_array.size(), 0)));
-
-            std::vector<double> z_array;
-            for (double z = zs_lower; z < zs_upper+delta_z_step; z+=delta_z_step)
-                z_array.push_back(z);
 
             std::vector<std::vector<double>> iB_l_z_grid(l_array.size(), std::vector<double>(z_array.size(), 0));
             std::vector<std::vector<double>> iBp_l_z_grid(l_array.size(), std::vector<double>(z_array.size(), 0));
