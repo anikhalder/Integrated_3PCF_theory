@@ -111,24 +111,26 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
 
     // Use hybrid model of bispectra for squeezed and non-squeezed triangle configurations
 
-    
     double B;
 
     if (k_m < f_sq*k_s)
     {
+        //std::cout << "GM" << std::endl;
         // non-squeezed configurations
 
         //B = 0.0;
         //B = B_tree(k_h, k_m, k_s, z, class_obj, false);
         //B = B_1_loop_hcubature(k_h, k_m, k_s, z, class_obj, false);
         //B = B_SC(k_h, k_m, k_s, z, class_obj, true);
-        B = B_GM(k_h, k_m, k_s, z, class_obj, true);
+        //B = B_GM(k_h, k_m, k_s, z, class_obj, true);
+        B = B_GM_v2(k_h, k_m, k_s, z, class_obj, true); // fast GM version
         //B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
         //B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
     }
 
     else
     {
+        //std::cout << "RF" << std::endl;
         // squeezed configurations
 
         //B = 0.0;
@@ -141,7 +143,6 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
 
     }
     
-
     if (apply_T17_corrections)
         B *= T17_shell_correction(k_h,class_obj)*T17_shell_correction(k_m,class_obj)*T17_shell_correction(k_s,class_obj);
 
@@ -716,6 +717,33 @@ double B_GM(const double &k_1, const double &k_2, const double &k_3, const doubl
     double c_1 = c_GM(n_1,q_1);
     double c_2 = c_GM(n_2,q_2);
     double c_3 = c_GM(n_3,q_3);
+
+    double B = 2.0*(F2_eff(k_1,k_2,k_3,a_1,a_2,b_1,b_2,c_1,c_2)*Pk_1*Pk_2
+                   +F2_eff(k_2,k_3,k_1,a_2,a_3,b_2,b_3,c_2,c_3)*Pk_2*Pk_3
+                   +F2_eff(k_3,k_1,k_2,a_3,a_1,b_3,b_1,c_3,c_1)*Pk_3*Pk_1);
+
+    return B;
+}
+
+double B_GM_v2(const double &k_1, const double &k_2, const double &k_3, const double &z, ClassEngine *class_obj, bool use_pk_nl)
+{
+    // Already ensure beforehand that the input k_i modes form a closed triangle
+
+    double Pk_1 = class_obj->pk(k_1,z,use_pk_nl);
+    double Pk_2 = class_obj->pk(k_2,z,use_pk_nl);
+    double Pk_3 = class_obj->pk(k_3,z,use_pk_nl);
+
+    double a_1 = class_obj->get_a_GM_k_z_interp(k_1,z);
+    double a_2 = class_obj->get_a_GM_k_z_interp(k_2,z);
+    double a_3 = class_obj->get_a_GM_k_z_interp(k_3,z);
+
+    double b_1 = class_obj->get_b_GM_k_z_interp(k_1,z);
+    double b_2 = class_obj->get_b_GM_k_z_interp(k_2,z);
+    double b_3 = class_obj->get_b_GM_k_z_interp(k_3,z);
+
+    double c_1 = class_obj->get_c_GM_k_z_interp(k_1,z);
+    double c_2 = class_obj->get_c_GM_k_z_interp(k_2,z);
+    double c_3 = class_obj->get_c_GM_k_z_interp(k_3,z);
 
     double B = 2.0*(F2_eff(k_1,k_2,k_3,a_1,a_2,b_1,b_2,c_1,c_2)*Pk_1*Pk_2
                    +F2_eff(k_2,k_3,k_1,a_2,a_3,b_2,b_3,c_2,c_3)*Pk_2*Pk_3

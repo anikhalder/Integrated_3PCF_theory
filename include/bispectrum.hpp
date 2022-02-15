@@ -83,6 +83,8 @@ double c_GM(const double &n, const double &q);
 
 double B_GM(const double &k_1, const double &k_2, const double &k_3, const double &z, ClassEngine *class_obj, bool use_pk_nl=true);
 
+double B_GM_v2(const double &k_1, const double &k_2, const double &k_3, const double &z, ClassEngine *class_obj, bool use_pk_nl=true);
+
 // ######################################################################################
 
 // bihalofit fitting formula

@@ -371,10 +371,31 @@ int main()
         // class_obj->set_f_NL_equilateral(0);
         // class_obj->set_f_NL_orthogonal(0);
 
+        /*
+
         gettimeofday(&end, nullptr);
         time_taken = (end.tv_sec - start.tv_sec) * 1e6;
         time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
         std::cout << "\nTime taken for setting cosmology and CLASS object creation: " << time_taken << " sec" << std::endl;
+
+        gettimeofday(&start, nullptr);
+
+        //double B = B_GM(8,7.2,1,0.2,class_obj.get(),true);
+        double B = B_GM_v2(8,7.2,1,0.2,class_obj.get(),true);
+
+        //double B = B_GM(1,1,1,0.2,class_obj.get(),true);
+        //double B = B_GM_v2(1,1,1,0.2,class_obj.get(),true);
+
+        std::cout << "Bispectrum value = " << B << std::endl;
+
+        gettimeofday(&end, nullptr);
+        time_taken = (end.tv_sec - start.tv_sec) * 1e6;
+        time_taken = (time_taken + (end.tv_usec - start.tv_usec)) * 1e-6;
+        std::cout << "\nTime taken for bispectrum call: " << time_taken << " sec" << std::endl;
+
+        return 0;
+
+        */
 
         // -------------------------------------------------------------------------------------
 
@@ -409,7 +430,7 @@ int main()
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = true;
+        bool compute_2D_integrated_bispectra_l_z_grid = false;
         bool compute_2D_integrated_bispectra_from_l_z_grid = false;
         bool compute_2D_integrated_3PCF = false;
 
@@ -528,7 +549,7 @@ int main()
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
 
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_v2/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_fast/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
         std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";

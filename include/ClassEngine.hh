@@ -194,6 +194,10 @@ public:
   double get_G_1_k_z_interp(double k, double z); // density growth-only response function G_1(k,z)
   double get_G_K_k_z_interp(double k, double z); // tidal growth-only response function G_K(k,z)
 
+  double get_a_GM_k_z_interp(const double &k, const double &z); 
+  double get_b_GM_k_z_interp(const double &k, const double &z);
+  double get_c_GM_k_z_interp(const double &k, const double &z); 
+
   void bihalofit_compute_pk_norm();
   double bihalofit_pk_lin(const double &k_h, const double &z);
   double bihalofit_window(const double &x, const int &j);
@@ -259,6 +263,10 @@ private:
   Linear_interp_1D k_NL_z_from_lin_Pk_array;  /* k_NL of linear P(k,z) interpolation array */
   Linear_interp_2D G_1_k_z;  /* density growth-only response function G_1(k,z) */
   Linear_interp_2D G_K_k_z;  /* tidal growth-only response function G_K(k,z) */
+
+  Linear_interp_2D a_GM_k_z;  
+  Linear_interp_2D b_GM_k_z; 
+  Linear_interp_2D c_GM_k_z; 
 
   double m_bihalofit_norm;
 

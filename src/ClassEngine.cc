@@ -24,6 +24,7 @@
 
 #include <cosmology_utils.h>
 #include <constants.h>
+#include <bispectrum.hpp>
 
 #include <sys/time.h>
 
@@ -463,10 +464,16 @@ void ClassEngine::compute_bispectrum_helpers()
   if (compute_bihalofit)
     bihalofit_compute_pk_norm();
 
-  double z=0;
-  while (z <= 2.0)
+  double z=0.;
+  while (z <= get_z_max_pk())
   {
     m_z_array.push_back(z);
+    z += 0.05;
+  }
+
+  for (size_t z_idx=0; z_idx<m_z_array.size(); z_idx++)
+  {
+    z = m_z_array.at(z_idx);
     m_k_NL_z_array.push_back(get_k_NL_from_lin_Pk(z));
 
     double R_NL;
@@ -486,8 +493,6 @@ void ClassEngine::compute_bispectrum_helpers()
         m_bihalofit_R_NL_z_array.push_back(0);
         m_bihalofit_n_eff_z_array.push_back(0);
     }
-
-    z = z + 0.05;
   }
 
   k_NL_z_from_lin_Pk_array = Linear_interp_1D(m_z_array, m_k_NL_z_array);
@@ -499,9 +504,7 @@ void ClassEngine::compute_bispectrum_helpers()
   std::vector<double> G_1_vals_array = read_1_column_table("../data/response_functions/G_1_vals.tab");
 
   for (size_t i=0; i<G_1_k_array.size(); i++)
-  {
       G_1_k_array[i] *=  ba.h; // convert to 1/Mpc
-  }
 
   G_1_k_z = Linear_interp_2D(G_1_k_array, G_1_z_array, G_1_vals_array);
 
@@ -510,12 +513,44 @@ void ClassEngine::compute_bispectrum_helpers()
   std::vector<double> G_K_vals_array = read_1_column_table("../data/response_functions/G_K_vals.tab");
 
   for (size_t i=0; i<G_K_k_array.size(); i++)
-  {
       G_K_k_array[i] *=  ba.h;// convert to 1/Mpc
-  }
 
   G_K_k_z = Linear_interp_2D(G_K_k_array, G_K_z_array, G_K_vals_array);
 
+  // pre-computing GM bispectrum fitting functions
+  std::vector<double> m_k_array;
+  double a=-4,b=log10(get_k_max_pk());
+  int num_k_pts = 1500;
+
+  for (int i=0; i<num_k_pts; i++)
+    m_k_array.push_back(pow(10, a + i * (b - a) / (num_k_pts - 1))); // in units of 1/Mpc
+
+  std::vector<double> a_GM_k_z_vals(m_k_array.size()*m_z_array.size(), 0);
+  std::vector<double> b_GM_k_z_vals(m_k_array.size()*m_z_array.size(), 0);
+  std::vector<double> c_GM_k_z_vals(m_k_array.size()*m_z_array.size(), 0);
+
+  for (size_t z_idx=0; z_idx<m_z_array.size(); z_idx++)
+  {
+    z = m_z_array.at(z_idx);
+    double k_NL_z = get_k_NL_from_lin_Pk(z);
+    double sigma8_z = get_sigma8_z(z); 
+
+    for (size_t k_idx=0; k_idx<m_k_array.size(); k_idx++)
+    {
+      double k = m_k_array[k_idx];
+      double n = get_n_eff_from_lin_Pk(k, 0);
+
+      double q = k/k_NL_z;
+
+      a_GM_k_z_vals[k_idx*m_z_array.size()+z_idx] = a_GM(n,q,sigma8_z);
+      b_GM_k_z_vals[k_idx*m_z_array.size()+z_idx] = b_GM(n,q);
+      c_GM_k_z_vals[k_idx*m_z_array.size()+z_idx] = c_GM(n,q);
+    }
+  }
+
+  a_GM_k_z = Linear_interp_2D(m_k_array, m_z_array, a_GM_k_z_vals);
+  b_GM_k_z = Linear_interp_2D(m_k_array, m_z_array, b_GM_k_z_vals);
+  c_GM_k_z = Linear_interp_2D(m_k_array, m_z_array, c_GM_k_z_vals);
 }
 
 void ClassEngine::call_perturb_sources_at_tau(
@@ -1259,6 +1294,22 @@ double ClassEngine::get_G_K_k_z_interp(double k, double z)
     else
         return G_K_k_z.interp(k,z);
 }
+
+double ClassEngine::get_a_GM_k_z_interp(const double &k, const double &z)
+{
+  return a_GM_k_z.interp(k,z);
+}
+
+double ClassEngine::get_b_GM_k_z_interp(const double &k, const double &z)
+{
+  return b_GM_k_z.interp(k,z);
+}
+
+double ClassEngine::get_c_GM_k_z_interp(const double &k, const double &z)
+{
+  return c_GM_k_z.interp(k,z);
+}
+
 
 void ClassEngine::bihalofit_compute_pk_norm()
 {
