@@ -430,7 +430,7 @@ int main()
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = false;
+        bool compute_2D_integrated_bispectra_l_z_grid = true;
         bool compute_2D_integrated_bispectra_from_l_z_grid = false;
         bool compute_2D_integrated_3PCF = false;
 
@@ -549,7 +549,7 @@ int main()
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
 
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_fast/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_v3/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
         std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
