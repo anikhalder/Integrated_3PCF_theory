@@ -434,7 +434,7 @@ int main()
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = true;
+        bool compute_2D_integrated_bispectra_l_z_grid = false;
         bool compute_2D_integrated_bispectra_from_l_z_grid = true;
         bool compute_2D_integrated_3PCF = true;
 
@@ -555,10 +555,10 @@ int main()
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimzed_v2_kmax_zmax_numkpts_deltaz/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_v2_kmax_zmax_numkpts_deltaz/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimzed_v2_kmax_zmax_numkpts_deltaz/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimzed_v2_kmax_zmax_numkpts_deltaz/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_v2_kmax_zmax_numkpts_deltaz/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_v2_kmax_zmax_numkpts_deltaz/";
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
@@ -613,12 +613,11 @@ int main()
 
         l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
 
-        //double a = log10(2);
-        //double b = log10(20000);
-        //double num_pts = 30;
+        // double a = log10(1);
+        // double b = log10(15000);
 
-        //for(int i=0; i<num_pts; i++)
-        //    l_array.push_back(pow(10, a + i * (b - a) / (num_pts - 1)));
+        // for(int i=0; i<num_l_pts; i++)
+        //     l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
 
         if (verbose_print_outs)
             std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
@@ -649,6 +648,9 @@ int main()
         double zs_upper = 2.0;
 
         std::vector<double> z_array;
+        //for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
+        //    z_array.push_back(z);
+
         for (double z = zs_lower; z < zs_upper+delta_z_step; z+=delta_z_step)
             z_array.push_back(z);
 
@@ -689,14 +691,16 @@ int main()
         std::vector<double> B2D_sss_upper_limit = { zs_upper };
 
         std::vector<double> iB_sss_lower_limits = { zs_lower, 1, 1, 0, 0};
-        std::vector<double> iB_sss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
+        std::vector<double> iB_sss_upper_limits = { zs_upper, 25000, 25000, 2*M_PI, 2*M_PI}; // settings for papers
         //std::vector<double> iB_sss_upper_limits = { zs_upper, 30000, 30000, 2*M_PI, 2*M_PI}; // previous settings
 
         std::vector<double> iB_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
         std::vector<double> iB_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
         std::vector<double> iB_sss_4_dim_lower_limits = { 1, 1, 0, 0};
-        std::vector<double> iB_sss_4_dim_upper_limits = { 25000, 25000, 2*M_PI, 2*M_PI};
+        //std::vector<double> iB_sss_4_dim_upper_limits = { 25000, 25000, 2*M_PI, 2*M_PI}; // settings for papers
+        std::vector<double> iB_sss_4_dim_upper_limits = { 20000, 20000, 2*M_PI, 2*M_PI}; // possibly optimized
+
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
 
