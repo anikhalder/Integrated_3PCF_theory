@@ -612,12 +612,13 @@ int main()
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_150_disjoint.tab"); // ell_max = 20000 where 30 points log-spaced (1-200); 120 points log-spaced (230-20000)
 
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
+        l_array = read_1_column_table("../data/ell_arrays/ell_array_80.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
 
-        double a = log10(1);
-        double b = log10(15000);
+        // double a = log10(1);
+        // double b = log10(15000);
 
-        for(int i=0; i<num_l_pts; i++)
-            l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
+        // for(int i=0; i<num_l_pts; i++)
+        //     l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
 
         if (verbose_print_outs)
             std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
