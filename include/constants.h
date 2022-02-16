@@ -27,7 +27,7 @@ const double z_cmb = 1090;
 const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 
 //const double delta_z_step = 0.02; // for making grid
-const double delta_z_step = 0.04; // for making grid ; possibly optimized
+const double delta_z_step = 0.03; // for making grid ; possibly optimized
 
 const int num_trapz_steps = 100; // for trapezoidal integration
 
