@@ -434,7 +434,7 @@ int main()
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = false;
+        bool compute_2D_integrated_bispectra_l_z_grid = true;
         bool compute_2D_integrated_bispectra_from_l_z_grid = true;
         bool compute_2D_integrated_3PCF = true;
 
