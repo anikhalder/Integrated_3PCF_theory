@@ -332,9 +332,13 @@ int main()
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_h/Mpc",15853.0); // previous settings
 
-        pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
+        
+        pars.add("P_k_max_1/Mpc",200.0); // possibly optimized 
 
-        pars.add("z_max_pk",3.5);
+        //pars.add("z_max_pk",3.5); --> current settings for paper
+
+        pars.add("z_max_pk",2.6);// possibly optimized 
 
         // -------------------------
 
@@ -431,8 +435,8 @@ int main()
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
         bool compute_2D_integrated_bispectra_l_z_grid = true;
-        bool compute_2D_integrated_bispectra_from_l_z_grid = false;
-        bool compute_2D_integrated_3PCF = false;
+        bool compute_2D_integrated_bispectra_from_l_z_grid = true;
+        bool compute_2D_integrated_3PCF = true;
 
         // bool compute_2D_integrated_3PCF_area_pre_factors = true;
         // bool compute_2D_power_spectra = true;
@@ -549,10 +553,14 @@ int main()
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_1e6_x2_220_20000_another_run/";
 
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_v3/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimzed_kmax_zmax_numkpts_deltaz/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
-        std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_kmax_zmax_numkpts_deltaz/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_kmax_zmax_numkpts_deltaz/";
+        //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
+        //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";

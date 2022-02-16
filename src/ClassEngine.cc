@@ -468,7 +468,8 @@ void ClassEngine::compute_bispectrum_helpers()
   while (z <= get_z_max_pk())
   {
     m_z_array.push_back(z);
-    z += 0.05;
+    //z += 0.05;
+    z += delta_z_step;
   }
 
   for (size_t z_idx=0; z_idx<m_z_array.size(); z_idx++)
@@ -520,7 +521,7 @@ void ClassEngine::compute_bispectrum_helpers()
   // pre-computing GM bispectrum fitting functions
   std::vector<double> m_k_array;
   double a=-4,b=log10(get_k_max_pk());
-  int num_k_pts = 1500;
+  int num_k_pts = 1000; // possibly optimized
 
   for (int i=0; i<num_k_pts; i++)
     m_k_array.push_back(pow(10, a + i * (b - a) / (num_k_pts - 1))); // in units of 1/Mpc
