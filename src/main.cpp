@@ -555,10 +555,10 @@ int main()
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz03/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz03/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz03/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 

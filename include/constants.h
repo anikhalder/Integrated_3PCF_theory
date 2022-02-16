@@ -29,8 +29,8 @@ const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 const size_t num_l_pts = 90;
 const size_t num_k_pts = 1000;
 
-//const double delta_z_step = 0.02; // for making grid
-const double delta_z_step = 0.03; // for making grid ; possibly optimized
+const double delta_z_step = 0.02; // for making grid
+//const double delta_z_step = 0.025; // for making grid ; possibly optimized
 
 const int num_trapz_steps = 100; // for trapezoidal integration
 
