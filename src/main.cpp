@@ -555,10 +555,10 @@ int main()
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02_ell60/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02_ell50/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell60_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell60_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
@@ -613,8 +613,8 @@ int main()
 
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_80.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
-        l_array = read_1_column_table("../data/ell_arrays/ell_array_60.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
-        //l_array = read_1_column_table("../data/ell_arrays/ell_array_50.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
+        //l_array = read_1_column_table("../data/ell_arrays/ell_array_60.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
+        l_array = read_1_column_table("../data/ell_arrays/ell_array_50.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
 
         // double a = log10(1);
         // double b = log10(15000);
