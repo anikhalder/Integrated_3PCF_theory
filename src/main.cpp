@@ -555,10 +555,10 @@ int main()
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02_ell80/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell80_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell80_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
@@ -611,13 +611,13 @@ int main()
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_157.tab"); // ell_max = 20000 where 157 points log-spaced (1-20000) -- previous settings
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_150_disjoint.tab"); // ell_max = 20000 where 30 points log-spaced (1-200); 120 points log-spaced (230-20000)
 
-        l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
+        //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
 
-        // double a = log10(1);
-        // double b = log10(15000);
+        double a = log10(1);
+        double b = log10(15000);
 
-        // for(int i=0; i<num_l_pts; i++)
-        //     l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
+        for(int i=0; i<num_l_pts; i++)
+            l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
 
         if (verbose_print_outs)
             std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
