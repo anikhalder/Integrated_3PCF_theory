@@ -651,7 +651,7 @@ int main()
         //for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
         //    z_array.push_back(z);
 
-        for (double z = zs_lower; z < zs_upper+delta_z_step; z+=delta_z_step)
+        for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
             z_array.push_back(z);
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
