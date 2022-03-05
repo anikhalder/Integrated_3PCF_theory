@@ -566,8 +566,8 @@ projection_kernel_q_k_zs_fixed::projection_kernel_q_k_zs_fixed(ClassEngine *clas
       m_z_array.push_back(z);
       m_q_k_z_array.push_back(q_k_zs_fixed(z, m_class_obj, m_zs));
 
-      z = z + 0.05;
-  //    z = z + 0.000025;
+      z += 0.05;
+  //    z += 0.000025;
     }
 
     m_q_k_zs_fixed_z_array = Linear_interp_1D(m_z_array, m_q_k_z_array);
@@ -596,7 +596,9 @@ projection_kernel_q_k_zs_distribution::projection_kernel_q_k_zs_distribution(Cla
       m_z_array.push_back(z);
       m_q_k_z_array.push_back(q_k_zs_distribution(z, m_class_obj, m_n_source_of_z, m_z_max));
 
-      z = z + 0.05;
+      //z += 0.05;
+      z += delta_z_step;
+      //z += 0.001;
     }
 
     m_q_k_zs_distribution_z_array = Linear_interp_1D(m_z_array, m_q_k_z_array);
@@ -635,7 +637,7 @@ projection_kernel_q_h::projection_kernel_q_h(ClassEngine *class_obj, const doubl
       m_q_h_without_b_z_array.push_back(q_h_without_b_unnormalised(z, m_class_obj, m_M_min, m_M_max)/m_N_h);
       m_n_h_z_array.push_back(n_h_z(z, m_class_obj, m_M_min, m_M_max));
 
-      z = z + 0.05;
+      z += delta_z_step;
     }
 
     m_q_h_without_b_z_interp_array = Linear_interp_1D(m_z_array, m_q_h_without_b_z_array);
@@ -697,7 +699,7 @@ projection_kernel_q_h_b1::projection_kernel_q_h_b1(ClassEngine *class_obj, const
       m_z_array.push_back(z);
       m_q_h_b1_z_array.push_back(q_h_b1_unnormalised(z, m_class_obj, m_M_min, m_M_max)/m_N_h);
 
-      z = z + 0.05;
+      z += delta_z_step;
     }
 
     m_q_h_b1_z_interp_array = Linear_interp_1D(m_z_array, m_q_h_b1_z_array);
@@ -748,7 +750,7 @@ projection_kernel_q_h_b2::projection_kernel_q_h_b2(ClassEngine *class_obj, const
       m_z_array.push_back(z);
       m_q_h_b2_z_array.push_back(q_h_b2_unnormalised(z, m_class_obj, m_M_min, m_M_max)/m_N_h);
 
-      z = z + 0.05;
+      z += delta_z_step;
     }
 
     m_q_h_b2_z_interp_array = Linear_interp_1D(m_z_array, m_q_h_b2_z_array);
@@ -799,7 +801,7 @@ projection_kernel_q_h_bs2::projection_kernel_q_h_bs2(ClassEngine *class_obj, con
       m_z_array.push_back(z);
       m_q_h_bs2_z_array.push_back(q_h_bs2_unnormalised(z, m_class_obj, m_M_min, m_M_max)/m_N_h);
 
-      z = z + 0.05;
+      z += delta_z_step;
     }
 
     m_q_h_bs2_z_interp_array = Linear_interp_1D(m_z_array, m_q_h_bs2_z_array);

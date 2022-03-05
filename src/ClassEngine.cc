@@ -468,7 +468,7 @@ void ClassEngine::compute_bispectrum_helpers()
   while (z <= get_z_max_pk())
   {
     m_z_array.push_back(z);
-    z += 0.05;
+    z += 0.01;
     //z += delta_z_step;
   }
 

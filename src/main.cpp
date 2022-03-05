@@ -60,8 +60,8 @@ int main()
         }
     }
 
-    const int thread_count = static_cast<int>(omp_get_max_threads())-10;
-    //const int thread_count = 120;
+    //const int thread_count = static_cast<int>(omp_get_max_threads())-10;
+    const int thread_count = 100;
     
     if (verbose_print_outs)
         std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
@@ -334,11 +334,11 @@ int main()
 
         //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
         
-        pars.add("P_k_max_1/Mpc",200.0); // possibly optimized 
+        pars.add("P_k_max_1/Mpc",k_max); // possibly optimized 
 
         //pars.add("z_max_pk",3.5); --> current settings for paper
 
-        pars.add("z_max_pk",2.6);// possibly optimized 
+        pars.add("z_max_pk",z_max);// possibly optimized 
 
         // -------------------------
 
@@ -428,9 +428,9 @@ int main()
         bool compute_halo_quantities_tables = false;
 
         bool compute_2D_integrated_3PCF_area_pre_factors = false;
-        bool compute_2D_power_spectra = false;
+        bool compute_2D_power_spectra = true;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = false;
+        bool compute_2D_2PCF = true;
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
@@ -555,15 +555,22 @@ int main()
         //std::string iB_l_z_folder = "./iB_l_z_W75W75W75/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_repeat_run/";
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02_ell50/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02_ell50/";
         //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_tree/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
+        //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_ell50_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_15000_tabulatedGM_run_optimized_kmax_zmax_numkpts_deltaz02/";
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
         //std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
         //std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
+
+        //std::string spectra_folder = "./test_DESY3_redmagic_lens_BIN1_gg_spectra/";
+        //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
+
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_trapz_iB_l_z_spectra/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_trapz_iB_l_z_correlations/";
 
         // -------------------------------------------------------------------------------------
 
@@ -614,13 +621,13 @@ int main()
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_80.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_60.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
-        l_array = read_1_column_table("../data/ell_arrays/ell_array_50.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
+        //l_array = read_1_column_table("../data/ell_arrays/ell_array_50.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
 
-        // double a = log10(1);
-        // double b = log10(15000);
+        double a = log10(2);
+        double b = log10(15000);
 
-        // for(int i=0; i<num_l_pts; i++)
-        //     l_array.push_back(floor(pow(10, a + i * (b - a) / (num_l_pts - 1))));
+        for(int i=0; i<num_l_pts; i++)
+             l_array.push_back(pow(10, a + i * (b - a) / (num_l_pts - 1)));
 
         if (verbose_print_outs)
             std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
@@ -654,8 +661,14 @@ int main()
         //for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
         //    z_array.push_back(z);
 
-        for (double z = zs_lower; z <= zs_upper+2*delta_z_step; z+=delta_z_step)
-            z_array.push_back(z);
+        //for (double z = zs_lower; z <= zs_upper+2*delta_z_step; z+=delta_z_step)
+        //    z_array.push_back(z);
+
+        a = 0.0;
+        b = 2.0;
+
+        for(int i=0; i<num_z_pts; i++)
+             z_array.push_back(a + i * (b - a) / (num_z_pts - 1));
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
         std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
@@ -669,23 +682,31 @@ int main()
         bool do_cross_fields = true; // previous settings
         //bool do_cross_fields = false;
 
-        std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs1));
-        std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs2));
+        //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs1));
+        //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs2));
+
+        // std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
+        // for (size_t i = 0; i < zs_bins.size(); i++)
+        //     qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
         ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
-        //std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
-        //assert(!nofz_s1_table.empty());
-        //normalise_nofz(nofz_s1_table);
-        //Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
+        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
+        assert(!nofz_s1_table.empty());
+        normalise_nofz(nofz_s1_table);
+        Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
         ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
-        //std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
-        //assert(!nofz_s2_table.empty());
-        //normalise_nofz(nofz_s2_table);
-        //Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
+        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
+        assert(!nofz_s2_table.empty());
+        normalise_nofz(nofz_s2_table);
+        Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
 
-        //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs1));
-        //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs2));
+        std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
+        std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+
+        std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
         std::vector<double> P_ss_upper_limit = { zs_upper };
@@ -700,15 +721,10 @@ int main()
         std::vector<double> iB_sss_angle_averaged_lower_limits = { 0, zs_lower, 1, 1, 0, 0};
         std::vector<double> iB_sss_angle_averaged_upper_limits = { 2*M_PI, zs_upper, 25000, 25000, 2*M_PI, 2*M_PI};
 
-        std::vector<double> iB_sss_4_dim_lower_limits = { 1, 1, 0, 0};
+        //std::vector<double> iB_sss_4_dim_lower_limits = { 1, 1, 0, 0};
         //std::vector<double> iB_sss_4_dim_upper_limits = { 25000, 25000, 2*M_PI, 2*M_PI}; // settings for papers
+        std::vector<double> iB_sss_4_dim_lower_limits = { 0.1, 0.1, 0, 0};// possibly optimized
         std::vector<double> iB_sss_4_dim_upper_limits = { 20000, 20000, 2*M_PI, 2*M_PI}; // possibly optimized
-
-
-        std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-
-        for (size_t i = 0; i < zs_bins.size(); i++)
-            qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
         // --------------------------------------------------------
         // Lens (halo/galaxy) correlations settings
@@ -719,8 +735,10 @@ int main()
 //        double zl_upper = 0.36;
 
         // redmagicLens1
-        double zl_lower = 0.15;
-        double zl_upper = 0.35;
+        //double zl_lower = 0.15;
+        //double zl_upper = 0.35;
+        double zl_lower = 0.1;
+        double zl_upper = 0.5;
 
         double zl1 = (zl_upper - zl_lower) / 2.0;
         double M_halos_lower = pow(10,13.5)/h; // [M_sun]
@@ -760,12 +778,16 @@ int main()
         std::vector<std::shared_ptr<projection_kernel>> ql_bs2_kernels;
         std::vector<std::shared_ptr<projection_kernel>> ql_kernels;
 
+        std::vector<std::shared_ptr<projection_kernel>> qq_b_kernels;
+
         for (size_t i = 0; i < zl_bins.size(); i++)
         {
             ql_b1_kernels.emplace_back(new projection_kernel_q_h_b1(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
             ql_b2_kernels.emplace_back(new projection_kernel_q_h_b2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
             ql_bs2_kernels.emplace_back(new projection_kernel_q_h_bs2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
             ql_kernels.emplace_back(new projection_kernel_q_h(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
+
+            qq_b_kernels.emplace_back(new projection_kernel_q_m(class_obj.get(), &nofz_l1));
         }
         double N = std::dynamic_pointer_cast<projection_kernel_q_h_b1>(ql_b1_kernels.at(0))->get_N_h();
         double n_bar = std::dynamic_pointer_cast<projection_kernel_q_h_b1>(ql_b1_kernels.at(0))->get_n_h(); // [Mpc^-3]
@@ -789,10 +811,11 @@ int main()
         //filename_P = "P_kk.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
         filename_P = "P_ss.dat"; // P_kk and P_ss (kappa/shear) power spectra are the same but not their 2PCF!
         //filename_P = "P_hh.dat"; // with bias
+        //filename_P = "P_gg.dat"; // without bias
 
-        std::string P_integration_algorithm = "qag"; // -- current settings for papers
+        //std::string P_integration_algorithm = "qag"; // -- current settings for papers
         //std::string P_integration_algorithm = "mc";
-        //std::string P_integration_algorithm = "hcubature"; // -- previous settings
+        std::string P_integration_algorithm = "hcubature"; // -- previous settings
 
         // -------------------------
 
@@ -849,7 +872,7 @@ int main()
             calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
             
             //calls_iB_initial_4_dim = 2*calls_1e5;
-            calls_iB_initial_4_dim = 1*calls_1e5;
+            calls_iB_initial_4_dim = 5*calls_1e5;
         }
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
@@ -1586,6 +1609,45 @@ int main()
                     }
                 }
 
+                else if (filename_P == "P_gg.dat")
+                {
+                    size_t corr_idx = 0;
+
+                    for (size_t a = 0; a < zl_bins.size() ; a++) // only auto-P for lens bins
+                    {
+                        assert(corr_idx != num_2pt_ll_correlations);
+
+                        if (P_integration_algorithm == "qag")
+                        {
+                            // b1 term
+                            P_ll_array[0][corr_idx][idx] = P2D_z_qag("P", l_array.at(idx), class_obj.get(), use_pk_nl, qq_b_kernels.at(a).get(), qq_b_kernels.at(a).get(), P_ll_lower_limit.at(0), P_ll_upper_limit.at(0));
+
+                            // Shot noise term
+                            P_ll_array[1][corr_idx][idx] = 0; // TODO
+                        }
+
+                        else if (P_integration_algorithm == "mc")
+                        {
+                            // b1 term
+                            P_ll_array[0][corr_idx][idx] = P2D_z_mc("P", l_array.at(idx), class_obj.get(), use_pk_nl, qq_b_kernels.at(a).get(), qq_b_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit, T, "vegas");
+
+                            // Shot noise term
+                            P_ll_array[1][corr_idx][idx] = 0; // TODO
+                        }
+
+                        else if (P_integration_algorithm == "hcubature")
+                        {
+                            // b1 term
+                            P_ll_array[0][corr_idx][idx] = P2D_z_hcubature("P", l_array.at(idx), class_obj.get(), use_pk_nl, qq_b_kernels.at(a).get(), qq_b_kernels.at(a).get(), P_ll_lower_limit, P_ll_upper_limit);
+
+                            // Shot noise term
+                            P_ll_array[1][corr_idx][idx] = 0; // TODO
+                        }
+
+                        corr_idx++;
+                    }
+                }
+
                 if (verbose_print_outs)
                     std::cout << ++counter << " " << l_array.at(idx) << std::endl;
             }
@@ -1623,7 +1685,7 @@ int main()
                 }
             }
 
-           else if (filename_P == "P_hh.dat") // only auto-P for lens bins
+           else if (filename_P == "P_hh.dat" || filename_P == "P_gg.dat") // only auto-P for lens bins
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -1685,7 +1747,7 @@ int main()
                     }
                 }
 
-                else if (filename_P == "P_hh.dat")
+                else if (filename_P == "P_hh.dat" || filename_P == "P_gg.dat")
                 {
                     size_t corr_idx = 0;
                     for (size_t a = 0; a < zl_bins.size() ; a++)
@@ -1830,7 +1892,7 @@ int main()
                 }
             }
 
-            else if (filename_P == "P_hh.dat")
+            else if (filename_P == "P_hh.dat" || filename_P == "P_gg.dat")
             {
                 size_t corr_idx = 0;
                 for (size_t a = 0; a < zl_bins.size() ; a++)

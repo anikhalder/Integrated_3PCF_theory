@@ -13,9 +13,9 @@ void C_ells_spherical_sky(const std::vector<double> &l_array, const std::vector<
 
     // compute interpolated C_ells array for ells = 0,1,...,l_max-1
 
-    Linear_interp_1D P_interpolated_obj(l_array, P); // l is assumed to start from 1
+    Linear_interp_1D P_interpolated_obj(l_array, P); // l is assumed to start from 2 or below
 
-    int l_max = int(l_array.back());
+    int l_max = floor(l_array.back());
 
     for (int l = 0; l <= l_max-1; l++)
     {

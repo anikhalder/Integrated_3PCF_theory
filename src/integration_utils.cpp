@@ -29,7 +29,8 @@ void qag_1D_integration_abs_rel(double (*func)(double, void*), void *args, const
     integrand.function = func;
     integrand.params = args;
 
-    gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m04, error_m04, workspace_size, 6, work_ptr, &result, &error);
+    //gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m04, error_m04, workspace_size, 6, work_ptr, &result, &error);
+    gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m03, error_m03, workspace_size, 6, work_ptr, &result, &error);
 
     gsl_integration_workspace_free(work_ptr);
 }
@@ -90,7 +91,7 @@ void monte_carlo_vegas_integration(gsl_monte_function *G, std::vector<double> &l
     gsl_rng *r = gsl_rng_alloc(T);
     gsl_monte_vegas_state *s = gsl_monte_vegas_alloc (dim);
 
-    gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, 2*calls_1e4, r, s, &result, &error); // to warm up the grid
+    gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, calls_1e4, r, s, &result, &error); // to warm up the grid
 
     gsl_monte_vegas_integrate (G, lower_limits.data(), upper_limits.data(), dim, calls, r, s, &result, &error);
 //    do

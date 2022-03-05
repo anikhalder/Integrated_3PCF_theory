@@ -26,11 +26,16 @@ const double z_cmb = 1090;
 
 const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 
-const size_t num_l_pts = 80;
-const size_t num_k_pts = 1000;
+const double pk_max = 250.0; // 1/Mpc
+const double z_max = 2.1;
 
-const double delta_z_step = 0.02; // for making grid
-//const double delta_z_step = 0.025; // for making grid ; possibly optimized
+const size_t num_l_pts = 60; // in iB(l,z) grid
+const size_t num_z_pts = 50; // in iB(l,z) grid
+const size_t num_k_pts = 1000; // in (k,z) grid
+
+//const double delta_z_step = 0.05;
+const double delta_z_step = 0.01;
+//const double delta_z_step = 0.025; // possibly optimized
 
 const int num_trapz_steps = 100; // for trapezoidal integration
 
