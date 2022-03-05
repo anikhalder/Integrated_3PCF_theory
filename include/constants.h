@@ -26,7 +26,7 @@ const double z_cmb = 1090;
 
 const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 
-const double pk_max = 250.0; // 1/Mpc
+const double k_max = 250.0; // 1/Mpc
 const double z_max = 2.1;
 
 const size_t num_l_pts = 60; // in iB(l,z) grid

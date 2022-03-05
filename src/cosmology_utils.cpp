@@ -566,7 +566,7 @@ projection_kernel_q_k_zs_fixed::projection_kernel_q_k_zs_fixed(ClassEngine *clas
       m_z_array.push_back(z);
       m_q_k_z_array.push_back(q_k_zs_fixed(z, m_class_obj, m_zs));
 
-      z += 0.05;
+      z += delta_z_step;
   //    z += 0.000025;
     }
 
