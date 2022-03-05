@@ -427,7 +427,7 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = false;
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
         bool compute_2D_power_spectra = true;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
         bool compute_2D_2PCF = true;
@@ -568,9 +568,9 @@ int main()
         //std::string spectra_folder = "./test_DESY3_redmagic_lens_BIN1_gg_spectra/";
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_trapz_iB_l_z_spectra/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_trapz_iB_l_z_correlations/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_1e5/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_1e5_trapz_iB_l_z_spectra/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_1e5_trapz_iB_l_z_correlations/";
 
         // -------------------------------------------------------------------------------------
 
@@ -871,8 +871,8 @@ int main()
             //calls_iB_initial = 2*calls_1e6; // -- current settings for papers
             calls_iB_initial = 1*calls_1e6; // maybe useful when doing for halos or for faster checks
             
-            //calls_iB_initial_4_dim = 2*calls_1e5;
-            calls_iB_initial_4_dim = 5*calls_1e5;
+            calls_iB_initial_4_dim = 1*calls_1e5;
+            //calls_iB_initial_4_dim = 5*calls_1e5;
         }
         else if (iB_integration_algorithm == "hcubature")
             calls_iB_initial = calls_1e7;
