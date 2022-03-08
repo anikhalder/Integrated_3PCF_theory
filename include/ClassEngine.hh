@@ -273,13 +273,14 @@ private:
   Linear_interp_1D bihalofit_R_NL_z_array;  /* R_NL(z) bihalofit interpolation array */
   Linear_interp_1D bihalofit_n_eff_z_array;  /* n_eff(z) bihalofit interpolation array */
 
+  // primordial non-Gaussianity
+
   double m_f_NL_local;
   double m_f_NL_equilateral;
   double m_f_NL_orthogonal;
 
 protected:
  
-  
 };
 
 #endif

@@ -86,11 +86,14 @@ double pk_lin_manual(const double &k, const double &z, ClassEngine *class_obj, L
 
 double q_m(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_m_of_z);
 
-struct params_W_k_zs_distribution_integrand { double z; ClassEngine *class_obj; Linear_interp_1D *n_source_of_z;};
+struct params_W_k_zs_distribution_integrand { double z; ClassEngine *class_obj; Linear_interp_1D *n_source_of_z; double delta_photoz;};
 
 double W_k_zs_distribution_integrand(double zs, void *params);
 
 double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max);
+
+double q_k_zs_distribution_f_IA_NLA_delta_photoz(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max, 
+                                                 const double &delta_photoz, const double &A_IA_0_NLA, const double &alpha_IA_0_NLA);
 
 double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs);
 
@@ -157,11 +160,16 @@ class projection_kernel_q_k_zs_distribution : public projection_kernel
     ClassEngine *m_class_obj;
     Linear_interp_1D *m_n_source_of_z;
     double m_z_max;
+    double m_delta_photoz;
+    double m_A_IA_0_NLA;
+    double m_alpha_IA_0_NLA;
 
     Linear_interp_1D m_q_k_zs_distribution_z_array;
 
 public:
     projection_kernel_q_k_zs_distribution(ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max);
+    projection_kernel_q_k_zs_distribution(ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max, 
+                                          const double &delta_photoz, const double &A_IA_0_NLA, const double &alpha_IA_0_NLA);
 
     double evaluate(const double &z);
 

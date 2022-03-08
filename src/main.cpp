@@ -75,7 +75,10 @@ int main()
               "_minus_2step_w_a.dat", "_minus_1step_w_a.dat", "_plus_1step_w_a.dat", "_plus_2step_w_a.dat",
               "_minus_2step_eta_0.dat", "_minus_1step_eta_0.dat", "_plus_1step_eta_0.dat", "_plus_2step_eta_0.dat",
               "_minus_2step_c_min.dat", "_minus_1step_c_min.dat", "_plus_1step_c_min.dat", "_plus_2step_c_min.dat",
-              "_minus_2step_h.dat", "_minus_1step_h.dat", "_plus_1step_h.dat", "_plus_2step_h.dat"};
+              "_minus_2step_h.dat", "_minus_1step_h.dat", "_plus_1step_h.dat", "_plus_2step_h.dat",
+              "_minus_2step_delta_photoz.dat", "_minus_1step_delta_photoz.dat", "_plus_1step_delta_photoz.dat", "_plus_2step_delta_photoz.dat",
+              "_minus_2step_A_IA_0_NLA.dat", "_minus_1step_A_IA_0_NLA.dat", "_plus_1step_A_IA_0_NLA.dat", "_plus_2step_A_IA_0_NLA.dat",
+              "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
     for (size_t i=0; i<1; i++)
@@ -173,7 +176,7 @@ int main()
         double w_a = 0.0;
         double eta_0 = 0.603; // emu_dmonly (fiducial)
         double c_min = 3.13; // emu_dmonly (fiducial)
-
+      
         //double eta_0 = 0.64; // owls_dmonly
         //double c_min = 3.43; // owls_dmonly
 
@@ -182,6 +185,15 @@ int main()
 
         // double Omega_b = omega_b/h/h;
         // double Omega_cdm = omega_cdm/h/h;
+
+        // lensing systematic parameters
+
+        double delta_photoz_1 = 0.0;
+        double delta_photoz_2 = 0.0;
+
+        double delta_photoz = 0.5; // photoz uncertainty
+        double A_IA_0_NLA = 1.0; // IA parameter (fiducial)
+        double alpha_IA_0_NLA = 0.5; // IA parameter (fiducial)
 
         // Useful only for Fisher forecasting i.e. i>0
 //        if (i==1)
@@ -256,6 +268,30 @@ int main()
             h *= 1.02;
         else if (i==32)
             h *= 1.04;
+        else if (i==33)
+            delta_photoz -= 0.1;
+        else if (i==34)
+            delta_photoz -= 0.05;
+        else if (i==35)
+            delta_photoz += 0.05;
+        else if (i==36)
+            delta_photoz += 0.1;
+        else if (i==37)
+            A_IA_0_NLA *= 0.9;
+        else if (i==38)
+            A_IA_0_NLA *= 0.95;
+        else if (i==39)
+            A_IA_0_NLA *= 1.05;
+        else if (i==40)
+            A_IA_0_NLA *= 1.1;
+        else if (i==41)
+            alpha_IA_0_NLA -= 0.3;
+        else if (i==42)
+            alpha_IA_0_NLA -= 0.15;
+        else if (i==43)
+            alpha_IA_0_NLA += 0.15;
+        else if (i==44)
+            alpha_IA_0_NLA += 0.3;
 
         double omega_b = Omega_b*h*h;
         double omega_cdm = Omega_cdm*h*h;
@@ -334,11 +370,11 @@ int main()
 
         //pars.add("P_k_max_1/Mpc",3000.0); // for l1 + l2 = 50000 this is good enough (for lowest z=0.005) --> current settings for paper
         
-        pars.add("P_k_max_1/Mpc",k_max); // possibly optimized 
+        pars.add("P_k_max_1/Mpc",pk_k_max); // possibly optimized 
 
         //pars.add("z_max_pk",3.5); --> current settings for paper
 
-        pars.add("z_max_pk",z_max);// possibly optimized 
+        pars.add("z_max_pk",pk_z_max);// possibly optimized 
 
         // -------------------------
 
@@ -434,7 +470,7 @@ int main()
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = true;
+        bool compute_2D_integrated_bispectra_l_z_grid = false;
         bool compute_2D_integrated_bispectra_from_l_z_grid = true;
         bool compute_2D_integrated_3PCF = true;
 
@@ -568,9 +604,9 @@ int main()
         //std::string spectra_folder = "./test_DESY3_redmagic_lens_BIN1_gg_spectra/";
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_1e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_1e5_trapz_iB_l_z_spectra/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_1e5_trapz_iB_l_z_correlations/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_spectra_change_params/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_correlations_change_params/";
 
         // -------------------------------------------------------------------------------------
 
@@ -690,13 +726,13 @@ int main()
         //     qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
         ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
-        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
+        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2.0);
         assert(!nofz_s1_table.empty());
         normalise_nofz(nofz_s1_table);
         Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
         ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
-        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
+        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2.0);
         assert(!nofz_s2_table.empty());
         normalise_nofz(nofz_s2_table);
         Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
@@ -705,8 +741,11 @@ int main()
         std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
         std::vector<double> P_ss_upper_limit = { zs_upper };

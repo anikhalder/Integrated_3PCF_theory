@@ -354,7 +354,10 @@ double W_k_zs_distribution_integrand(double zs, void *params)
     double chi_z = p->class_obj->get_chi_z(p->z);
     double chi_zs = p->class_obj->get_chi_z(zs);
 
-    return p->n_source_of_z->interp(zs) * (chi_zs - chi_z) / chi_zs;
+    if (p->delta_photoz == 0)
+        return p->n_source_of_z->interp(zs) * (chi_zs - chi_z) / chi_zs;
+    else
+        return p->n_source_of_z->interp(zs + p->delta_photoz) * (chi_zs - chi_z) / chi_zs;
 }
 
 double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max)
@@ -369,7 +372,7 @@ double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_inter
      * Here, denote z' as zs */
 
     //parameters in integrand
-    params_W_k_zs_distribution_integrand args = {z, class_obj, n_source_of_z};
+    params_W_k_zs_distribution_integrand args = {z, class_obj, n_source_of_z, 0.0};
 
     double W_k_z = 0, error = 0;
 
@@ -378,7 +381,35 @@ double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_inter
     double chi_z = class_obj->get_chi_z(z);
     double H_0 = class_obj->get_H_z(0);
 
-    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * W_k_z;
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1.+z) * chi_z * W_k_z;
+}
+
+double q_k_zs_distribution_f_IA_NLA_delta_photoz(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max, 
+                                                 const double &delta_photoz, const double &A_IA_0_NLA, const double &alpha_IA_0_NLA)
+{
+
+    /* equations (10.42) and (10.41) combined of https://edoc.ub.uni-muenchen.de/23401/1/Friedrich_Oliver.pdf
+     * or equations (6.21) and (6.19) combined of https://arxiv.org/pdf/astro-ph/9912508.pdf
+     *
+     * q_k(x) = 3/2 H0^2 Omega0_m x/a(x) W_k(x) , where W_k(x) = \int_x^x_max dx'g(x') (x'-x)/x'
+     * => q_k(x) = 3/2 H0^2 Omega0_m x/a(x) \int_x^x_max dx'g(x') (x'-x)/x'
+     * => q_k(x(z)) = 3/2 H0^2 Omega0_m (1+z) x(z) \int_z^z_max dz'/H(z') g(x(z')) (x(z')-x(z))/x(z')
+     * Here, denote z' as zs */
+
+    //parameters in integrand
+    params_W_k_zs_distribution_integrand args = {z, class_obj, n_source_of_z, delta_photoz};
+
+    double W_k_z = 0, error = 0;
+
+    qag_1D_integration_abs_rel(&W_k_zs_distribution_integrand, static_cast<void *>(&args), z, z_max, 5*calls_1e3, W_k_z, error);
+
+    double chi_z = class_obj->get_chi_z(z);
+    double H_0 = class_obj->get_H_z(0);
+
+    double q_k_z = 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * W_k_z;
+    double f_IA_NLA_z = - A_IA_0_NLA*pow((1.+z)/1.62,alpha_IA_0_NLA)*0.0134*class_obj->get_D_plus_z(0)/class_obj->get_D_plus_z(z);
+
+    return  q_k_z + f_IA_NLA_z*n_source_of_z->interp(z+delta_photoz)*class_obj->get_H_z(z);
 }
 
 double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs)
@@ -394,7 +425,7 @@ double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs)
     double chi_zs = class_obj->get_chi_z(zs);
     double H_0 = class_obj->get_H_z(0);
 
-    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_zs - chi_z) / chi_zs;
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1.+z) * chi_z * (chi_zs - chi_z) / chi_zs;
 }
 
 double cmb_lensing_convergence_kernel(const double &z, ClassEngine *class_obj)
@@ -408,7 +439,7 @@ double cmb_lensing_convergence_kernel(const double &z, ClassEngine *class_obj)
     double chi_z_cmb = class_obj->get_chi_z(z_cmb);
     double H_0 = class_obj->get_H_z(0);
 
-    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * (chi_z_cmb - chi_z) / chi_z_cmb; // / class_obj->get_Hz(z)  (should this H(z) be here?)
+    return 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1.+z) * chi_z * (chi_z_cmb - chi_z) / chi_z_cmb; // / class_obj->get_Hz(z)  (should this H(z) be here?)
 }
 
 double q_h_b1_integrand(double M, void *params)
@@ -585,7 +616,7 @@ projection_kernel_q_k_zs_fixed::~projection_kernel_q_k_zs_fixed()
 }
 
 projection_kernel_q_k_zs_distribution::projection_kernel_q_k_zs_distribution(ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max) :
-    m_class_obj(class_obj), m_n_source_of_z(n_source_of_z), m_z_max(z_max)
+    m_class_obj(class_obj), m_n_source_of_z(n_source_of_z), m_z_max(z_max), m_delta_photoz(0.0), m_A_IA_0_NLA(0.0), m_alpha_IA_0_NLA(0.0)
 {
     std::vector<double> m_z_array;
     std::vector<double> m_q_k_z_array;
@@ -599,6 +630,24 @@ projection_kernel_q_k_zs_distribution::projection_kernel_q_k_zs_distribution(Cla
       //z += 0.05;
       z += delta_z_step;
       //z += 0.001;
+    }
+
+    m_q_k_zs_distribution_z_array = Linear_interp_1D(m_z_array, m_q_k_z_array);
+}
+
+projection_kernel_q_k_zs_distribution::projection_kernel_q_k_zs_distribution(ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max, const double &delta_photoz, const double &A_IA_0_NLA, const double &alpha_IA_0_NLA) :
+    m_class_obj(class_obj), m_n_source_of_z(n_source_of_z), m_z_max(z_max), m_delta_photoz(delta_photoz), m_A_IA_0_NLA(A_IA_0_NLA), m_alpha_IA_0_NLA(alpha_IA_0_NLA)
+{
+    std::vector<double> m_z_array;
+    std::vector<double> m_q_k_z_array;
+
+    double z=0;
+    while (z <= m_z_max)
+    {
+      m_z_array.push_back(z);
+      m_q_k_z_array.push_back(q_k_zs_distribution_f_IA_NLA_delta_photoz(z, m_class_obj, m_n_source_of_z, m_z_max, m_delta_photoz, m_A_IA_0_NLA, m_alpha_IA_0_NLA));
+
+      z += delta_z_step;
     }
 
     m_q_k_zs_distribution_z_array = Linear_interp_1D(m_z_array, m_q_k_z_array);

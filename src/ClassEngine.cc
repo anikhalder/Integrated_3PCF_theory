@@ -130,6 +130,8 @@ ClassEngine::ClassEngine(const ClassParams& pars, bool verbose): cl(0),dofree(tr
 
   compute_bispectrum_helpers();
 
+  // primordial non-Gaussianity
+
   m_f_NL_local = 0;
   m_f_NL_equilateral = 0;
   m_f_NL_orthogonal = 0;
@@ -468,8 +470,7 @@ void ClassEngine::compute_bispectrum_helpers()
   while (z <= get_z_max_pk())
   {
     m_z_array.push_back(z);
-    z += 0.05;
-    //z += delta_z_step;
+    z += delta_z_step;
   }
 
   for (size_t z_idx=0; z_idx<m_z_array.size(); z_idx++)
