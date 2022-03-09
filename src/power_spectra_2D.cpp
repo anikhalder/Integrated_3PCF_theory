@@ -73,7 +73,8 @@ double P2D_z_qag(const std::string &key, const double &l, ClassEngine *class_obj
     //parameters in integrand
     params_P2D_z_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
 
-    qag_1D_integration(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    //qag_1D_integration(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    qag_1D_integration_abs_rel(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
 
     return result;
 }
