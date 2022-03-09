@@ -745,11 +745,11 @@ int main()
         //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
 
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
         std::cout << "Printing lensing kernel" << std::endl;
         double delta_z = (2.0-0)/num_trapz_steps;
