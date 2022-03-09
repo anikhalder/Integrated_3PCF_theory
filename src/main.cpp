@@ -81,8 +81,8 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    for (size_t i=33; i<45; i++)
-    //for (size_t i=0; i<1; i++)
+    //for (size_t i=33; i<45; i++)
+    for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
@@ -606,8 +606,8 @@ int main()
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
         std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
 
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
@@ -754,7 +754,7 @@ int main()
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
-        /*
+        
         std::cout << "Printing lensing kernel" << std::endl;
         double delta_z = (zs_upper-zs_lower)/num_trapz_steps;
 
@@ -767,7 +767,7 @@ int main()
             std::cout << z << " " << q_1 << " " << q_2 << std::endl;
         }
         std::cout << "Printing done" << std::endl;
-        */
+        
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
         std::vector<double> P_ss_upper_limit = { zs_upper };
