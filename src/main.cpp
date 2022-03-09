@@ -192,9 +192,9 @@ int main()
         double delta_photoz_1 = 0.0;
         double delta_photoz_2 = 0.0;
 
-        double delta_photoz = 0.5; // photoz uncertainty
-        double A_IA_0_NLA = 1.0; // IA parameter (fiducial)
-        double alpha_IA_0_NLA = 0.5; // IA parameter (fiducial)
+        double delta_photoz = 0.01; // photoz uncertainty (fiducial)
+        double A_IA_0_NLA = 1.0; // IA amplitude parameter (fiducial)
+        double alpha_IA_0_NLA = 0.1; // IA power law-slope parameter (fiducial)
 
         // Useful only for Fisher forecasting i.e. i>0
 //        if (i==1)
@@ -270,13 +270,13 @@ int main()
         else if (i==32)
             h *= 1.04;
         else if (i==33)
-            delta_photoz -= 0.1;
+            delta_photoz *= 0.9;
         else if (i==34)
-            delta_photoz -= 0.05;
+            delta_photoz *= 0.95;
         else if (i==35)
-            delta_photoz += 0.05;
+            delta_photoz *= 1.05;
         else if (i==36)
-            delta_photoz += 0.1;
+            delta_photoz *= 1.1;
         else if (i==37)
             A_IA_0_NLA *= 0.9;
         else if (i==38)
@@ -286,13 +286,13 @@ int main()
         else if (i==40)
             A_IA_0_NLA *= 1.1;
         else if (i==41)
-            alpha_IA_0_NLA -= 0.3;
+            alpha_IA_0_NLA *= 0.9;
         else if (i==42)
-            alpha_IA_0_NLA -= 0.15;
+            alpha_IA_0_NLA *= 0.95;
         else if (i==43)
-            alpha_IA_0_NLA += 0.15;
+            alpha_IA_0_NLA *= 1.05;
         else if (i==44)
-            alpha_IA_0_NLA += 0.3;
+            alpha_IA_0_NLA *= 1.1;
 
         double omega_b = Omega_b*h*h;
         double omega_cdm = Omega_cdm*h*h;
@@ -606,8 +606,8 @@ int main()
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
         std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_spectra_change_params_P_mc/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_correlations_change_params_P_mc/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc/";
 
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
