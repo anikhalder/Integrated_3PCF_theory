@@ -755,7 +755,7 @@ int main()
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, 0.0, 0.0));
 
         std::cout << "Printing lensing kernel" << std::endl;
-        double delta_z = (zs_lower-zs_upper)/num_trapz_steps;
+        double delta_z = (zs_upper-zs_lower)/num_trapz_steps;
 
         for (int i = 0; i <= num_trapz_steps; i++)
         {
