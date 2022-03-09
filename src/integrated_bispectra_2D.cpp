@@ -515,6 +515,9 @@ double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, doub
     {
         double z = z_lower_limit + i*delta_z;
 
+        if (z=0.0)
+            continue; // since chi=0 and hence chi_inv is undefined at z=0
+
         double q_1 = q1->evaluate(z);
         double q_2 = q2->evaluate(z);
         double q_3 = q3->evaluate(z);
