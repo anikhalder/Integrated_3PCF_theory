@@ -751,8 +751,8 @@ int main()
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, 0.0, A_IA_0_NLA, 0.0));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, 0.0, A_IA_0_NLA, 0.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, 0.0, A_IA_0_NLA, alpha_IA_0_NLA));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, 0.0, A_IA_0_NLA, alpha_IA_0_NLA));
 
         std::cout << "Printing lensing kernel" << std::endl;
         double delta_z = (zs_upper-zs_lower)/num_trapz_steps;
