@@ -81,8 +81,8 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    //for (size_t i=33; i<45; i++)
-    for (size_t i=0; i<1; i++)
+    for (size_t i=33; i<45; i++)
+    //for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
