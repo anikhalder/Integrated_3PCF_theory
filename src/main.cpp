@@ -81,7 +81,8 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    for (size_t i=33; i<45; i++)
+    //for (size_t i=33; i<45; i++)
+    for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
@@ -605,8 +606,8 @@ int main()
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
         std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_spectra_change_params/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_correlations_change_params/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_spectra_change_params_P_mc/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_correlations_change_params_P_mc/";
 
         // -------------------------------------------------------------------------------------
 
@@ -853,8 +854,8 @@ int main()
         //filename_P = "P_gg.dat"; // without bias
 
         //std::string P_integration_algorithm = "qag"; // -- current settings for papers
-        //std::string P_integration_algorithm = "mc";
-        std::string P_integration_algorithm = "hcubature"; // -- previous settings
+        std::string P_integration_algorithm = "mc";
+        //std::string P_integration_algorithm = "hcubature"; // -- previous settings
 
         // -------------------------
 
