@@ -406,10 +406,15 @@ double q_k_zs_distribution_f_IA_NLA_delta_photoz(const double &z, ClassEngine *c
     double chi_z = class_obj->get_chi_z(z);
     double H_0 = class_obj->get_H_z(0);
 
-    double q_k_z = 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1+z) * chi_z * W_k_z;
-    double f_IA_NLA_z = - A_IA_0_NLA*pow((1.+z)/1.62,alpha_IA_0_NLA)*0.0134*class_obj->get_D_plus_z(0)/class_obj->get_D_plus_z(z);
+    double q_k_z = 3./2. * H_0 * H_0 * class_obj->get_Omega0_m() * (1.+z) * chi_z * W_k_z;
 
-    return  q_k_z + f_IA_NLA_z*n_source_of_z->interp(z+delta_photoz)*class_obj->get_H_z(z);
+    if (A_IA_0_NLA == 0.0)
+        return q_k_z;
+    else
+    {
+        double f_IA_NLA_z = - A_IA_0_NLA*pow((1.+z)/1.62,alpha_IA_0_NLA)*0.0134; //*class_obj->get_D_plus_z(0)/class_obj->get_D_plus_z(z);
+        return  q_k_z + f_IA_NLA_z*n_source_of_z->interp(z+delta_photoz)*class_obj->get_H_z(z);
+    }
 }
 
 double q_k_zs_fixed(const double &z, ClassEngine *class_obj, const double &zs)
