@@ -751,6 +751,19 @@ int main()
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
+        std::cout << "Printing lensing kernel" << std::endl;
+        double delta_z = (2.0-0)/num_trapz_steps;
+
+        for (int i = 0; i <= num_trapz_steps; i++)
+        {
+            double z = 0 + i*delta_z;
+
+            double q_1 = qs_kernels.at(0).get()->evaluate(z);
+            double q_2 = qs_kernels.at(1).get()->evaluate(z);
+            std::cout << z << " " << q_1 << " " << q_2 << std::endl;
+        }
+        std::cout << "Printing done" << std::endl;
+
         std::cout << "Outside left range = " << qs_kernels.at(0).get()->evaluate(-0.0001) << std::endl;
         std::cout << "Inside range = " << qs_kernels.at(0).get()->evaluate(0.5) << std::endl;
         std::cout << "Outside right range = " << qs_kernels.at(0).get()->evaluate(2.0001) << std::endl;

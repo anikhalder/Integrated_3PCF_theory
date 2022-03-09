@@ -354,7 +354,7 @@ double W_k_zs_distribution_integrand(double zs, void *params)
     double chi_z = p->class_obj->get_chi_z(p->z);
     double chi_zs = p->class_obj->get_chi_z(zs);
 
-    if (p->delta_photoz == 0)
+    if (p->delta_photoz == 0.0)
         return p->n_source_of_z->interp(zs) * (chi_zs - chi_z) / chi_zs;
     else
         return p->n_source_of_z->interp(zs + p->delta_photoz) * (chi_zs - chi_z) / chi_zs;
