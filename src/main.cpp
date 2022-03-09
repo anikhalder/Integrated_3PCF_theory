@@ -81,8 +81,8 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    //for (size_t i=33; i<45; i++)
-    for (size_t i=0; i<1; i++)
+    for (size_t i=33; i<45; i++)
+    //for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
@@ -464,7 +464,7 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_integrated_3PCF_area_pre_factors = false;
         bool compute_2D_power_spectra = true;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
         bool compute_2D_2PCF = true;
@@ -754,6 +754,7 @@ int main()
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
         qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
+        /*
         std::cout << "Printing lensing kernel" << std::endl;
         double delta_z = (zs_upper-zs_lower)/num_trapz_steps;
 
@@ -766,6 +767,7 @@ int main()
             std::cout << z << " " << q_1 << " " << q_2 << std::endl;
         }
         std::cout << "Printing done" << std::endl;
+        */
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
         std::vector<double> P_ss_upper_limit = { zs_upper };
