@@ -103,7 +103,7 @@ double P2D_z_mc(const std::string &key, const double &l, ClassEngine *class_obj,
 
     gsl_monte_function G = { &P2D_z_mc_integrand, 1, static_cast<void *>(&args)};
 
-    size_t calls = calls_1e5;
+    size_t calls = calls_1e4;
 
     if (mc_integration_type == "plain" )
         monte_carlo_plain_integration(&G, z_lower, z_upper, 1, calls, T, result, error);
