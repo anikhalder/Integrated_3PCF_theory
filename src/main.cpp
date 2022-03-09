@@ -3176,7 +3176,8 @@ int main()
             if (filename_iB == "iB_kkk.dat" || filename_iB == "iB_Mkk.dat")
             {
                 std::stringstream s_iB_l_z;
-                s_iB_l_z << iB_l_z_folder << "iB_l_z" << cosmology_name << filename_extension;
+                //s_iB_l_z << iB_l_z_folder << "iB_l_z" << cosmology_name << filename_extension;
+                s_iB_l_z << iB_l_z_folder << "iB_l_z" << cosmology_name << ".dat";
                 std::string iB_l_z_grid_filename =  s_iB_l_z.str();
                 iB_l_z_grid = read_n_column_table(iB_l_z_grid_filename, 7);
 
@@ -3187,14 +3188,14 @@ int main()
             else if (filename_iB == "iB_Mss.dat")
             {
                 std::stringstream s_iBp_l_z, s_iBm_l_z;
-                s_iBp_l_z << iB_l_z_folder << "iBp_l_z" << cosmology_name << filename_extension;
+                s_iBp_l_z << iB_l_z_folder << "iBp_l_z" << cosmology_name << ".dat";
                 std::string iBp_l_z_grid_filename =  s_iBp_l_z.str();
                 iBp_l_z_grid = read_n_column_table(iBp_l_z_grid_filename, l_array.size());
 
                 assert (iBp_l_z_grid.size() == l_array.size());
                 assert (iBp_l_z_grid.at(0).size() == z_array.size());
 
-                s_iBm_l_z << iB_l_z_folder << "iBm_l_z" << cosmology_name << filename_extension;
+                s_iBm_l_z << iB_l_z_folder << "iBm_l_z" << cosmology_name << ".dat";
                 std::string iBm_l_z_grid_filename =  s_iBm_l_z.str();
                 iBm_l_z_grid = read_n_column_table(iBm_l_z_grid_filename, l_array.size());
 
