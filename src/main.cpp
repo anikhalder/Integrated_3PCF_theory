@@ -609,8 +609,8 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_spectra_change_params_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_correlations_change_params_P_mc/";
 
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_qag/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_qag/";
+        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
+        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
 
         // -------------------------------------------------------------------------------------
 
@@ -856,8 +856,8 @@ int main()
         //filename_P = "P_hh.dat"; // with bias
         //filename_P = "P_gg.dat"; // without bias
 
-        std::string P_integration_algorithm = "qag"; // -- current settings for papers
-        //std::string P_integration_algorithm = "mc";
+        //std::string P_integration_algorithm = "qag"; // -- current settings for papers
+        std::string P_integration_algorithm = "mc";
         //std::string P_integration_algorithm = "hcubature"; // -- previous settings
 
         // -------------------------

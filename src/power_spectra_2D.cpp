@@ -73,8 +73,8 @@ double P2D_z_qag(const std::string &key, const double &l, ClassEngine *class_obj
     //parameters in integrand
     params_P2D_z_integrand args = {key, l, class_obj, use_pk_nl, q1, q2};
 
-    //qag_1D_integration(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
-    qag_1D_integration_abs_rel(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    qag_1D_integration(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
+    //qag_1D_integration_abs_rel(&P2D_z_qag_integrand, static_cast<void *>(&args), z_lower, z_upper, calls_1e5, result, error);
 
     return result;
 }
@@ -103,7 +103,7 @@ double P2D_z_mc(const std::string &key, const double &l, ClassEngine *class_obj,
 
     gsl_monte_function G = { &P2D_z_mc_integrand, 1, static_cast<void *>(&args)};
 
-    size_t calls = 2*calls_1e3;
+    size_t calls = calls_1e5;
 
     if (mc_integration_type == "plain" )
         monte_carlo_plain_integration(&G, z_lower, z_upper, 1, calls, T, result, error);
