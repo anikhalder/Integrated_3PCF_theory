@@ -515,7 +515,7 @@ double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, doub
     {
         double z = z_lower_limit + i*delta_z;
 
-        if (z=0.0)
+        if (z==0.0)
             continue; // since chi=0 and hence chi_inv is undefined at z=0
 
         double q_1 = q1->evaluate(z);
@@ -529,8 +529,8 @@ double iB2D_trapz_z(Linear_interp_1D *iB2D_z_interp, double &z_lower_limit, doub
         double Hz_inv = 1/class_obj->get_H_z(z);
 
         double val = Hz_inv*chi_inv*chi_inv*chi_inv*chi_inv*q_1*q_2*q_3*iB2D_z_interp->interp(z);
-        if (isnan(val))
-            std::cout << "Nan encountered at z="<< z << std::endl;
+        //if (isnan(val))
+        //    std::cout << "Nan encountered at z="<< z << std::endl;
 
         if (i==0 || i==num_trapz_steps)
             integral += val;       
