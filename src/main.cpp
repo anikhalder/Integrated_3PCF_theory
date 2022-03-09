@@ -730,13 +730,13 @@ int main()
         //     qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
         ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
-        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", zs_upper);
+        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
         assert(!nofz_s1_table.empty());
         normalise_nofz(nofz_s1_table);
         Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
         ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
-        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", zs_upper);
+        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
         assert(!nofz_s2_table.empty());
         normalise_nofz(nofz_s2_table);
         Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
