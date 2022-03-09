@@ -693,9 +693,9 @@ int main()
         //double zs1 = 0.5; // MassiveNus
         //double zs2 = 1.0; // MassiveNus
 
-        double zs_lower = 0;
+        double zs_lower = 0.0;
         //double zs_upper = zs2;
-        double zs_upper = 2.0;
+        double zs_upper = 1.99;
 
         std::vector<double> z_array;
         //for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
@@ -730,32 +730,32 @@ int main()
         //     qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
         ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
-        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2.0);
+        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", zs_upper);
         assert(!nofz_s1_table.empty());
         normalise_nofz(nofz_s1_table);
         Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
         ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
-        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2.0);
+        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", zs_upper);
         assert(!nofz_s2_table.empty());
         normalise_nofz(nofz_s2_table);
         Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
 
-        //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
-        //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+        //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
+        //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0));
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, 2.0, 0.0, A_IA_0_NLA, 0.0));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, 2.0, 0.0, A_IA_0_NLA, 0.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, 0.0, 0.0));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, 0.0, 0.0));
 
         std::cout << "Printing lensing kernel" << std::endl;
-        double delta_z = (2.0-0)/num_trapz_steps;
+        double delta_z = (zs_lower-zs_upper)/num_trapz_steps;
 
         for (int i = 0; i <= num_trapz_steps; i++)
         {
@@ -766,14 +766,6 @@ int main()
             std::cout << z << " " << q_1 << " " << q_2 << std::endl;
         }
         std::cout << "Printing done" << std::endl;
-
-        std::cout << "Outside left range = " << qs_kernels.at(0).get()->evaluate(-0.0001) << std::endl;
-        std::cout << "Inside range = " << qs_kernels.at(0).get()->evaluate(0.5) << std::endl;
-        std::cout << "Outside right range = " << qs_kernels.at(0).get()->evaluate(2.0001) << std::endl;
-
-        std::cout << "Outside left range = " << qs_kernels.at(1).get()->evaluate(-0.0001) << std::endl;
-        std::cout << "Inside range = " << qs_kernels.at(1).get()->evaluate(0.5) << std::endl;
-        std::cout << "Outside right range = " << qs_kernels.at(1).get()->evaluate(2.0001) << std::endl;
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
         std::vector<double> P_ss_upper_limit = { zs_upper };
