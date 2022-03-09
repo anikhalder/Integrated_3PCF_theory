@@ -413,7 +413,7 @@ double q_k_zs_distribution_f_IA_NLA_delta_photoz(const double &z, ClassEngine *c
     else
     {
         double f_IA_NLA_z = - A_IA_0_NLA*0.0134*pow((1.+z)/1.62,alpha_IA_0_NLA)*class_obj->get_D_plus_z(0)/class_obj->get_D_plus_z(z);
-        return q_k_z + f_IA_NLA_z*class_obj->get_H_z(z)*n_source_of_z->interp(z+delta_photoz);
+        return q_k_z + f_IA_NLA_z*class_obj->get_H_z(z)//*n_source_of_z->interp(z+delta_photoz);
     }
 }
 
