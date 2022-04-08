@@ -189,6 +189,42 @@ double A2pt_angle_averaged_qag(double alpha, double theta_T)
     return result/(2*M_PI);
 }
 
+// ##############################
+
+// testing with bin averaging over A2pt(alpha) integration
+
+double A2pt_alpha_qag_integrand(double alpha, void *params)
+{
+    params_A2pt_alpha_theta_phi_integrand *p = static_cast<params_A2pt_alpha_theta_phi_integrand *>(params);
+
+    //parameters in integrand
+    params_A2pt_theta_phi_integrand args = {p->phi_alpha, alpha, p->theta_T};
+
+    double result = 0;              // the result from the integration
+    double error = 0;               // the estimated error from the integration
+
+    //qag_1D_integration(&A2pt_theta_qag_integrand, static_cast<void *>(&args), 0, 4.0*p->theta_T, calls_1e5, result, error);
+    qag_1D_integration_abs_rel(&A2pt_theta_qag_integrand, static_cast<void *>(&args), 0, 4.0*p->theta_T, calls_1e5, result, error);
+
+    return result*alpha;
+}
+
+double A2pt_bin_averaged_qag(double alpha_min, double alpha_max, double theta_T)
+{
+    double phi_alpha = 0.0;
+    
+    //parameters in integrand
+    params_A2pt_alpha_theta_phi_integrand args = {phi_alpha, theta_T};
+
+    double result = 0;              // the result from the integration
+    double error = 0;               // the estimated error from the integration
+
+    //qag_1D_integration(&A2pt_phi_alpha_qag_integrand, static_cast<void *>(&args), 0, 2*M_PI, calls_1e5, result, error);
+    qag_1D_integration_abs_rel(&A2pt_alpha_qag_integrand, static_cast<void *>(&args), alpha_min, alpha_max, calls_1e5, result, error);
+
+    return result/(0.5*(alpha_max*alpha_max - alpha_min*alpha_min));
+}
+
 // ######################################################################################
 // ######################################################################################
 // ######################################################################################

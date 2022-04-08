@@ -30,7 +30,8 @@ void qag_1D_integration_abs_rel(double (*func)(double, void*), void *args, const
     integrand.params = args;
 
     //gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m04, error_m04, workspace_size, 6, work_ptr, &result, &error);
-    gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m03, error_m03, workspace_size, 6, work_ptr, &result, &error);
+    //gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m03, error_m03, workspace_size, 6, work_ptr, &result, &error);
+    gsl_integration_qag(&integrand, lower_limit, upper_limit, error_m04, 0, workspace_size, 6, work_ptr, &result, &error);
 
     gsl_integration_workspace_free(work_ptr);
 }

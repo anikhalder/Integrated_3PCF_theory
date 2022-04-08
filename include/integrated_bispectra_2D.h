@@ -52,6 +52,16 @@ double A2pt_phi_alpha_qag_integrand(double phi_alpha, void *params);
 
 double A2pt_angle_averaged_qag(double alpha, double theta_T);
 
+// ##############################
+
+// testing with bin averaging over A2pt(alpha) integration
+
+struct params_A2pt_alpha_theta_phi_integrand {double phi_alpha; double theta_T;};
+
+double A2pt_alpha_qag_integrand(double alpha, void *params);
+
+double A2pt_bin_averaged_qag(double alpha_min, double alpha_max, double theta_T);
+
 // ######################################################################################
 // ######################################################################################
 // ######################################################################################

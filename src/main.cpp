@@ -81,8 +81,8 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    for (size_t i=33; i<45; i++)
-    //for (size_t i=0; i<1; i++)
+    //for (size_t i=33; i<45; i++)
+    for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
         // For Fisher forecast computations use the corresponding desired range of i as per the filename_extension_array above
@@ -464,16 +464,16 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = false;
-        bool compute_2D_power_spectra = true;
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_power_spectra = false;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = true;
+        bool compute_2D_2PCF = false;
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
         bool compute_2D_integrated_bispectra_l_z_grid = false;
         bool compute_2D_integrated_bispectra_from_l_z_grid = true;
-        bool compute_2D_integrated_3PCF = true;
+        bool compute_2D_integrated_3PCF = false;
 
         // bool compute_2D_integrated_3PCF_area_pre_factors = true;
         // bool compute_2D_power_spectra = true;
@@ -605,12 +605,16 @@ int main()
         //std::string spectra_folder = "./test_DESY3_redmagic_lens_BIN1_gg_spectra/";
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
-        std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
+        //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
+        //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_change_params_P_mc_v2/";
 
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
+
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
+        std::string spectra_folder = "./test_spectra/";
+        std::string correlations_folder = "./test_correlations/";
 
         // -------------------------------------------------------------------------------------
 
@@ -745,16 +749,16 @@ int main()
         //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
         std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
-        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
+        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, 0.0, 0.0, 0.0));
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, 0.0, 0.0, 0.0));
 
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, delta_photoz, A_IA_0_NLA, alpha_IA_0_NLA));
 
-        
+        /*
         std::cout << "Printing lensing kernel" << std::endl;
         double delta_z = (zs_upper-zs_lower)/num_trapz_steps;
 
@@ -767,6 +771,7 @@ int main()
             std::cout << z << " " << q_1 << " " << q_2 << std::endl;
         }
         std::cout << "Printing done" << std::endl;
+        */
         
 
         std::vector<double> P_ss_lower_limit = { zs_lower };
@@ -2143,8 +2148,9 @@ int main()
             {
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
-                    A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
                     //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    A2pt[alpha_idx] = A2pt_bin_averaged_qag(alpha_min_table.at(alpha_idx)*M_PI/180.0/60.0, alpha_max_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
                 }
 
                 else if (i3pt_area_pre_factors_integration_algorithm == "mc")
