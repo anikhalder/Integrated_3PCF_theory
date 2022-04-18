@@ -6,7 +6,6 @@
 #include <interpolation_methods.h>
 #include <gsl/gsl_rng.h>
 #include <constants.h>
-#include <VEGAS_Integrator.h>
 
 // ######################################################################################
 
@@ -143,22 +142,6 @@ void iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc(const std::string &key, const double &l
 void iB2D_mc_angle_averaged(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
                           projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
                           const gsl_rng_type *T, const std::string &mc_integration_type, double &result, double &error, size_t calls);
-
-// Monte-Carlo CIGAR
-
-struct params_iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand { const std::string &key; const double &l; const double &phi_l; const struct_iB2D_W_FS &info_iB2D_W_FS; ClassEngine *class_obj;
-                                                              const bool &use_pk_nl; projection_kernel *q1; projection_kernel *q2; projection_kernel *q3; 
-                                                              std::vector<double> &lower_limits; std::vector<double> &upper_limits;};
-
-double iB2D_phi_l_z_l_1_l_2_phi_1_phi_2_mc_cigar_integrand(std::vector<double> k, void *params);
-
-void iB2D_z_l_1_l_2_phi_1_phi_2_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
-                                         projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                                         VEGAS_Integrator &cigar, double &result, double &error, int thread_count);
-
-void iB2D_mc_cigar(const std::string &key, const double &l, const struct_iB2D_W_FS &info_iB2D_W_FS, ClassEngine *class_obj, const bool &use_pk_nl,
-                 projection_kernel *q1, projection_kernel *q2, projection_kernel *q3, std::vector<double> lower_limits, std::vector<double> upper_limits,
-                 VEGAS_Integrator &cigar, double &result, double &error, int thread_count);
 
 // h-cubature
 

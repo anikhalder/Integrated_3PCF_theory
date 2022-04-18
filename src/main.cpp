@@ -15,7 +15,6 @@
 #include <real_space_2D.h>
 #include <sstream>
 #include <halo_utils.hpp>
-#include <VEGAS_Integrator.h>
 
 /*
  * Things to check/change before compiling the code and performing an execution:
@@ -457,14 +456,14 @@ int main()
         bool compute_initial_checks = false;
         bool compute_sigma_quantities_tables = false;
         bool compute_Pk_shell_integration_table = false;
-        bool compute_Pk_Bkkk_tables = false;
-        bool compute_n_eff_table = false;
+        bool compute_Pk_Bkkk_tables = true;
+        bool compute_n_eff_table = true;
         bool compute_k_NL_table = false;
-        bool compute_response_function_tables = false;
+        bool compute_response_function_tables = true;
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_integrated_3PCF_area_pre_factors = false;
         bool compute_2D_power_spectra = false;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
         bool compute_2D_2PCF = false;
@@ -472,7 +471,7 @@ int main()
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
         bool compute_2D_integrated_bispectra_l_z_grid = false;
-        bool compute_2D_integrated_bispectra_from_l_z_grid = true;
+        bool compute_2D_integrated_bispectra_from_l_z_grid = false;
         bool compute_2D_integrated_3PCF = false;
 
         // bool compute_2D_integrated_3PCF_area_pre_factors = true;
@@ -599,9 +598,6 @@ int main()
         //std::string spectra_folder = "./takahashi_bsr_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
         //std::string correlations_folder = "./takahashi_bsr_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_1e5_trapz_20000_collapse/";
 
-        //std::string spectra_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iB_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
-        //std::string correlations_folder = "./takahashi_bsr_nonsq_tree_sq7_tree_ell120_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_cigar_20000_bin_averaged/";
-
         //std::string spectra_folder = "./test_DESY3_redmagic_lens_BIN1_gg_spectra/";
         //std::string correlations_folder = "./test_DESY3_redmagic_lens_BIN1_gg_correlations/";
 
@@ -613,8 +609,8 @@ int main()
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
 
         std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./test_spectra/";
-        std::string correlations_folder = "./test_correlations/";
+        std::string spectra_folder = "./test_A2pt_bin_averaging_spectra/";
+        std::string correlations_folder = "./test_A2pt_bin_averaging_correlations/";
 
         // -------------------------------------------------------------------------------------
 
@@ -926,7 +922,6 @@ int main()
         //filename_iB = "iBkxi_mc.dat"; // for shear integrated bispectra - using MC integration
 
         std::string iB_integration_algorithm = "mc";
-        //std::string iB_integration_algorithm = "mc_cigar";
         //std::string iB_integration_algorithm = "hcubature";
 
         size_t calls_iB_initial;
@@ -1236,7 +1231,7 @@ int main()
 
                 B3D_kkk[i][0] = k_h;
                 B3D_kkk[i][1] = B_tree(k,k,k,z,class_obj.get(),false)*pow(h,6);
-                B3D_kkk[i][2] = B_SC(k,k,k,z,class_obj.get(),true)*pow(h,6);
+                B3D_kkk[i][2] = B_GM_v2(k,k,k,z,class_obj.get(),true)*pow(h,6);
                 //B3D_kkk[i][3] = B_bihalofit(k, k, k, z,class_obj.get(),true)*pow(h,6);
                 //B3D_kkk[i][4] = B_1_loop_hcubature(k,k,k,z,class_obj.get(),false)*pow(h,6);
 
@@ -1278,9 +1273,9 @@ int main()
             n_eff_k_h_table.open ("./output/n_eff_k_h_table.tab", std::ofstream::trunc);
 
             double a=-3,b=2;
-            int num_pts = 1000;
-            double z=1.0;
-            for(int i=0; i<=num_pts; i++)
+            int num_pts = 100;
+            double z=0.0;
+            for(int i=0; i<num_pts; i++)
             {
                 double k_h = pow(10, a + i * (b - a) / (num_pts - 1)); // in units of h/Mpc
                 double n_eff_lin_k_h = class_obj->get_n_eff_from_lin_Pk(k_h*h,z); // ideally, same as class_obj->get_n_eff_from_lin_Pk(k_h*h,0)
@@ -1326,8 +1321,8 @@ int main()
             R_G_1_k_h_table.open ("./output/R_G_1_k_h_table.tab", std::ofstream::trunc);
             R_G_K_k_h_table.open ("./output/R_G_K_k_h_table.tab", std::ofstream::trunc);
 
-            double a=-2,b=0;
-            int num_pts = 1000;
+            double a=-3,b=2;
+            int num_pts = 100;
             double z=0.0;
             for(int i=0; i<=num_pts; i++)
             {
@@ -2511,9 +2506,6 @@ int main()
 
             counter = 0;
 
-            VEGAS_Integrator cigar;
-            cigar.Set_Verbose(NONE);
-
             #pragma omp parallel for num_threads(thread_count) shared(l_array, class_obj, qs_kernels, ql_b1_kernels, ql_b2_kernels, ql_bs2_kernels)
             for (size_t l_idx = 0; l_idx < l_array.size(); l_idx++)
             {
@@ -2548,18 +2540,6 @@ int main()
                                         iB2D_mc("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
                                     else if (filename_iB == "iB_Mkk.dat")
                                         iB2D_mc("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-                                }
-
-                                if (iB_integration_algorithm == "mc_cigar")
-                                {
-                                    // iB term
-                                    result = 0.0, error = 0.0;
-                                    if (filename_iB == "iB_kkk.dat")
-                                        iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_WWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    else if (filename_iB == "iB_Mkk.dat")
-                                        iB2D_mc_cigar("B", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
                                     iB_sss_array[0][corr_idx][l_idx] = result;
                                     iB_sss_error_array[0][corr_idx][l_idx] = error;
                                 }
@@ -2613,25 +2593,6 @@ int main()
                                         iB2D_mc("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, T, "vegas", result, error, calls_iB);
                                     else if (filename_iB == "iB_Mss_angle_averaged.dat")
                                         iB2D_mc_angle_averaged("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_angle_averaged_lower_limits, iB_sss_angle_averaged_upper_limits, T, "vegas", result, error, calls_iB);
-                                    
-                                    iB_sss_array[1][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[1][corr_idx][l_idx] = error;
-                                }
-
-                                if (iB_integration_algorithm == "mc_cigar")
-                                {
-                                    // iBp term
-                                    result = 0.0, error = 0.0;
-                                    if (filename_iB == "iB_Mss.dat")
-                                        iB2D_mc_cigar("B_xip_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
-                                    
-                                    iB_sss_array[0][corr_idx][l_idx] = result;
-                                    iB_sss_error_array[0][corr_idx][l_idx] = error;
-
-                                    // iBm term
-                                    result = 0.0, error = 0.0;
-                                    if (filename_iB == "iB_Mss.dat")
-                                        iB2D_mc_cigar("B_xim_cos", l_array.at(l_idx), info_iB_UWW_FS, class_obj.get(), use_pk_nl, qs_kernels.at(a).get(), qs_kernels.at(b).get(), qs_kernels.at(c).get(), iB_sss_lower_limits, iB_sss_upper_limits, cigar, result, error, thread_count);
                                     
                                     iB_sss_array[1][corr_idx][l_idx] = result;
                                     iB_sss_error_array[1][corr_idx][l_idx] = error;
