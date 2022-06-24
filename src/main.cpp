@@ -59,8 +59,8 @@ int main()
         }
     }
 
-    //const int thread_count = static_cast<int>(omp_get_max_threads())-10;
-    const int thread_count = 100;
+    const int thread_count = static_cast<int>(omp_get_max_threads())-10;
+    //const int thread_count = 100;
     
     if (verbose_print_outs)
         std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
