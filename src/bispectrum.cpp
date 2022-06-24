@@ -123,8 +123,8 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
         //B = B_1_loop_hcubature(k_h, k_m, k_s, z, class_obj, false);
         //B = B_SC(k_h, k_m, k_s, z, class_obj, true);
         //B = B_GM(k_h, k_m, k_s, z, class_obj, true);
-        B = B_GM_v2(k_h, k_m, k_s, z, class_obj, true); // fast GM version
-        //B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
+        //B = B_GM_v2(k_h, k_m, k_s, z, class_obj, true); // fast GM version
+        B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
         //B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
     }
 

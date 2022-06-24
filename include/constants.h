@@ -26,15 +26,15 @@ const double z_cmb = 1090;
 
 const double arcmin = 1/60.0*M_PI/180.0; // expressed in radians
 
-const double pk_k_max = 350.0; // 1/Mpc
-const double pk_z_max = 3.5;
+const double pk_k_max = 70.0; // 1/Mpc
+const double pk_z_max = 3.0;
 
 const size_t num_l_pts = 60; // in iB(l,z) grid
 const size_t num_z_pts = 50; // in iB(l,z) grid
 const size_t num_k_pts = 1000; // in (k,z) grid
 
-//const double delta_z_step = 0.05;
-const double delta_z_step = 0.01;
+const double delta_z_step = 0.05;
+//const double delta_z_step = 0.01;
 //const double delta_z_step = 0.025; // possibly optimized
 
 const int num_trapz_steps = 100; // for trapezoidal integration
@@ -50,9 +50,9 @@ const double delta_r_T17 = 450.0; // [Mpc/h]
 
 //const double delta_r_T17 = 126.0; // [Mpc/h] for MassiveNus
 
-const bool apply_T17_corrections = false; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
+const bool apply_T17_corrections = true; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
 
-const bool compute_bihalofit = false;
+const bool compute_bihalofit = true;
 
 const bool verbose_print_outs = true;
 

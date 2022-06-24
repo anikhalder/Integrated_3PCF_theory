@@ -80,7 +80,6 @@ int main()
               "_minus_2step_alpha_IA_0_NLA.dat", "_minus_1step_alpha_IA_0_NLA.dat", "_plus_1step_alpha_IA_0_NLA.dat", "_plus_2step_alpha_IA_0_NLA.dat"};
 
     //for (size_t i=0; i<filename_extension_array.size(); i++)
-    //for (size_t i=33; i<45; i++)
     for (size_t i=0; i<1; i++)
     {
         // For normal runs only use the first iteration of the loop i.e. i=0 --> '.dat'
@@ -360,9 +359,8 @@ int main()
 
         // set k_max, z_max for 3D Pk computation by CLASS
 
-        //pars.add("P_k_max_1/Mpc",10.0); // this is good for quick tests
-        //pars.add("P_k_max_1/Mpc",30.0); // this is good for quick tests
-        //pars.add("P_k_max_1/Mpc",150.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",70.0); // this is good for quick tests
+        //pars.add("P_k_max_1/Mpc",60.0); // this is good for quick tests
 
         //pars.add("P_k_max_1/Mpc",5000.0); // for l1 + l2 = 20000 this is good enough (for lowest z=0.001)
         //pars.add("P_k_max_1/Mpc",6000.0); // for l1 + l2 = 25000 this is good enough (for lowest z=0.001)
@@ -456,23 +454,23 @@ int main()
         bool compute_initial_checks = false;
         bool compute_sigma_quantities_tables = false;
         bool compute_Pk_shell_integration_table = false;
-        bool compute_Pk_Bkkk_tables = true;
-        bool compute_n_eff_table = true;
+        bool compute_Pk_Bkkk_tables = false;
+        bool compute_n_eff_table = false;
         bool compute_k_NL_table = false;
-        bool compute_response_function_tables = true;
+        bool compute_response_function_tables = false;
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = false;
-        bool compute_2D_power_spectra = false;
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_power_spectra = true;
         bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = false;
+        bool compute_2D_2PCF = true;
         bool compute_2D_bispectra_equilateral = false;
         bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = false;
-        bool compute_2D_integrated_bispectra_from_l_z_grid = false;
-        bool compute_2D_integrated_3PCF = false;
+        bool compute_2D_integrated_bispectra_l_z_grid = true;
+        bool compute_2D_integrated_bispectra_from_l_z_grid = true;
+        bool compute_2D_integrated_3PCF = true;
 
         // bool compute_2D_integrated_3PCF_area_pre_factors = true;
         // bool compute_2D_power_spectra = true;
@@ -608,9 +606,9 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_GM_sq7_RF_ell60_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./test_A2pt_bin_averaging_spectra/";
-        std::string correlations_folder = "./test_A2pt_bin_averaging_correlations/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_nonsq_bihalofit_sq7_RF_ell120_z50_mc_4dim_5e5/";
+        std::string spectra_folder = "./takahashi_nonsq_bihalofit_sq7_RF_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+        std::string correlations_folder = "./takahashi_nonsq_bihalofit_sq7_RF_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
 
         // -------------------------------------------------------------------------------------
 
@@ -650,6 +648,24 @@ int main()
         std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_20_bins.tab");
         assert(!alpha_max_table.empty());
 
+        //std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_4_130_10_bins.tab");
+        //assert(!alpha_table.empty());
+
+        //std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_4_130_10_bins.tab");
+        //assert(!alpha_min_table.empty());
+
+        //std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_4_130_10_bins.tab");
+        //assert(!alpha_max_table.empty());
+
+        //std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_4_250_20_bins.tab");
+        //assert(!alpha_table.empty());
+
+        //std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_4_250_20_bins.tab");
+        //assert(!alpha_min_table.empty());
+
+        //std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_4_250_20_bins.tab");
+        //assert(!alpha_max_table.empty());
+
         std::vector<double> l_array;
 
         //for(int l=1; l<=10001; l++)
@@ -658,16 +674,16 @@ int main()
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_157.tab"); // ell_max = 20000 where 157 points log-spaced (1-20000) -- previous settings
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_150_disjoint.tab"); // ell_max = 20000 where 30 points log-spaced (1-200); 120 points log-spaced (230-20000)
 
-        //l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
+        l_array = read_1_column_table("../data/ell_arrays/ell_array_120.tab"); // ell_max = 20000 where 120 points log-spaced (1-20000) -- current settings for papers
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_80.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_60.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
         //l_array = read_1_column_table("../data/ell_arrays/ell_array_50.tab"); // ell_max = 15000 where 80 points log-spaced (1-15000) -- possibly optimized
 
-        double a = log10(2);
-        double b = log10(15000);
+        //double a = log10(2);
+        //double b = log10(15000);
 
-        for(int i=0; i<num_l_pts; i++)
-             l_array.push_back(pow(10, a + i * (b - a) / (num_l_pts - 1)));
+        //for(int i=0; i<num_l_pts; i++)
+        //     l_array.push_back(pow(10, a + i * (b - a) / (num_l_pts - 1)));
 
         if (verbose_print_outs)
             std::cout << "\nSize of l_array = " << l_array.size() << "\n" << std::endl;
@@ -694,21 +710,21 @@ int main()
         //double zs2 = 1.0; // MassiveNus
 
         double zs_lower = 0.0;
-        //double zs_upper = zs2;
-        double zs_upper = 1.99;
+        double zs_upper = zs2;
+        //double zs_upper = 1.99;
 
         std::vector<double> z_array;
         //for (double z = zs_lower; z <= zs_upper+3*delta_z_step; z+=delta_z_step)
         //    z_array.push_back(z);
 
-        //for (double z = zs_lower; z <= zs_upper+2*delta_z_step; z+=delta_z_step)
-        //    z_array.push_back(z);
+        for (double z = zs_lower; z <= zs_upper+2*delta_z_step; z+=delta_z_step)
+            z_array.push_back(z);
 
-        a = 0.0;
-        b = 2.0;
+        //double z_a = 0.0;
+        //double z_a = 2.0;
 
-        for(int i=0; i<num_z_pts; i++)
-             z_array.push_back(a + i * (b - a) / (num_z_pts - 1));
+        //for(int i=0; i<num_z_pts; i++)
+        //     z_array.push_back(z_a + i * (z_b - z_a) / (num_z_pts - 1));
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
         std::vector<double> zs_bins{zs1, zs2}; // source (shear/convergence) redshift bin median --> for shear only
@@ -725,28 +741,28 @@ int main()
         std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs1));
         std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs2));
 
-        // std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        // for (size_t i = 0; i < zs_bins.size(); i++)
-        //     qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
+        std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
+        for (size_t i = 0; i < zs_bins.size(); i++)
+            qs_kernels.emplace_back(new projection_kernel_q_k_zs_fixed(class_obj.get(), zs_bins.at(i)));
 
-        ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
-        std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
-        assert(!nofz_s1_table.empty());
-        normalise_nofz(nofz_s1_table);
-        Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
+        // ////std::vector<std::vector<double>> nofz_s1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab");
+        // std::vector<std::vector<double>> nofz_s1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN2.tab", 2);
+        // assert(!nofz_s1_table.empty());
+        // normalise_nofz(nofz_s1_table);
+        // Linear_interp_1D nofz_s1(nofz_s1_table.at(0), nofz_s1_table.at(1));
 
-        ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
-        std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
-        assert(!nofz_s2_table.empty());
-        normalise_nofz(nofz_s2_table);
-        Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
+        // ////std::vector<std::vector<double>> nofz_s2_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab");
+        // std::vector<std::vector<double>> nofz_s2_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_source_BIN4.tab", 2);
+        // assert(!nofz_s2_table.empty());
+        // normalise_nofz(nofz_s2_table);
+        // Linear_interp_1D nofz_s2(nofz_s2_table.at(0), nofz_s2_table.at(1));
 
         //std::shared_ptr<projection_kernel> qk1(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
         //std::shared_ptr<projection_kernel> qk2(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
-        std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
-        qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
+        //std::vector<std::shared_ptr<projection_kernel>> qs_kernels;
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper));
+        //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper));
 
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s1, zs_upper, 0.0, 0.0, 0.0));
         //qs_kernels.emplace_back(new projection_kernel_q_k_zs_distribution(class_obj.get(), &nofz_s2, zs_upper, 0.0, 0.0, 0.0));
@@ -800,11 +816,13 @@ int main()
         //double zl_lower = 0.15;
         //double zl_upper = 0.35;
         double zl_lower = 0.1;
-        double zl_upper = 0.5;
+        double zl_upper = 0.45;
 
         double zl1 = (zl_upper - zl_lower) / 2.0;
-        double M_halos_lower = pow(10,13.5)/h; // [M_sun]
-        double M_halos_upper = pow(10,17.0)/h; // [M_sun]
+        //double M_halos_lower = pow(10,13.5)/h; // [M_sun]
+        //double M_halos_upper = pow(10,17.0)/h; // [M_sun]
+        double M_halos_lower = pow(10,12.0413926852)/h; // [M_sun]
+        double M_halos_upper = pow(10,15.0)/h; // [M_sun]
 
         // redshift bins --> make sure that this array is in ascending order for multiple bins
         std::vector<double> zl_bins{zl1}; // lens redshift bin median
@@ -814,7 +832,7 @@ int main()
 
         //std::vector<std::vector<double>> nofz_l1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab");
         std::vector<std::vector<double>> nofz_l1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab", 2);
-        assert(!nofz_l1_table.empty());
+        //assert(!nofz_l1_table.empty());
         normalise_nofz(nofz_l1_table);
 
         //for (size_t idx = 0; idx < nofz_l1_table.at(0).size(); idx++)
@@ -822,6 +840,18 @@ int main()
 
         Linear_interp_1D nofz_l1(nofz_l1_table.at(0), nofz_l1_table.at(1));
         std::shared_ptr<projection_kernel> qg1(new projection_kernel_q_m(class_obj.get(), &nofz_l1));
+
+        //b1_integral_constraint_qag(0.0);
+        //g_sigma_integral_constraint_qag(0.0);
+        //f_nu_integral_constraint_qag(0.0);
+        //b1_avg_z_gal_qag(0.15, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
+        //b1_avg_z_gal_qag(0.25, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
+        //b1_avg_z_gal_qag(0.35, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
+        ////b1_avg_gal(class_obj.get(), &nofz_l1, 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h);
+        //comoving_volume_qag(0.1, 0.45, class_obj.get(), &nofz_l1);
+        //std::cout << N_h_hcubature(class_obj.get(), 0.1, 0.45, pow(10,11)/h, pow(10,15)/h) << std::endl;
+        //std::cout << N_h_hcubature(class_obj.get(), 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h) << std::endl;
+        //std::cout << N_gal_qag(class_obj.get(), 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h) << std::endl;
 
         std::shared_ptr<projection_kernel> qh1_b1(new projection_kernel_q_h_b1(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper)); // sample 2 in Takahashi et al.
         std::shared_ptr<projection_kernel> qh1_b2(new projection_kernel_q_h_b2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
@@ -1045,12 +1075,18 @@ int main()
 
             std::cout << "\nCompare with cosmology calculator (https://cosmocalc.icrar.org) \n" << std::endl;
 
-            double z = 0.5;
+            double z = 0.0;
 
             std::cout << "The redshift z is = " << z << std::endl;
             std::cout << "The scale (expansion) factor a is = " << class_obj->get_a_z(z) << std::endl;
 
-            std::cout << "The radial comoving radial distance along the LoS to z is [cMpc] = " << class_obj->get_chi_z(z) << std::endl;
+            std::cout << "The radial comoving distance along the LoS to z is [cMpc] = " << class_obj->get_chi_z(z) << std::endl;
+            std::cout << "The radial comoving distance between 0.26 and 0.24 is [cMpc] = " << class_obj->get_chi_z(0.26) - class_obj->get_chi_z(0.24) << std::endl;
+            std::cout << "The radial comoving distance between 0.76 and 0.74 is [cMpc] = " << class_obj->get_chi_z(0.76) - class_obj->get_chi_z(0.74) << std::endl;
+            double delta_z_25 = 0.003*(1+0.25); 
+            double delta_z_75 = 0.003*(1+0.75); 
+            std::cout << "The radial comoving distance at 0.25 (MICE) is [cMpc] = " << class_obj->get_chi_z(0.25+delta_z_25/2.) - class_obj->get_chi_z(0.25-delta_z_25/2.) << std::endl;
+            std::cout << "The radial comoving distance at 0.75 (MICE) is [cMpc] = " << class_obj->get_chi_z(0.75+delta_z_75/2.) - class_obj->get_chi_z(0.75-delta_z_75/2.) << std::endl;
             std::cout << "The luminosity distance to z is [Mpc] = " << class_obj->get_D_lum_z(z) << std::endl;
             std::cout << "The angular diameter distance to z is [pMpc] = " << class_obj->get_D_ang_z(z) << std::endl;
             std::cout << "The comoving volume to z is [cGpc^3] = " << 4.*M_PI/3.0*pow(class_obj->get_chi_z(z),3) / 1e9 << std::endl;
@@ -1130,8 +1166,10 @@ int main()
             {
                 z = i*(b-a)/num_pts;
                 double sigma_R_z = class_obj->get_sigma_R_z(R,z); // dimensionless
+                double sigma_R_z_lin = class_obj->get_sigma_R_z_lin(R,z);
                 double dln_sigma8_dln_R_z = class_obj->get_sigma_prime_R_z(R,z)*R/sigma_R_z; // dimensionless
-                sigma8_quantities_z_table << z << " " <<  sigma_R_z <<  " " <<  dln_sigma8_dln_R_z << "\n";
+
+                sigma8_quantities_z_table << z << " " <<  sigma_R_z <<  " " <<  sigma_R_z_lin << " " << dln_sigma8_dln_R_z << "\n";
             }
 
             sigma8_quantities_z_table.close();
@@ -1846,10 +1884,6 @@ int main()
 
         // ######################################################################################
 
-        //if ()
-
-        // ######################################################################################
-
         // 2D 2PCF
 
         //for (size_t i=0; i < filename_extension_array.size(); i++)
@@ -2144,8 +2178,8 @@ int main()
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
                     //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
-                    //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
-                    A2pt[alpha_idx] = A2pt_bin_averaged_qag(alpha_min_table.at(alpha_idx)*M_PI/180.0/60.0, alpha_max_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    //A2pt[alpha_idx] = A2pt_bin_averaged_qag(alpha_min_table.at(alpha_idx)*M_PI/180.0/60.0, alpha_max_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
                 }
 
                 else if (i3pt_area_pre_factors_integration_algorithm == "mc")
@@ -2164,7 +2198,7 @@ int main()
 
             std::ofstream area_pre_factor;
             std::stringstream s_area_pre_factor;
-            s_area_pre_factor << correlations_folder << "i3pt_area_pre_factors_" << i3pt_area_pre_factors_integration_algorithm << ".dat";
+            s_area_pre_factor << correlations_folder << "i3pt_area_pre_factors_" << i3pt_area_pre_factors_integration_algorithm << "_bin_averaged.dat";
             area_pre_factor.open (s_area_pre_factor.str(), std::ofstream::trunc);
             area_pre_factor.precision(16);
 

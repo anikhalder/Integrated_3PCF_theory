@@ -463,6 +463,7 @@ void ClassEngine::compute_bispectrum_helpers()
   std::vector<double> m_bihalofit_R_NL_z_array;
   std::vector<double> m_bihalofit_n_eff_z_array;
 
+  m_bihalofit_norm = 0.;
   if (compute_bihalofit)
     bihalofit_compute_pk_norm();
 
@@ -937,18 +938,31 @@ double ClassEngine::get_sigma8_z(const double &z)
 
 double ClassEngine::get_sigma_R_z(const double &R, const double &z)
 {
+    // This function computes the sigma for a given R and z using the nonlinear Pk
     // R must be input in [Mpc]
     double sigma_R_z;
-    nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, 0, out_sigma, &sigma_R_z);
-
+    //nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, 0, out_sigma, &sigma_R_z);
+    nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, nl.index_pk_m, out_sigma, &sigma_R_z);
+    
     return sigma_R_z;
+}
+
+double ClassEngine::get_sigma_R_z_lin(const double &R, const double &z)
+{
+    // This function computes the sigma for a given R and z using the linear Pk using the helper function implemented for bihalofit
+    // R must be input in [Mpc]
+    if (m_bihalofit_norm == 0.0)
+      bihalofit_compute_pk_norm();
+
+    return get_D_plus_z(z)*bihalofit_sigma_j(R*ba.h,0);
 }
 
 double ClassEngine::get_sigma_squared_prime_R_z(const double &R, const double &z)
 {
     // R must be input in [Mpc]
     double sigma_squared_prime_R_z;
-    nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, 0, out_sigma_prime, &sigma_squared_prime_R_z);
+    //nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, 0, out_sigma_prime, &sigma_squared_prime_R_z);
+    nonlinear_sigmas_at_z(&pr, &ba, &nl, R, z, nl.index_pk_m, out_sigma_prime, &sigma_squared_prime_R_z);
 
     // NOTE: out_sigma_prime corresponds to d sigma^2 / d R
     return sigma_squared_prime_R_z; // in [1/Mpc]
@@ -1124,18 +1138,18 @@ double ClassEngine::get_Omega_k_z(const double &z)
 
 double ClassEngine::get_rho_crit_z(const double &z)
 {
-//    double tau = get_tau_z(z);
-//    double *pvecback=(double *)malloc(ba.bg_size*sizeof(double));
-//    int index;
-//    background_at_tau(&ba,tau,ba.long_info,ba.inter_normal, &index, pvecback); //call to fill pvecback
+    double tau = get_tau_z(z);
+    double *pvecback=(double *)malloc(ba.bg_size*sizeof(double));
+    int index;
+    background_at_tau(&ba,tau,ba.long_info,ba.inter_normal, &index, pvecback); //call to fill pvecback
 
-//    double rho_crit_z = pvecback[ba.index_bg_rho_crit]; // rho_crit_z = get_H_z(z)^2 = H(z)^2/c^2 (this is the definition used in class)
-//    free(pvecback);
+    double rho_crit_z = pvecback[ba.index_bg_rho_crit]; // rho_crit_z = get_H_z(z)^2 = H(z)^2/c^2 (this is the definition used in class)
+    free(pvecback);
 
-//    return(rho_crit_z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
+    return(rho_crit_z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
 
     // alternative way of calculation
-    return get_H_z(z)*get_H_z(z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
+    //return get_H_z(z)*get_H_z(z)*_rho_class_to_SI_units_; // = 3H(z)^2/(8*pi*G) in units [kg/m^3]
 }
 
 double ClassEngine::get_rho_m_z(const double &z)

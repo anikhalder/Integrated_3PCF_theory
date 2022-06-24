@@ -131,7 +131,7 @@ void hcubature_v_integration(integrand_v func, void *args, std::vector<double> &
     unsigned ndim = dim;
     unsigned fdim = 1;
 
-    hcubature_v(fdim, func, args, ndim, lower_limits.data(), upper_limits.data(), max_evals, 0, error_m08, ERROR_INDIVIDUAL, &result, &error);
+    hcubature_v(fdim, func, args, ndim, lower_limits.data(), upper_limits.data(), max_evals, 0, error_m03, ERROR_INDIVIDUAL, &result, &error);
 }
 
 //void cuba_cuhre_integration(integrand_t func, void *args, std::vector<double> &lower_limits, std::vector<double> &upper_limits, const size_t &dim,

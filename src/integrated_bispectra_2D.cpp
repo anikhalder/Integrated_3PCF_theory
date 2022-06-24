@@ -1302,7 +1302,8 @@ int iB2D_z_l_1_l_2_phi_1_phi_2_hcubature_v_integrand(unsigned ndim, size_t npts,
 
     params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *p = static_cast<params_iB2D_z_l_1_l_2_phi_1_phi_2_integrand *>(params);
 
-    for (unsigned j = 0; j < npts; ++j) { // evaluate the integrand for npts points
+    for (unsigned j = 0; j < npts; ++j) 
+    { // evaluate the integrand for npts points
 
         z = k[j*ndim+0], l_1 = k[j*ndim+1], l_2 = k[j*ndim+2], phi_1 = k[j*ndim+3], phi_2 = k[j*ndim+4];
 

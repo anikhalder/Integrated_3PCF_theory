@@ -327,6 +327,34 @@ double pk_lin_manual(const double &k, const double &z, ClassEngine *class_obj, L
             class_obj->get_A_s() * pow(k/class_obj->get_k_pivot(), class_obj->get_n_s()-1);
 }
 
+double comoving_volume_qag_integrand(double z, void *params)
+{
+    params_comoving_volume_qag_integrand *p = static_cast<params_comoving_volume_qag_integrand *>(params);
+
+    double chi_z = p->class_obj->get_chi_z(z);
+    double H_z_inv = 1/p->class_obj->get_H_z(z);
+
+    // normal comoving volume
+    return 4.*M_PI*chi_z*chi_z*H_z_inv; // in units [cMpc^3]
+
+    // weighted comoving volume
+    //return 4.*M_PI*chi_z*chi_z*H_z_inv*p->n_of_z->interp(z); // in units [cMpc^3]
+}
+
+double comoving_volume_qag(const double &z_min, const double &z_max, ClassEngine *class_obj, Linear_interp_1D *n_of_z)
+{
+    double result = 0, error = 0;
+
+    params_comoving_volume_qag_integrand args = {class_obj, n_of_z};
+
+    qag_1D_integration_abs_rel(&comoving_volume_qag_integrand, static_cast<void *>(&args), z_min, z_max,  calls_1e5, result, error);
+
+    std::cout << "Comoving volume [cMpc^3] --> "  << result << " +/- " << error << std::endl;
+    std::cout << "Comoving volume [cGpc^3/h^3] --> " << result / 1.e9 * pow(class_obj->get_h(),3) << " +/- " << error / 1.e9 * pow(class_obj->get_h(),3) << std::endl;
+
+    return result;
+}
+
 // ######################################################################################
 
 // 2D projection kernels

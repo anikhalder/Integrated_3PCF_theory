@@ -80,6 +80,12 @@ double sigma_squared_prime_R_z(const double &R, const double &z, ClassEngine *cl
 
 double pk_lin_manual(const double &k, const double &z, ClassEngine *class_obj, Linear_interp_1D& Tk_z0_d_tot);
 
+struct params_comoving_volume_qag_integrand {ClassEngine *class_obj; Linear_interp_1D *n_of_z;};
+
+double comoving_volume_qag_integrand(double z, void *params);
+
+double comoving_volume_qag(const double &z_min, const double &z_max, ClassEngine *class_obj, Linear_interp_1D *n_of_z);
+
 // ######################################################################################
 
 // 2D projection kernels
@@ -90,7 +96,7 @@ struct params_W_k_zs_distribution_integrand { double z; ClassEngine *class_obj; 
 
 double W_k_zs_distribution_integrand(double zs, void *params);
 
-double q_k_zs_distribution(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max);
+double q_k_zs_distribution(const double &z, ClassEngine *class_obj,  Linear_interp_1D *n_source_of_z, const double &z_max);
 
 double q_k_zs_distribution_f_IA_NLA_delta_photoz(const double &z, ClassEngine *class_obj, Linear_interp_1D *n_source_of_z, const double &z_max, 
                                                  const double &delta_photoz, const double &A_IA_0_NLA, const double &alpha_IA_0_NLA);

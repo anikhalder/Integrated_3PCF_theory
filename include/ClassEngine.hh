@@ -144,6 +144,7 @@ public:
   double get_f_z(const double &z); // velocity growth factor
   double get_sigma8_z(const double &z);
   double get_sigma_R_z(const double &R, const double &z);
+  double get_sigma_R_z_lin(const double &R, const double &z);
   double get_sigma_squared_prime_R_z(const double &R, const double &z);
   double get_sigma_prime_R_z(const double &R, const double &z);
 
