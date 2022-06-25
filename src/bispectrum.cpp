@@ -27,7 +27,7 @@ namespace
     const double a8_GM = -0.722;
     const double a9_GM = -0.926;
 
-    const double f_sq = 7.0; // squeezed factor for response function approach
+    const double f_sq = 20.0; // squeezed factor for response function approach
 }
 
 bool is_triangle_closed(const double &k_1, const double &k_2, const double &k_3)
@@ -140,7 +140,6 @@ double B(const double &k_1, const double &k_2, const double &k_3, const double &
         //B = B_GM(k_h, k_m, k_s, z, class_obj, true);
         //B = B_bihalofit(k_h, k_m, k_s, z, class_obj, false);
         B = B_squeezed_RF(k_h, k_m, k_s, z, class_obj, true);
-
     }
     
     if (apply_T17_corrections)
