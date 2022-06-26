@@ -606,9 +606,9 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_bsr_nonsq_GM_sq20_RF_ell120_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq20_RF_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq20_RF_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_bsr_nonsq_GM_sq40_RF_ell120_z50_mc_4dim_5e5/";
+        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq40_RF_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq40_RF_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
 
         // -------------------------------------------------------------------------------------
 
