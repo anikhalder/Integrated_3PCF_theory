@@ -52,7 +52,7 @@ const double delta_r_T17 = 450.0; // [Mpc/h]
 
 const bool apply_T17_corrections = true; // set this to false when calculating models for Fisher derivatives; when comparing to simulations set to true
 
-const bool compute_bihalofit = false;
+const bool compute_bihalofit = true;
 
 const bool verbose_print_outs = true;
 
