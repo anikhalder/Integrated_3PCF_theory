@@ -59,8 +59,7 @@ int main()
         }
     }
 
-    const int thread_count = static_cast<int>(omp_get_max_threads())-10;
-    //const int thread_count = 100;
+    const int thread_count = static_cast<int>(omp_get_max_threads())-2;
     
     if (verbose_print_outs)
         std::cout<<"Number of threads that will be used if parallelisation is requested = " << thread_count << std::endl;
@@ -461,17 +460,6 @@ int main()
         bool compute_transfer_function_tables = false;
         bool compute_halo_quantities_tables = false;
 
-        bool compute_2D_integrated_3PCF_area_pre_factors = true;
-        bool compute_2D_power_spectra = true;
-        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
-        bool compute_2D_2PCF = true;
-        bool compute_2D_bispectra_equilateral = false;
-        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
-        bool compute_2D_integrated_bispectra_v2 = false;
-        bool compute_2D_integrated_bispectra_l_z_grid = true;
-        bool compute_2D_integrated_bispectra_from_l_z_grid = true;
-        bool compute_2D_integrated_3PCF = true;
-
         // bool compute_2D_integrated_3PCF_area_pre_factors = true;
         // bool compute_2D_power_spectra = true;
         // bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
@@ -479,9 +467,20 @@ int main()
         // bool compute_2D_bispectra_equilateral = false;
         // bool compute_2D_integrated_bispectra = false; // OLD to be deleted
         // bool compute_2D_integrated_bispectra_v2 = false;
+        // bool compute_2D_integrated_bispectra_l_z_grid = true;
         // bool compute_2D_integrated_bispectra_from_l_z_grid = true;
-        // bool compute_2D_integrated_bispectra_l_z_grid = false;
         // bool compute_2D_integrated_3PCF = true;
+
+        bool compute_2D_integrated_3PCF_area_pre_factors = true;
+        bool compute_2D_power_spectra = false;
+        bool compute_2D_power_spectra_spherical_sky = false; // e.g. needed for FLASK (this can only be computed when compute_2D_power_spectra = true)
+        bool compute_2D_2PCF = false;
+        bool compute_2D_bispectra_equilateral = false;
+        bool compute_2D_integrated_bispectra = false; // OLD to be deleted
+        bool compute_2D_integrated_bispectra_v2 = false;
+        bool compute_2D_integrated_bispectra_from_l_z_grid = false;
+        bool compute_2D_integrated_bispectra_l_z_grid = false;
+        bool compute_2D_integrated_3PCF = false;
 
         // ######################################################################################
         // ######################################################################################
@@ -606,9 +605,13 @@ int main()
         //std::string spectra_folder = "./takahashi_nonsq_GM_sq7_RF_iB_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
         //std::string correlations_folder = "./takahashi_nonsq_GM_sq7_RF_iZ_Mss_U70W75W75_cross_DESY3_source_BIN2_BIN4_mc_5e5_trapz_iB_l_z_v2_P_mc/";
 
-        std::string iB_l_z_folder = "./iB_l_z_U70W75W75_bsr_nonsq_GM_sq80_RF_ell120_z50_mc_4dim_5e5/";
-        std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq80_RF_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
-        std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq80_RF_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+        //std::string iB_l_z_folder = "./iB_l_z_U70W75W75_bsr_nonsq_GM_sq80_RF_ell120_z50_mc_4dim_5e5/";
+        //std::string spectra_folder = "./takahashi_bsr_nonsq_GM_sq80_RF_iB_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+        //std::string correlations_folder = "./takahashi_bsr_nonsq_GM_sq80_RF_iZ_Mss_U70W75W75_cross_zs10_zs16_mc_4dim_5e5_trapz_iB_l_z_v2_P_mc/";
+
+        std::string iB_l_z_folder = "./test_grids/";
+        std::string spectra_folder = "./test_spectra/";
+        std::string correlations_folder = "./test_correlations/";
 
         // -------------------------------------------------------------------------------------
 
@@ -628,25 +631,27 @@ int main()
 
         // 2D window, projection kernel, spectra and correlation calculation settings
 
-        double theta_U = 70*arcmin;
+        //double theta_U = 70*arcmin;
+        double theta_U = 130*arcmin;
 
         //double patch_area_sq_degrees = 5.0;
         //double theta_T = spherical_cap_sqdeg_2_radius(patch_area_sq_degrees);
 
-        double theta_T = 75*arcmin;
+        //double theta_T = 75*arcmin;
+        double theta_T = 130*arcmin;
         double patch_area_sq_radians = spherical_cap_radius_2_sqradians(theta_T);
 
         if (verbose_print_outs)
             std::cout << "\nPatch area (square radians) = " << patch_area_sq_radians << std::endl;
 
-        std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_20_bins.tab");
-        assert(!alpha_table.empty());
+        //std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_20_bins.tab");
+        //assert(!alpha_table.empty());
 
-        std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_20_bins.tab");
-        assert(!alpha_min_table.empty());
+        //std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_20_bins.tab");
+        //assert(!alpha_min_table.empty());
 
-        std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_20_bins.tab");
-        assert(!alpha_max_table.empty());
+        //std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_20_bins.tab");
+        //assert(!alpha_max_table.empty());
 
         //std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_4_130_10_bins.tab");
         //assert(!alpha_table.empty());
@@ -657,14 +662,14 @@ int main()
         //std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_4_130_10_bins.tab");
         //assert(!alpha_max_table.empty());
 
-        //std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_4_250_20_bins.tab");
-        //assert(!alpha_table.empty());
+        std::vector<double> alpha_table = read_1_column_table("../data/angular_bins/alpha_angles_arcmins_5_250_15_bins.tab");
+        assert(!alpha_table.empty());
 
-        //std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_4_250_20_bins.tab");
-        //assert(!alpha_min_table.empty());
+        std::vector<double> alpha_min_table = read_1_column_table("../data/angular_bins/alpha_min_angles_arcmins_5_250_15_bins.tab");
+        assert(!alpha_min_table.empty());
 
-        //std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_4_250_20_bins.tab");
-        //assert(!alpha_max_table.empty());
+        std::vector<double> alpha_max_table = read_1_column_table("../data/angular_bins/alpha_max_angles_arcmins_5_250_15_bins.tab");
+        assert(!alpha_max_table.empty());
 
         std::vector<double> l_array;
 
@@ -831,7 +836,7 @@ int main()
         size_t num_i3pt_lll_correlations =  zl_bins.size();
 
         //std::vector<std::vector<double>> nofz_l1_table = read_2_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab");
-        std::vector<std::vector<double>> nofz_l1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1.tab", 2);
+        std::vector<std::vector<double>> nofz_l1_table = read_n_column_table("../data/nofz/DESY3_nofz/nofz_DESY3_redmagic_lens_BIN1like.tab", 2);
         //assert(!nofz_l1_table.empty());
         normalise_nofz(nofz_l1_table);
 
@@ -844,14 +849,12 @@ int main()
         //b1_integral_constraint_qag(0.0);
         //g_sigma_integral_constraint_qag(0.0);
         //f_nu_integral_constraint_qag(0.0);
-        //b1_avg_z_gal_qag(0.15, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
-        //b1_avg_z_gal_qag(0.25, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
-        //b1_avg_z_gal_qag(0.35, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15)/h);
-        ////b1_avg_gal(class_obj.get(), &nofz_l1, 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h);
-        //comoving_volume_qag(0.1, 0.45, class_obj.get(), &nofz_l1);
-        //std::cout << N_h_hcubature(class_obj.get(), 0.1, 0.45, pow(10,11)/h, pow(10,15)/h) << std::endl;
-        //std::cout << N_h_hcubature(class_obj.get(), 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h) << std::endl;
-        //std::cout << N_gal_qag(class_obj.get(), 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15)/h) << std::endl;
+        //b1_avg_z_gal_qag(0.25, class_obj.get(), pow(10,12.0413926852)/h, pow(10,15.5)/h);
+        //b1_avg_gal(class_obj.get(), &nofz_l1, 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15.5)/h);
+        //double vol = comoving_volume_qag(0.15, 0.35, class_obj.get(), &nofz_l1);
+        //std::cout << N_h_hcubature(class_obj.get(), 0.1, 0.45, pow(10,12.0413926852)/h, pow(10,15.5)/h) << std::endl;
+        //double N_gal = N_gal_qag(class_obj.get(), 0.15, 0.35, pow(10,12.0413926852)/h, pow(10,15.5)/h); 
+        //std::cout << N_gal / (vol * pow(class_obj->get_h(),3)) << std::endl;
 
         std::shared_ptr<projection_kernel> qh1_b1(new projection_kernel_q_h_b1(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper)); // sample 2 in Takahashi et al.
         std::shared_ptr<projection_kernel> qh1_b2(new projection_kernel_q_h_b2(class_obj.get(), zl_lower, zl_upper, M_halos_lower, M_halos_upper));
@@ -2177,8 +2180,8 @@ int main()
             {
                 if (i3pt_area_pre_factors_integration_algorithm == "qag")
                 {
-                    //A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
-                    A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
+                    A2pt[alpha_idx] = A2pt_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
+                    //A2pt[alpha_idx] = A2pt_angle_averaged_qag(alpha_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T); // angle-averaged phi_alpha (NOT NEEDED)
                     //A2pt[alpha_idx] = A2pt_bin_averaged_qag(alpha_min_table.at(alpha_idx)*M_PI/180.0/60.0, alpha_max_table.at(alpha_idx)*M_PI/180.0/60.0, theta_T);
                 }
 
@@ -2198,7 +2201,7 @@ int main()
 
             std::ofstream area_pre_factor;
             std::stringstream s_area_pre_factor;
-            s_area_pre_factor << correlations_folder << "i3pt_area_pre_factors_" << i3pt_area_pre_factors_integration_algorithm << "_bin_averaged.dat";
+            s_area_pre_factor << correlations_folder << "i3pt_area_pre_factors_" << i3pt_area_pre_factors_integration_algorithm << ".dat";
             area_pre_factor.open (s_area_pre_factor.str(), std::ofstream::trunc);
             area_pre_factor.precision(16);
 

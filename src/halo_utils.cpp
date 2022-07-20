@@ -252,20 +252,20 @@ double N_gal_expected_Zacharegkas2020(const double &M, const double &z)
     // halo mass M is in units [M_sun]
     // this is using the Lens1-Source4 RedMagic best fit parameters from Table D1 of Zacharegkas 2020 (DES collaboration)
 
-    double log_M_min = 12.13;
-    double M_1 = pow(10,13.64);
+    double log_M_min = 12.25; //12.3
+    double M_1 = pow(10,13.5);
     double sigma_logM = 0.50;
     double alpha = 2.06;
-    double f_cen = 0.13;
+    double f_cen = 0.2;
 
     // eqn (1) and (2) of Zacharegkas 2020
 
     double N_cen_expected = f_cen/2.0*(1.+erf((log10(M) - log_M_min)/sigma_logM));
     double N_sat_expected = N_cen_expected*pow(M/M_1,alpha);
 
-    //return N_cen_expected + N_sat_expected;
+    return N_cen_expected + N_sat_expected;
     //return N_cen_expected;
-    return N_sat_expected;
+    //return N_sat_expected;
 }
 
 double n_z_gal_M_qag_integrand(double M, void *params)
@@ -321,7 +321,8 @@ double b1_avg_z_gal_M_qag_integrand(double M, void *params)
 
     double N_galaxies_expected = N_gal_expected_Zacharegkas2020(M, p->z);
 
-    return dn_dM_Tinker2008(M, p->z, p->class_obj)*N_galaxies_expected*halo_b1_Tinker2010(M, p->z, p->class_obj); // mean halo bias which hosts the corresponding HOD galaxies
+    return dn_dM_Tinker2008(M, p->z, p->class_obj)*N_galaxies_expected*halo_b1_Tinker2010(M, p->z, p->class_obj); // mean halo b1 which hosts the corresponding HOD galaxies
+    //return dn_dM_Tinker2008(M, p->z, p->class_obj)*N_galaxies_expected*halo_b2_Lazeyras(M, p->z, p->class_obj); // mean halo b2 which hosts the corresponding HOD galaxies
     //return dn_dM_Tinker2008(M, p->z, p->class_obj)*N_galaxies_expected*M; // mean halo mass which hosts the corresponding HOD galaxies
 }
 
@@ -355,6 +356,7 @@ int b1_avg_gal_z_M_integrand(unsigned ndim, const double *k, void *params, unsig
     double n_gal_z = n_z_gal_qag(z, p->class_obj, p->M_min, p->M_max);
 
     value[0] = p->n_of_z->interp(z)*dn_dM_Tinker2008(M, z, p->class_obj)*N_galaxies_expected*halo_b1_Tinker2010(M, z, p->class_obj) / n_gal_z;
+    //value[0] = p->n_of_z->interp(z)*dn_dM_Tinker2008(M, z, p->class_obj)*N_galaxies_expected*halo_b2_Lazeyras(M, z, p->class_obj) / n_gal_z;
 
     return 0;
 }

@@ -350,6 +350,7 @@ double comoving_volume_qag(const double &z_min, const double &z_max, ClassEngine
     qag_1D_integration_abs_rel(&comoving_volume_qag_integrand, static_cast<void *>(&args), z_min, z_max,  calls_1e5, result, error);
 
     std::cout << "Comoving volume [cMpc^3] --> "  << result << " +/- " << error << std::endl;
+    std::cout << "Comoving volume [cMpc^3/h^3] --> " << result * pow(class_obj->get_h(),3) << " +/- " << error * pow(class_obj->get_h(),3) << std::endl;
     std::cout << "Comoving volume [cGpc^3/h^3] --> " << result / 1.e9 * pow(class_obj->get_h(),3) << " +/- " << error / 1.e9 * pow(class_obj->get_h(),3) << std::endl;
 
     return result;
